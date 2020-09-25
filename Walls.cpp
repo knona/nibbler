@@ -24,12 +24,10 @@ void Walls::removeWall(int id, Area &area)
 	Wall &wall = (*this)[id];
 
 	for (const Position &pos : wall.getPositions())
-	{
-		area[pos].id = -1;
-		area[pos].type = ElementType::FreeT;
-	}
+		area[pos].reset();
 
 	this->erase(id);
+	Walls::_id--;
 }
 
 int Walls::_id = 0;

@@ -18,6 +18,7 @@ private:
 public:
 	void addRandomFood(Area &area);
 	void removeFood(int id, Area &area);
+	void removeFood(const Position &pos, Area &area);
 };
 
 #endif // !FOODS_HPP

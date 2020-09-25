@@ -6,13 +6,15 @@
 struct Cell
 {
 	int id;
-	unsigned char type;
+	ElementType type;
 
 	Cell();
-	Cell(int id, unsigned char type);
+	Cell(int id, ElementType type);
 	Cell(const Cell &cell);
 	~Cell();
 	Cell &operator=(const Cell &);
+
+	void reset();
 };
 
 #endif // !CELL_HPP

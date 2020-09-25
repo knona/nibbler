@@ -14,6 +14,11 @@ void Foods::addRandomFood(Area &area)
 	(*this)[newId] = food;
 }
 
+void Foods::removeFood(const Position &pos, Area &area)
+{
+	this->removeFood(area[pos].id, area);
+}
+
 void Foods::removeFood(int id, Area &area)
 {
 	if (this->find(id) == this->end())
@@ -22,12 +27,10 @@ void Foods::removeFood(int id, Area &area)
 	Food &food = (*this)[id];
 
 	for (const Position &pos : food.getPositions())
-	{
-		area[pos].id = -1;
-		area[pos].type = ElementType::FreeT;
-	}
+		area[pos].reset();
 
 	this->erase(id);
+	Foods::_id--;
 }
 
 int Foods::_id = 0;

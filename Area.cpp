@@ -51,26 +51,36 @@ std::vector<Position> Area::getFreePositions() const
 
 bool Area::isFree(const Position &pos) const
 {
+	if (pos.x >= this->_size.width || pos.y >= this->_size.height || pos.x < 0 || pos.y < 0)
+		return false;
 	return (*this)[pos].type == static_cast<unsigned char>(ElementType::FreeT);
 }
 
 bool Area::isFood(const Position &pos) const
 {
+	if (pos.x >= this->_size.width || pos.y >= this->_size.height || pos.x < 0 || pos.y < 0)
+		return false;
 	return (*this)[pos].type == static_cast<unsigned char>(ElementType::FoodT);
 }
 
 bool Area::isSnake(const Position &pos) const
 {
+	if (pos.x >= this->_size.width || pos.y >= this->_size.height || pos.x < 0 || pos.y < 0)
+		return false;
 	return (*this)[pos].type == static_cast<unsigned char>(ElementType::SnakeT);
 }
 
 bool Area::isWall(const Position &pos) const
 {
+	if (pos.x >= this->_size.width || pos.y >= this->_size.height || pos.x < 0 || pos.y < 0)
+		return false;
 	return (*this)[pos].type == static_cast<unsigned char>(ElementType::WallT);
 }
 
 bool Area::isDanger(const Position &pos) const
 {
+	if (pos.x >= this->_size.width || pos.y >= this->_size.height || pos.x < 0 || pos.y < 0)
+		return true;
 	return this->isWall(pos) || this->isSnake(pos);
 }
 

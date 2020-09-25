@@ -17,6 +17,8 @@ Méthodes:
 - moveFromBottomnput()
 - moveFromLeftInput()
 
+# AJOUTER DES IDS AUX CLASSES WALL, FOOD ET VERIFIER SNAKE
+
 ### Main
 
 - Area area
