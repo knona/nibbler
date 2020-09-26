@@ -29,3 +29,21 @@ const std::list<Position> &Element::getPositions(void) const
 {
 	return this->_positions;
 }
+
+int Element::Element::getId() const
+{
+	return this->_id;
+}
+
+int Element::Element::setId()
+{
+	this->_id = this->getIdCounter()++;
+	return this->_id;
+}
+
+int &Element::getIdCounter() const
+{
+	return Element::_idCounter;
+}
+
+int Element::_idCounter = 0;

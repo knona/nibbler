@@ -6,7 +6,7 @@ void Foods::addRandomFood(Area &area)
 	Element element({pos});
 	Food food(element);
 
-	int newId = Foods::_id++;
+	int newId = food.setId();
 
 	area[pos].id = newId;
 	area[pos].type = ElementType::FoodT;
@@ -30,7 +30,4 @@ void Foods::removeFood(int id, Area &area)
 		area[pos].reset();
 
 	this->erase(id);
-	Foods::_id--;
 }
-
-int Foods::_id = 0;

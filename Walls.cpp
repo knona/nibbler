@@ -27,7 +27,6 @@ void Walls::removeWall(int id, Area &area)
 		area[pos].reset();
 
 	this->erase(id);
-	Walls::_id--;
 }
 
 int Walls::_id = 0;

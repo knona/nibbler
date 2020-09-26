@@ -2,7 +2,11 @@
 
 Food::Food() {}
 
-Food::Food(const Element &element)
+Food::Food(const Element &element) : Element(element) {}
+
+int &Food::getIdCounter() const
 {
-	this->_positions = element.getPositions();
+	return Food::_idCounter;
 }
+
+int Food::_idCounter = 0;

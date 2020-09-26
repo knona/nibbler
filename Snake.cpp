@@ -31,7 +31,7 @@ void Snake::moveFromInput(Area &area, const Position &newHead, Foods &foods)
 		foods.removeFood(newHead, area);
 		this->_grow = true;
 	}
-	// area[newHead].id = Snake::_id;
+	area[newHead].id = this->_id;
 	area[newHead].type = ElementType::SnakeT;
 	area[tail].reset();
 }
@@ -80,9 +80,7 @@ void Snake::grow(Area &area)
 {
 	if (!this->_grow)
 		return;
-	// area[this->_lastTail].id = Snake::_id;
+	area[this->_lastTail].id = this->_id;
 	area[this->_lastTail].type = ElementType::SnakeT;
 	this->_positions.push_back(this->_lastTail);
 }
-
-int Snake::_id = 0;

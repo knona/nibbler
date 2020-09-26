@@ -6,9 +6,13 @@
 class Wall : public Element
 {
 private:
+	static int _idCounter;
+
 public:
 	Wall();
 	Wall(const Element &element);
+
+	int &getIdCounter() const;
 };
 
 #endif // !WALL_HPP

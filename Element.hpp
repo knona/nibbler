@@ -7,7 +7,11 @@
 
 class Element
 {
+private:
+	static int _idCounter;
+
 protected:
+	int _id;
 	std::list<Position> _positions;
 
 public:
@@ -16,8 +20,11 @@ public:
 	Element(const Element &);
 	virtual ~Element();
 	Element &operator=(const Element &);
-	std::list<Position> &getPositions(void);
-	const std::list<Position> &getPositions(void) const;
+	virtual std::list<Position> &getPositions(void);
+	virtual const std::list<Position> &getPositions(void) const;
+	virtual int getId() const;
+	virtual int setId();
+	virtual int &getIdCounter() const;
 };
 
 #endif // !ELEMENT_HPP

@@ -12,9 +12,6 @@
 
 class Foods : public std::unordered_map<int, Food>
 {
-private:
-	static int _id;
-
 public:
 	void addRandomFood(Area &area);
 	void removeFood(int id, Area &area);

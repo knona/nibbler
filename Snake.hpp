@@ -10,7 +10,6 @@
 class Snake : public Element
 {
 private:
-	static int _id;
 	Direction _direction;
 	bool _grow;
 	Position _lastTail;

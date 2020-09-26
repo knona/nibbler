@@ -2,7 +2,11 @@
 
 Wall::Wall() {}
 
-Wall::Wall(const Element &element)
+Wall::Wall(const Element &element) : Element(element) {}
+
+int &Wall::getIdCounter() const
 {
-	this->_positions = element.getPositions();
+	return Wall::_idCounter;
 }
+
+int Wall::_idCounter = 0;

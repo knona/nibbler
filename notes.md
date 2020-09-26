@@ -1,30 +1,6 @@
 # Nibbler
 
-## Structures et classes:
-
-### Snake
-
-Class herite de Element
-
-Attributs:
-
-- direction
-
-Méthodes:
-
-- moveFromTopInput()
-- moveFromRightInput()
-- moveFromBottomnput()
-- moveFromLeftInput()
-
-# AJOUTER DES IDS AUX CLASSES WALL, FOOD ET VERIFIER SNAKE
-
 ### Main
-
-- Area area
-- Snake snake
-- map\<Position, Wall\> Walls
-- map\<Position, Food\> Foods
 - cycle
 
 ## Bibliotheques
