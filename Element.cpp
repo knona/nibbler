@@ -17,6 +17,7 @@ Element::~Element() {}
 Element &Element::operator=(const Element &element)
 {
 	this->_positions = element._positions;
+	this->_id = element._id;
 	return *this;
 }
 
