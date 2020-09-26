@@ -20,6 +20,7 @@ public:
 	Element(const Element &);
 	virtual ~Element();
 	Element &operator=(const Element &);
+
 	virtual std::list<Position> &getPositions(void);
 	virtual const std::list<Position> &getPositions(void) const;
 	virtual int getId() const;
