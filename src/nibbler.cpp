@@ -1,4 +1,4 @@
-#include "main.hpp"
+#include "nibbler.hpp"
 
 int main(int argc, const char *argv[])
 {

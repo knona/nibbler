@@ -33,7 +33,7 @@
 nibbler
 
 # libraries src
-boost/
+libs/boost/
 
 # others
 *.tmp

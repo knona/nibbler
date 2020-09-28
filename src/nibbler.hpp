@@ -1,5 +1,5 @@
-#ifndef MAIN_HPP
-#define MAIN_HPP
+#ifndef NIBBLER_HPP
+#define NIBBLER_HPP
 
 #include "Area.hpp"
 #include "Cell.hpp"
@@ -20,4 +20,4 @@
 
 Options parseCommandLine(int argc, const char **argv);
 
-#endif // !MAIN_HPP
+#endif // !NIBBLER_HPP

@@ -1,41 +1,77 @@
 # EXECUTABLE
 NAME = nibbler
 
-# SOURCES
-SRC = $(wildcard *.cpp)
+define uniq =
+  $(eval seen :=)
+  $(foreach _,$1,$(if $(filter $_,${seen}),,$(eval seen += $_)))
+  ${seen}
+endef
 
-# HEADERS
-HEADERS = $(wildcard *.hpp)
+# SOURCES
+SRCS_FILES	= exceptions/Exceptions.cpp parser/parser.cpp nibbler.cpp class/Cell.cpp class/Area.cpp class/Food.cpp class/Element.cpp class/Walls.cpp class/Wall.cpp class/Snake.cpp class/Foods.cpp struct/Position.cpp 
+SRCS_MAIN_DIR	= src/
+SRCS		= $(addprefix $(SRCS_MAIN_DIR), $(SRCS_FILES))
 
 # OBJETS
-OBJ = $(SRC:.cpp=.o)
+OBJS_FILES	= $(SRCS_FILES:.cpp=.o)
+OBJS_MAIN_DIR 	= objs/
+OBJS 		= $(addprefix $(OBJS_MAIN_DIR), $(OBJS_FILES))
+OBJS_DIRS = $(call uniq, $(dir $(OBJS)))
+
+# HEADERS
+HEADERS_FILES = exceptions/Exceptions.hpp class/Area.hpp class/Walls.hpp class/Snake.hpp class/Cell.hpp class/Food.hpp class/Foods.hpp class/Element.hpp class/Wall.hpp nibbler.hpp enum/Direction.hpp enum/ElementType.hpp struct/Size.hpp struct/Position.hpp struct/Options.hpp 
+HEADERS = $(addprefix $(SRCS_MAIN_DIR), $(HEADERS_FILES))
+HEADERS_DIRS = $(call uniq, $(dir $(HEADERS)))
+
+# INCLUDES FOLDER
+INCLUDES = $(addprefix -I, $(SRCS_MAIN_DIR) $(HEADERS_DIRS))
+
+BOOST_DIR = libs/boost
 
 # COMPILATEUR
 CC		=	clang++
 CFLAGS	=	-Wall -Wextra -g3
 
 # REGLES
-all: $(NAME)
+all: libs $(OBJS_DIRS) $(NAME)
 
-$(NAME): $(OBJ)
+$(OBJS_DIRS):
+	@mkdir -p $@
+
+
+$(NAME): $(SRCS) $(OBJS)
 	@printf "\033[2K\r\033[36m>>Linking...\033[0m"
-	@$(CC) -o $@ $(OBJ) -Lboost/binaries -lboost_program_options
+	@$(CC) -o $@ $(OBJS) -Llibs/boost/binaries -lboost_program_options
 
 	@echo "\t\033[32m[OK]\033[0m"
 	@echo "\033[31m...$(shell echo $(NAME) | tr a-z A-Z)\033[0m"
 
-%.o: %.cpp $(HEADERS)
+$(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
 	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
-	@$(CC) $(CFLAGS) -o $@ -c $< -I boost/headers
+	@$(CC) $(CFLAGS) -I libs/boost/headers $(INCLUDES) -o $@ -c $<
+
+libs: $(BOOST_DIR)
+
+$(BOOST_DIR):
+	./scripts/install-boost.bash
 
 .PHONY: clean fclean re
 
 clean:
 	@echo "\033[31mCleaning .o\033[0m"
-	@rm -f $(OBJ)
+	@rm -rf $(OBJS_MAIN_DIR)
 
 fclean:	clean
 	@echo "\033[31mCleaning $(NAME)\033[0m"
 	@rm -f $(NAME)
+
+clean-boost:
+	@echo "\033[31mRemoving boost...\033[0m"
+	@rm -rf $(BOOST_DIR)
+
+clean-libs: clean-boost
+
+
+ffclean: clean-libs fclean
 
 re:		fclean all

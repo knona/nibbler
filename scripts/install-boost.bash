@@ -4,16 +4,16 @@
 
 current_directory=$(pwd)
 
-headers=boost/headers
-binaries=boost/binaries
+headers=libs/boost/headers
+binaries=libs/boost/binaries
 mkdir -p $headers
 mkdir -p $binaries
 
 mkdir .tmp
 cd .tmp
 
-boost_archive=boost.tar.bz2
-boost_dl_url=https://dl.bintray.com/boostorg/release/1.74.0/source/boost_1_74_0.tar.bz2
+boost_archive=boost.tar.gz
+boost_dl_url=https://dl.bintray.com/boostorg/release/1.74.0/source/boost_1_74_0.tar.gz
 curl -o $boost_archive -L $boost_dl_url
 tar -xf $boost_archive
 
