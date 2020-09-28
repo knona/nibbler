@@ -20,7 +20,7 @@ tar -xf $boost_archive
 cd boost_1_74_0
 
 ./bootstrap.sh --with-toolset=clang --libdir="$current_directory/$binaries" --includedir="$current_directory/$headers"
-./b2 install --toolset=clang
+./b2 install --no-cmake-config --with-program_options toolset=clang link=static runtime-link=static
 
 cd ../..
 rm -rf .tmp
