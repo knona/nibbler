@@ -8,20 +8,22 @@ define uniq =
 endef
 
 # SOURCES
-SRCS_FILES	= exceptions/Exceptions.cpp parser/parser.cpp nibbler.cpp class/Cell.cpp class/Area.cpp class/Food.cpp class/Element.cpp class/Walls.cpp class/Wall.cpp class/Snake.cpp class/Foods.cpp struct/Position.cpp 
-SRCS_MAIN_DIR	= src/
-SRCS		= $(addprefix $(SRCS_MAIN_DIR), $(SRCS_FILES))
+SRCS_FILES_WILDCARD	= $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
+SRCS_FILES			= $(SRCS_FILES_WILDCARD:src/%=%)
+SRCS_MAIN_DIR		= src/
+SRCS				= $(addprefix $(SRCS_MAIN_DIR), $(SRCS_FILES))
 
 # OBJETS
-OBJS_FILES	= $(SRCS_FILES:.cpp=.o)
+OBJS_FILES		= $(SRCS_FILES:.cpp=.o)
 OBJS_MAIN_DIR 	= objs/
-OBJS 		= $(addprefix $(OBJS_MAIN_DIR), $(OBJS_FILES))
-OBJS_DIRS = $(call uniq, $(dir $(OBJS)))
+OBJS 			= $(addprefix $(OBJS_MAIN_DIR), $(OBJS_FILES))
+OBJS_DIRS 		= $(call uniq, $(dir $(OBJS)))
 
 # HEADERS
-HEADERS_FILES = exceptions/Exceptions.hpp class/Area.hpp class/Walls.hpp class/Snake.hpp class/Cell.hpp class/Food.hpp class/Foods.hpp class/Element.hpp class/Wall.hpp nibbler.hpp enum/Direction.hpp enum/ElementType.hpp struct/Size.hpp struct/Position.hpp struct/Options.hpp 
-HEADERS = $(addprefix $(SRCS_MAIN_DIR), $(HEADERS_FILES))
-HEADERS_DIRS = $(call uniq, $(dir $(HEADERS)))
+HEADERS_FILES_WILDCARD	= $(wildcard src/*.hpp) $(wildcard src/*/*.hpp)
+HEADERS_FILES 			= $(HEADERS_FILES_WILDCARD:src/%=%)
+HEADERS					= $(addprefix $(SRCS_MAIN_DIR), $(HEADERS_FILES))
+HEADERS_DIRS			= $(call uniq, $(dir $(HEADERS)))
 
 # INCLUDES FOLDER
 INCLUDES = $(addprefix -I, $(SRCS_MAIN_DIR) $(HEADERS_DIRS))
@@ -29,8 +31,8 @@ INCLUDES = $(addprefix -I, $(SRCS_MAIN_DIR) $(HEADERS_DIRS))
 BOOST_DIR = libs/boost
 
 # COMPILATEUR
-CC		=	clang++
-CFLAGS	=	-Wall -Wextra -g3
+CC		= clang++
+CFLAGS	= -Wall -Wextra -g3
 
 # REGLES
 all: libs $(OBJS_DIRS) $(NAME)
@@ -73,4 +75,4 @@ clean-libs: clean-boost
 
 ffclean: clean-libs fclean
 
-re:		fclean all
+re: fclean all
