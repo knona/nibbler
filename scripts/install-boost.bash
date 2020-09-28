@@ -4,9 +4,9 @@
 
 current_directory=$(pwd)
 
-headers=libs/boost/headers
+includes=libs/boost/includes
 binaries=libs/boost/binaries
-mkdir -p $headers
+mkdir -p $includes
 mkdir -p $binaries
 
 mkdir .tmp
@@ -19,7 +19,7 @@ tar -xf $boost_archive
 
 cd boost_1_74_0
 
-./bootstrap.sh --with-toolset=clang --libdir="$current_directory/$binaries" --includedir="$current_directory/$headers"
+./bootstrap.sh --with-toolset=clang --libdir="$current_directory/$binaries" --includedir="$current_directory/$includes"
 ./b2 install --no-cmake-config --with-program_options toolset=clang link=static runtime-link=static
 
 cd ../..

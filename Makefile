@@ -30,6 +30,8 @@ INCLUDES = $(addprefix -I, $(SRCS_MAIN_DIR) $(HEADERS_DIRS))
 
 BOOST_DIR = libs/boost
 
+GLFW_DIR = libs/glfw
+
 # COMPILATEUR
 CC		= clang++
 CFLAGS	= -Wall -Wextra -g3
@@ -42,22 +44,26 @@ $(OBJS_DIRS):
 
 $(NAME): $(SRCS) $(OBJS)
 	@printf "\033[2K\r\033[36m>>Linking...\033[0m"
-	@$(CC) -o $@ $(OBJS) -Llibs/boost/binaries -lboost_program_options
+	@$(CC) -o $@ $(OBJS) -Llibs/boost/binaries -lboost_program_options -Llibs/glfw/binaries -lglfw3 -pthread -ldl -lGL -lrt -lXrandr -lXi -lXinerama -lX11 -lXcursor
 
 	@echo "\t\033[32m[OK]\033[0m"
 	@echo "\033[31m...$(shell echo $(NAME) | tr a-z A-Z)\033[0m"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
 	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
-	@$(CC) $(CFLAGS) -I libs/boost/headers $(INCLUDES) -o $@ -c $<
+	@$(CC) $(CFLAGS) -I libs/boost/includes -I libs/glfw/includes $(INCLUDES) -o $@ -c $<
 
-.PHONY: clean fclean re libs clean-boost clean-libs ffclean
+.PHONY: clean fclean re libs clean-boost clean-glfw clean-libs ffclean
 
-libs: $(BOOST_DIR)
+libs: $(BOOST_DIR) $(GLFW_DIR)
 
 $(BOOST_DIR):
 	@echo "\033[36mInstalling boost...\033[0m"
 	@./scripts/install-boost.bash
+
+$(GLFW_DIR):
+	@echo "\033[36mInstalling glfw...\033[0m"
+	@./scripts/install-glfw.bash
 
 clean:
 	@echo "\033[31mCleaning .o\033[0m"
@@ -71,7 +77,11 @@ clean-boost:
 	@echo "\033[31mRemoving boost...\033[0m"
 	@rm -rf $(BOOST_DIR)
 
-clean-libs: clean-boost
+clean-glfw:
+	@echo "\033[31mRemoving glfw...\033[0m"
+	@rm -rf $(GLFW_DIR)
+
+clean-libs: clean-boost clean-glfw
 
 ffclean: clean-libs fclean
 
