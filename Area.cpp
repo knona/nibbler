@@ -5,7 +5,7 @@ std::unique_ptr<Cell[]> alloc(const Size &size)
 	return std::make_unique<Cell[]>(size.width * size.height);
 }
 
-Area::Area() : _size({40, 25}), _data(alloc(_size)) {}
+Area::Area() {}
 
 Area::Area(int width, int height) : _size({width, height}), _data(alloc(_size)) {}
 

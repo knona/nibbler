@@ -30,8 +30,14 @@
 *.exe
 *.out
 *.app
+nibbler
 
+# libraries src
+boost/
+
+# others
 *.tmp
 .vscode
 *.DS_Store
-nibbler
+tmp/
+.tmp/

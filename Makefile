@@ -19,14 +19,14 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@printf "\033[2K\r\033[36m>>Linking...\033[0m"
-	@$(CC) -o $@ $(OBJ)
+	@$(CC) -o $@ $(OBJ) --static -L boost/binaries -lboost_program_options
 
 	@echo "\t\033[32m[OK]\033[0m"
 	@echo "\033[31m...$(shell echo $(NAME) | tr a-z A-Z)\033[0m"
 
 %.o: %.cpp $(HEADERS)
 	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
-	@$(CC) $(CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) -o $@ -c $< -I boost/headers
 
 .PHONY: clean fclean re
 

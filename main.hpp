@@ -13,7 +13,11 @@
 #include "Snake.hpp"
 #include "Wall.hpp"
 #include "Walls.hpp"
-#include "Area.hpp"
-#include "Area.hpp"
+#include "Options.hpp"
+
+#include <iostream>
+#include <string>
+
+Options parseCommandLine(int argc, const char **argv);
 
 #endif // !MAIN_HPP
