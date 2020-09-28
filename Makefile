@@ -38,7 +38,6 @@ all: libs $(OBJS_DIRS) $(NAME)
 $(OBJS_DIRS):
 	@mkdir -p $@
 
-
 $(NAME): $(SRCS) $(OBJS)
 	@printf "\033[2K\r\033[36m>>Linking...\033[0m"
 	@$(CC) -o $@ $(OBJS) -Llibs/boost/binaries -lboost_program_options
@@ -50,12 +49,13 @@ $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
 	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
 	@$(CC) $(CFLAGS) -I libs/boost/headers $(INCLUDES) -o $@ -c $<
 
+.PHONY: clean fclean re libs clean-boost clean-libs ffclean
+
 libs: $(BOOST_DIR)
 
 $(BOOST_DIR):
-	./scripts/install-boost.bash
-
-.PHONY: clean fclean re
+	@echo "\033[36mInstalling boost...\033[0m"
+	@./scripts/install-boost.bash
 
 clean:
 	@echo "\033[31mCleaning .o\033[0m"
@@ -70,7 +70,6 @@ clean-boost:
 	@rm -rf $(BOOST_DIR)
 
 clean-libs: clean-boost
-
 
 ffclean: clean-libs fclean
 
