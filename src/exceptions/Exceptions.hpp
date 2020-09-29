@@ -16,6 +16,18 @@ public:
 		virtual const char *what() const throw();
 	};
 
+	class ParsingOptions : public std::exception
+	{
+	private:
+		int _exitStatus;
+		ParsingOptions();
+
+	public:
+		ParsingOptions(const std::string &detail, int exitStatus);
+		virtual const char *what() const throw();
+		int getExitStatus() const;
+	};
+
 	class Classic : public std::exception
 	{
 	public:

@@ -1,4 +1,5 @@
 #include "nibbler.hpp"
+#include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
 void displayError(int errorCode, const char *error)
@@ -51,9 +52,22 @@ int testOpengl()
 
 int main(int argc, const char *argv[])
 {
-	Options options = parseCommandLine(argc, argv);
+	Options options;
 
-	return testOpengl();
-	// std::cout << "width: " << options.areaSize.width << ", height: " << options.areaSize.height << std::endl;
-	// return 0;
+	try
+	{
+		options = parseCommandLine(argc, argv);
+	}
+	catch (const Exception::ParsingOptions &e)
+	{
+		int exitStatus = e.getExitStatus();
+		if (exitStatus == EXIT_FAILURE)
+			std::cerr << "\033[0;31mError: \033[0m" << e.what() << std::endl;
+		else
+			std::cout << e.what() << std::endl;
+		return exitStatus;
+	}
+
+	std::cout << options.areaSize << std::endl;
+	return EXIT_SUCCESS;
 }
