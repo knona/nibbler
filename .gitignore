@@ -35,6 +35,7 @@ nibbler
 # libraries src
 libs/boost/
 libs/glfw/
+libs/glad/
 
 # others
 *.tmp

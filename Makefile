@@ -28,9 +28,10 @@ HEADERS_DIRS			= $(call uniq, $(dir $(HEADERS)))
 # INCLUDES FOLDER
 INCLUDES = $(addprefix -I, $(SRCS_MAIN_DIR) $(HEADERS_DIRS))
 
+# LIBRARIES
 BOOST_DIR = libs/boost
-
 GLFW_DIR = libs/glfw
+GLAD_DIR = libs/glad
 
 # COMPILATEUR
 CC		= clang++
@@ -42,20 +43,24 @@ all: libs $(OBJS_DIRS) $(NAME)
 $(OBJS_DIRS):
 	@mkdir -p $@
 
-$(NAME): $(SRCS) $(OBJS)
+$(NAME): $(OBJS) libs/glad/src/glad.o
 	@printf "\033[2K\r\033[36m>>Linking...\033[0m"
-	@$(CC) -o $@ $(OBJS) -Llibs/boost/binaries -lboost_program_options -Llibs/glfw/binaries -lglfw3 -pthread -ldl -lGL -lrt -lXrandr -lXi -lXinerama -lX11 -lXcursor
+	@$(CC) -o $@ $(OBJS) libs/glad/src/glad.o -Llibs/boost/binaries -lboost_program_options -Llibs/glfw/binaries -lglfw3 -pthread -ldl -lGL -lrt -lXrandr -lXi -lXinerama -lX11 -lXcursor
 
 	@echo "\t\033[32m[OK]\033[0m"
 	@echo "\033[31m...$(shell echo $(NAME) | tr a-z A-Z)\033[0m"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
 	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
-	@$(CC) $(CFLAGS) -I libs/boost/includes -I libs/glfw/includes $(INCLUDES) -o $@ -c $<
+	@$(CC) $(CFLAGS) -I libs/boost/includes -I libs/glfw/includes -I libs/glad/includes $(INCLUDES) -o $@ -c $<
 
-.PHONY: clean fclean re libs clean-boost clean-glfw clean-libs ffclean
+libs/glad/src/glad.o: libs/glad/src/glad.c
+	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
+	@clang -Wall -Wextra -Werror -I libs/glad/include -o $@ -c $<
 
-libs: $(BOOST_DIR) $(GLFW_DIR)
+.PHONY: clean fclean re libs clean-boost clean-glfw clean-glad clean-libs ffclean
+
+libs: $(BOOST_DIR) $(GLFW_DIR) $(GLAD_DIR)
 
 $(BOOST_DIR):
 	@echo "\033[36mInstalling boost...\033[0m"
@@ -64,6 +69,10 @@ $(BOOST_DIR):
 $(GLFW_DIR):
 	@echo "\033[36mInstalling glfw...\033[0m"
 	@./scripts/install-glfw.bash
+
+$(GLAD_DIR):
+	@echo "\033[36mInstalling glad...\033[0m"
+	@./scripts/install-glad.bash
 
 clean:
 	@echo "\033[31mCleaning .o\033[0m"
@@ -81,7 +90,11 @@ clean-glfw:
 	@echo "\033[31mRemoving glfw...\033[0m"
 	@rm -rf $(GLFW_DIR)
 
-clean-libs: clean-boost clean-glfw
+clean-glad:
+	@echo "\033[31mRemoving glad...\033[0m"
+	@rm -rf $(GLAD_DIR)
+
+clean-libs: clean-boost clean-glfw clean-glad
 
 ffclean: clean-libs fclean
 
