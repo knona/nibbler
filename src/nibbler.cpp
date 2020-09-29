@@ -2,7 +2,22 @@
 
 void startGame(const Options &options)
 {
-	libA();
+	Area area(options.areaSize);
+	Snake snake;
+	Walls walls;
+	Foods foods;
+
+	snake.setId();
+	snake.setSnakeOnArea(area);
+
+	foods.addRandomFood(area);
+
+	walls.addRandomWall(area);
+	walls.addRandomWall(area);
+	walls.addRandomWall(area);
+
+	std::cout << area << std::endl;
+	// libA();
 }
 
 int parsingErrorHandler(const Exception::ParsingOptions &e)
@@ -19,6 +34,7 @@ int main(int argc, const char *argv[])
 {
 	Options options;
 
+	srand(time(NULL));
 	try
 	{
 		options = parseCommandLine(argc, argv);

@@ -3,12 +3,10 @@
 void Walls::addRandomWall(Area &area)
 {
 	int size = std::rand() % 3 + 2;
-	Element element = area.getRandomFreeElement(size);
-	Wall wall(element);
+	Wall wall = Wall::getRandomWall(area, size);
+	int newId = wall.setId();
 
-	int newId = Walls::_id++;
-
-	for (const Position &pos : element.getPositions())
+	for (const Position &pos : wall.getPositions())
 	{
 		area[pos].id = newId;
 		area[pos].type = ElementType::WallT;

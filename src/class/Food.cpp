@@ -10,3 +10,11 @@ int &Food::getIdCounter() const
 }
 
 int Food::_idCounter = 0;
+
+Food Food::getRandomFood(Area &area)
+{
+	Position pos = area.getRandomFreePosition();
+	Element element({pos});
+
+	return element;
+}

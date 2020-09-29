@@ -41,11 +41,11 @@ Options parseCommandLine(int argc, const char **argv)
 	if (areaSize.height == 0 || areaSize.width == 0)
 		throw Exception::ParsingOptions("You must set area's witdh and height", EXIT_FAILURE);
 
-	if (areaSize.width > 200 || areaSize.width < 10)
-		throw Exception::ParsingOptions("Area's witdh must be between 10 and 200", EXIT_FAILURE);
+	if (areaSize.width > 200 || areaSize.width < 8)
+		throw Exception::ParsingOptions("Area's witdh must be between 8 and 200", EXIT_FAILURE);
 
-	if (areaSize.height > 200 || areaSize.height < 10)
-		throw Exception::ParsingOptions("Area's height must be between 10 and 200", EXIT_FAILURE);
+	if (areaSize.height > 200 || areaSize.height < 8)
+		throw Exception::ParsingOptions("Area's height must be between 8 and 200", EXIT_FAILURE);
 
 	return {.areaSize = areaSize};
 }

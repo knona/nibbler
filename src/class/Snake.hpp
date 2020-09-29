@@ -21,6 +21,7 @@ public:
 	~Snake();
 	Snake &operator=(const Snake &);
 
+	void setSnakeOnArea(Area &area);
 	void moveFromTopInput(Area &area, Foods &foods);
 	void moveFromRightInput(Area &area, Foods &foods);
 	void moveFromBottomnput(Area &area, Foods &foods);

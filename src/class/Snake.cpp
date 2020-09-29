@@ -84,3 +84,19 @@ void Snake::grow(Area &area)
 	area[this->_lastTail].type = ElementType::SnakeT;
 	this->_positions.push_back(this->_lastTail);
 }
+
+void Snake::setSnakeOnArea(Area &area)
+{
+	Size areaSize = area.getSize();
+	int y = areaSize.height / 2;
+	int x = areaSize.width / 2 - 2;
+
+	for (int i = 0; i < 4; i++)
+	{
+		Position pos = {x + i, y};
+		Cell &cell = area[pos];
+		cell.id = this->_id;
+		cell.type = ElementType::SnakeT;
+		this->_positions.push_back(pos);
+	}
+}

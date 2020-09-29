@@ -2,7 +2,7 @@
 #define FOOD_HPP
 
 #include "Element.hpp"
-
+#include "Area.hpp"
 class Food : public Element
 {
 private:
@@ -13,6 +13,7 @@ public:
 	Food(const Element &element);
 
 	int &getIdCounter() const;
+	static Food getRandomFood(Area &area);
 };
 
 #endif // !FOOD_HPP

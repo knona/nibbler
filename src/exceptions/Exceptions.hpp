@@ -16,6 +16,12 @@ public:
 		virtual const char *what() const throw();
 	};
 
+	class Win : public std::exception
+	{
+	public:
+		virtual const char *what() const throw();
+	};
+
 	class ParsingOptions : public std::exception
 	{
 	private:
@@ -26,6 +32,12 @@ public:
 		ParsingOptions(const std::string &detail, int exitStatus);
 		virtual const char *what() const throw();
 		int getExitStatus() const;
+	};
+
+	class NoSpace : public std::exception
+	{
+	public:
+		virtual const char *what() const throw();
 	};
 
 	class Classic : public std::exception

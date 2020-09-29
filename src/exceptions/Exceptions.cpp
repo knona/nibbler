@@ -5,6 +5,11 @@ const char *Exception::GameOver::what() const throw()
 	return "GAME OVER";
 }
 
+const char *Exception::Win::what() const throw()
+{
+	return "WIN";
+}
+
 Exception::ParsingOptions::ParsingOptions(const std::string &detail, int exitStatus)
 {
 	this->_exitStatus = exitStatus;
@@ -21,6 +26,11 @@ const char *Exception::ParsingOptions::what() const throw()
 int Exception::ParsingOptions::getExitStatus() const
 {
 	return this->_exitStatus;
+}
+
+const char *Exception::NoSpace::what() const throw()
+{
+	return "No space";
 }
 
 const char *Exception::Classic::what() const throw()

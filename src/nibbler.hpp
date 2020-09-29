@@ -17,6 +17,8 @@
 
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include <ctime>
 
 Options parseCommandLine(int argc, const char **argv);
 int libA();

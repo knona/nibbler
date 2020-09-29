@@ -4,13 +4,15 @@
 #include <memory>
 #include <vector>
 #include <cstdlib>
-#include <exception>
+#include <iostream>
+#include <algorithm>
 
 #include "Size.hpp"
 #include "Position.hpp"
 #include "Element.hpp"
 #include "ElementType.hpp"
 #include "Cell.hpp"
+#include "Exceptions.hpp"
 
 class Area
 {
@@ -31,6 +33,7 @@ public:
 	const Cell &operator[](size_t) const;
 	const Cell &operator[](const Position &pos) const;
 	Size getSize() const;
+	bool isOverArea(const Position &) const;
 	bool isFree(const Position &) const;
 	bool isFood(const Position &) const;
 	bool isSnake(const Position &) const;
@@ -41,5 +44,7 @@ public:
 	std::vector<Element> getFreeElements(int size) const;
 	Element getRandomFreeElement(int size) const;
 };
+
+std::ostream &operator<<(std::ostream &os, const Area &);
 
 #endif // !AREA_HPP

@@ -2,6 +2,7 @@
 #define WALL_HPP
 
 #include "Element.hpp"
+#include "Area.hpp"
 
 class Wall : public Element
 {
@@ -13,6 +14,7 @@ public:
 	Wall(const Element &element);
 
 	int &getIdCounter() const;
+	static Wall getRandomWall(Area &area, int size);
 };
 
 #endif // !WALL_HPP

@@ -2,9 +2,8 @@
 
 void Foods::addRandomFood(Area &area)
 {
-	Position pos = area.getRandomFreePosition();
-	Element element({pos});
-	Food food(element);
+	Food food = Food::getRandomFood(area);
+	Position pos = food.getPositions().front();
 
 	int newId = food.setId();
 
@@ -30,4 +29,16 @@ void Foods::removeFood(int id, Area &area)
 		area[pos].reset();
 
 	this->erase(id);
+
+	if (this->empty())
+	{
+		try
+		{
+			this->addRandomFood(area);
+		}
+		catch (const Exception::NoSpace &e)
+		{
+			throw Exception::Win();
+		}
+	}
 }
