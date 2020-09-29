@@ -52,7 +52,7 @@ $(NAME): $(OBJS) libs/glad/src/glad.o
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
 	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
-	@$(CC) $(CFLAGS) -I libs/boost/includes -I libs/glfw/includes -I libs/glad/includes $(INCLUDES) -o $@ -c $<
+	@$(CC) $(CFLAGS) -I libs/boost/includes -I libs/glfw/includes -I libs/glad/include $(INCLUDES) -o $@ -c $<
 
 libs/glad/src/glad.o: libs/glad/src/glad.c
 	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
