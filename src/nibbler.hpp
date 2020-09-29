@@ -19,5 +19,6 @@
 #include <string>
 
 Options parseCommandLine(int argc, const char **argv);
+int libA();
 
 #endif // !NIBBLER_HPP
