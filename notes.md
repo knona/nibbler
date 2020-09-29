@@ -1,7 +1,6 @@
 # Nibbler
 
-### Main
-- cycle
+Optimiser les fonctions pour placer les walls et les foods
 
 ## Bibliotheques
 
