@@ -2,11 +2,17 @@
 
 namespace libA
 {
-	void init()
+	WINDOW *win;
+
+	void init(Game &game)
 	{
 		setlocale(LC_ALL, "");
 		initscr();
+		noecho();
+		cbreak();
 		curs_set(0);
+		refresh();
+		win = newwin(game.area.getSize().height + 2, game.area.getSize().width + 2, 1, 1);
 	}
 
 	void close()
@@ -37,7 +43,8 @@ namespace libA
 
 	void render(Game &game)
 	{
-		clear();
+		wclear(win);
+		box(win, 0, 0);
 		Area &area = game.area;
 		for (int y = 0; y < area.getSize().height; y++)
 		{
@@ -47,16 +54,15 @@ namespace libA
 				std::string color;
 
 				if (area.isWall(pos))
-					color = "🟥";
+					color = "w";
 				else if (area.isFood(pos))
-					color = "🟦";
+					color = "f";
 				else if (area.isSnake(pos))
-					color = "🟨";
-				else
-					color = "⬜";
-				mvprintw(y, x, color.c_str());
+					color = "▪";
+				if (!area.isFree(pos))
+					mvwprintw(win, y + 1, x + 1, color.c_str());
 			}
 		}
-		refresh();
+		wrefresh(win);
 	}
 } // namespace libA

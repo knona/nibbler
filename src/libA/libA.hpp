@@ -9,7 +9,7 @@
 
 namespace libA
 {
-	void init();
+	void init(Game &game);
 	void close();
 	Input getInput();
 	void render(Game &game);

@@ -33,11 +33,11 @@ void startGame(const Options &options)
 
 	game.foods.addRandomFood(game.area);
 
-	// game.walls.addRandomWall(game.area);
-	// game.walls.addRandomWall(game.area);
-	// game.walls.addRandomWall(game.area);
+	game.walls.addRandomWall(game.area);
+	game.walls.addRandomWall(game.area);
+	game.walls.addRandomWall(game.area);
 
-	libA::init();
+	libA::init(game);
 	try
 	{
 		loop(game);
