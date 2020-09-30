@@ -6,6 +6,7 @@ namespace libA
 	{
 		setlocale(LC_ALL, "");
 		initscr();
+		curs_set(0);
 	}
 
 	void close()
@@ -13,8 +14,30 @@ namespace libA
 		endwin();
 	}
 
+	Input getInput()
+	{
+		int c = getch();
+
+		switch (c)
+		{
+		case 119:
+			return Input::UP;
+		case 100:
+			return Input::RIGHT;
+		case 115:
+			return Input::DOWN;
+		case 97:
+			return Input::LEFT;
+		case 27:
+			return Input::EXIT;
+		default:
+			return Input::NONE;
+		}
+	}
+
 	void render(Game &game)
 	{
+		clear();
 		Area &area = game.area;
 		for (int y = 0; y < area.getSize().height; y++)
 		{
@@ -31,7 +54,7 @@ namespace libA
 					color = "🟨";
 				else
 					color = "⬜";
-				mvprintw(x, y, color.c_str());
+				mvprintw(y, x, color.c_str());
 			}
 		}
 		refresh();

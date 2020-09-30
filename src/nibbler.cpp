@@ -1,20 +1,22 @@
 #include "nibbler.hpp"
 
+#include <fstream>
+
 void loop(Game &game)
 {
-	std::string line;
+	Input input;
 
 	libA::render(game);
-	while (std::getline(std::cin, line) && line != "q")
+	while ((input = libA::getInput()) != Input::EXIT)
 	{
 		game.snake.grow(game.area);
-		if (line == "w")
+		if (input == Input::UP)
 			game.snake.moveTop(game.area, game.foods);
-		else if (line == "a")
+		else if (input == Input::LEFT)
 			game.snake.moveLeft(game.area, game.foods);
-		else if (line == "s")
+		else if (input == Input::DOWN)
 			game.snake.moveBottom(game.area, game.foods);
-		else if (line == "d")
+		else if (input == Input::RIGHT)
 			game.snake.moveRight(game.area, game.foods);
 		else
 			game.snake.moveForward(game.area, game.foods);
@@ -31,9 +33,9 @@ void startGame(const Options &options)
 
 	game.foods.addRandomFood(game.area);
 
-	game.walls.addRandomWall(game.area);
-	game.walls.addRandomWall(game.area);
-	game.walls.addRandomWall(game.area);
+	// game.walls.addRandomWall(game.area);
+	// game.walls.addRandomWall(game.area);
+	// game.walls.addRandomWall(game.area);
 
 	libA::init();
 	try

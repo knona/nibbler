@@ -16,6 +16,7 @@
 #include "Options.hpp"
 #include "Game.hpp"
 #include "libA.hpp"
+#include "Input.hpp"
 
 #include <iostream>
 #include <string>

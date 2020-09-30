@@ -39,7 +39,11 @@ void Snake::move(Area &area, const Position &newHead, Foods &foods)
 void Snake::moveTop(Area &area, Foods &foods, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Top || this->_direction == Direction::Bottom))
+	{
+		if (this->_direction == Direction::Top) // to remove
+			this->moveForward(area, foods);		// to remove
 		return;
+	}
 
 	Position newHead = this->_positions.front();
 	newHead.y--;
@@ -50,7 +54,11 @@ void Snake::moveTop(Area &area, Foods &foods, bool forward)
 void Snake::moveRight(Area &area, Foods &foods, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Left || this->_direction == Direction::Right))
+	{
+		if (this->_direction == Direction::Right) // to remove
+			this->moveForward(area, foods);		  // to remove
 		return;
+	}
 
 	Position newHead = this->_positions.front();
 	newHead.x++;
@@ -61,7 +69,11 @@ void Snake::moveRight(Area &area, Foods &foods, bool forward)
 void Snake::moveBottom(Area &area, Foods &foods, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Top || this->_direction == Direction::Bottom))
+	{
+		if (this->_direction == Direction::Bottom) // to remove
+			this->moveForward(area, foods);		   // to remove
 		return;
+	}
 
 	Position newHead = this->_positions.front();
 	newHead.y++;
@@ -72,7 +84,11 @@ void Snake::moveBottom(Area &area, Foods &foods, bool forward)
 void Snake::moveLeft(Area &area, Foods &foods, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Left || this->_direction == Direction::Right))
+	{
+		if (this->_direction == Direction::Left) // to remove
+			this->moveForward(area, foods);		 // to remove
 		return;
+	}
 
 	Position newHead = this->_positions.front();
 	newHead.x--;

@@ -2,6 +2,9 @@
 
 features:
 Optimiser les fonctions pour placer les walls et les foods
+Optimisation générale
+Faire une diff avec une ancienne map avant de render, pour render seulement les différences
+Pour ncurses ne pas render si taille trop petite, afficher un message
 
 bug:
 Lorsqu'une food est mangée, la prochaine peut apparaitre à l'endroit exact ou la queue est censée s'allonger
