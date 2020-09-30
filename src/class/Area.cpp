@@ -175,18 +175,15 @@ std::ostream &operator<<(std::ostream &os, const Area &area)
 			std::string color;
 
 			if (area.isWall(pos))
-				color = "\033[0;31m";
+				color = "🟥";
 			else if (area.isFood(pos))
-				color = "\033[0;36m";
+				color = "🟦";
 			else if (area.isSnake(pos))
-				color = "\033[1;33m";
+				color = "🟨";
 			else
-				color = "\033[0m";
-			if (x != 0)
-				os << " ";
-			os << color << "*";
+				color = "⬜";
+			os << color;
 		}
 	}
-	os << "\033[0m";
 	return os;
 }

@@ -13,7 +13,7 @@ private:
 	Direction _direction;
 	bool _grow;
 	Position _lastTail;
-	void moveFromInput(Area &area, const Position &newHead, Foods &foods);
+	void move(Area &area, const Position &newHead, Foods &foods);
 
 public:
 	Snake();
@@ -22,10 +22,11 @@ public:
 	Snake &operator=(const Snake &);
 
 	void setSnakeOnArea(Area &area);
-	void moveFromTopInput(Area &area, Foods &foods);
-	void moveFromRightInput(Area &area, Foods &foods);
-	void moveFromBottomnput(Area &area, Foods &foods);
-	void moveFromLeftInput(Area &area, Foods &foods);
+	void moveTop(Area &area, Foods &foods, bool forward = false);
+	void moveRight(Area &area, Foods &foods, bool forward = false);
+	void moveBottom(Area &area, Foods &foods, bool forward = false);
+	void moveLeft(Area &area, Foods &foods, bool forward = false);
+	void moveForward(Area &area, Foods &foods);
 
 	void grow(Area &area);
 };

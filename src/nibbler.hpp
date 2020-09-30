@@ -14,6 +14,7 @@
 #include "Wall.hpp"
 #include "Walls.hpp"
 #include "Options.hpp"
+#include "Game.hpp"
 
 #include <iostream>
 #include <string>

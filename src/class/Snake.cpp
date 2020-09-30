@@ -16,7 +16,7 @@ Snake &Snake::operator=(const Snake &snake)
 	return *this;
 }
 
-void Snake::moveFromInput(Area &area, const Position &newHead, Foods &foods)
+void Snake::move(Area &area, const Position &newHead, Foods &foods)
 {
 	if (area.isDanger(newHead))
 		throw Exception::GameOver();
@@ -36,44 +36,60 @@ void Snake::moveFromInput(Area &area, const Position &newHead, Foods &foods)
 	area[tail].reset();
 }
 
-void Snake::moveFromTopInput(Area &area, Foods &foods)
+void Snake::moveTop(Area &area, Foods &foods, bool forward)
 {
-	if (this->_direction == Direction::Top || this->_direction == Direction::Bottom)
+	if (!forward && (this->_direction == Direction::Top || this->_direction == Direction::Bottom))
 		return;
 
 	Position newHead = this->_positions.front();
 	newHead.y--;
-	this->moveFromInput(area, newHead, foods);
+	this->move(area, newHead, foods);
+	this->_direction = Direction::Top;
 }
 
-void Snake::moveFromRightInput(Area &area, Foods &foods)
+void Snake::moveRight(Area &area, Foods &foods, bool forward)
 {
-	if (this->_direction == Direction::Left || this->_direction == Direction::Right)
+	if (!forward && (this->_direction == Direction::Left || this->_direction == Direction::Right))
 		return;
 
 	Position newHead = this->_positions.front();
 	newHead.x++;
-	this->moveFromInput(area, newHead, foods);
+	this->move(area, newHead, foods);
+	this->_direction = Direction::Right;
 }
 
-void Snake::moveFromBottomnput(Area &area, Foods &foods)
+void Snake::moveBottom(Area &area, Foods &foods, bool forward)
 {
-	if (this->_direction == Direction::Top || this->_direction == Direction::Bottom)
+	if (!forward && (this->_direction == Direction::Top || this->_direction == Direction::Bottom))
 		return;
 
 	Position newHead = this->_positions.front();
 	newHead.y++;
-	this->moveFromInput(area, newHead, foods);
+	this->move(area, newHead, foods);
+	this->_direction = Direction::Bottom;
 }
 
-void Snake::moveFromLeftInput(Area &area, Foods &foods)
+void Snake::moveLeft(Area &area, Foods &foods, bool forward)
 {
-	if (this->_direction == Direction::Left || this->_direction == Direction::Right)
+	if (!forward && (this->_direction == Direction::Left || this->_direction == Direction::Right))
 		return;
 
 	Position newHead = this->_positions.front();
 	newHead.x--;
-	this->moveFromInput(area, newHead, foods);
+	this->move(area, newHead, foods);
+	this->_direction = Direction::Left;
+}
+
+void Snake::moveForward(Area &area, Foods &foods)
+{
+	if (this->_direction == Direction::Top)
+		moveTop(area, foods, true);
+	if (this->_direction == Direction::Right)
+		moveRight(area, foods, true);
+	if (this->_direction == Direction::Bottom)
+		moveBottom(area, foods, true);
+	if (this->_direction == Direction::Left)
+		moveLeft(area, foods, true);
 }
 
 void Snake::grow(Area &area)
@@ -83,6 +99,7 @@ void Snake::grow(Area &area)
 	area[this->_lastTail].id = this->_id;
 	area[this->_lastTail].type = ElementType::SnakeT;
 	this->_positions.push_back(this->_lastTail);
+	this->_grow = false;
 }
 
 void Snake::setSnakeOnArea(Area &area)
@@ -91,7 +108,7 @@ void Snake::setSnakeOnArea(Area &area)
 	int y = areaSize.height / 2;
 	int x = areaSize.width / 2 - 2;
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 3; i >= 0; i--)
 	{
 		Position pos = {x + i, y};
 		Cell &cell = area[pos];

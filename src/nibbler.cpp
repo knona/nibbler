@@ -1,22 +1,41 @@
 #include "nibbler.hpp"
 
+void loop(Game &game)
+{
+	std::string line;
+
+	std::cout << game.area << std::endl;
+	while (std::getline(std::cin, line) && line != "q")
+	{
+		game.snake.grow(game.area);
+		if (line == "w")
+			game.snake.moveTop(game.area, game.foods);
+		else if (line == "a")
+			game.snake.moveLeft(game.area, game.foods);
+		else if (line == "s")
+			game.snake.moveBottom(game.area, game.foods);
+		else if (line == "d")
+			game.snake.moveRight(game.area, game.foods);
+		else
+			game.snake.moveForward(game.area, game.foods);
+		std::cout << game.area << std::endl;
+	}
+}
+
 void startGame(const Options &options)
 {
-	Area area(options.areaSize);
-	Snake snake;
-	Walls walls;
-	Foods foods;
+	Game game = {.area = {options.areaSize}};
 
-	snake.setId();
-	snake.setSnakeOnArea(area);
+	game.snake.setId();
+	game.snake.setSnakeOnArea(game.area);
 
-	foods.addRandomFood(area);
+	game.foods.addRandomFood(game.area);
 
-	walls.addRandomWall(area);
-	walls.addRandomWall(area);
-	walls.addRandomWall(area);
+	game.walls.addRandomWall(game.area);
+	game.walls.addRandomWall(game.area);
+	game.walls.addRandomWall(game.area);
 
-	std::cout << area << std::endl;
+	loop(game);
 	// libA();
 }
 
