@@ -47,6 +47,7 @@ void startGame(const Options &options)
 		libA::close();
 		throw;
 	}
+	libA::close();
 }
 
 int parsingErrorHandler(const Exception::ParsingOptions &e)

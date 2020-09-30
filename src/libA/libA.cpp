@@ -24,6 +24,7 @@ namespace libA
 
 	void close()
 	{
+		delwin(win);
 		endwin();
 	}
 
