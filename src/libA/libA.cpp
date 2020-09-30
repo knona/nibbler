@@ -4,6 +4,7 @@ namespace libA
 {
 	void init()
 	{
+		setlocale(LC_ALL, "");
 		initscr();
 	}
 

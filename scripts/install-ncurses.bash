@@ -19,7 +19,7 @@ tar -xf $ncurses_archive
 
 cd ncurses-6.2
 
-./configure --prefix=$ncurses --libdir=$binaries --without-ada --without-manpages --without-progs --without-tack --without-tests --with-normal
+./configure --prefix=$ncurses --libdir=$binaries --enable-widec --without-ada --without-manpages --without-progs --without-tack --without-tests --with-normal
 make
 make install
 

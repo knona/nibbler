@@ -1,6 +1,10 @@
 # Nibbler
 
+features:
 Optimiser les fonctions pour placer les walls et les foods
+
+bug:
+Lorsqu'une food est mangée, la prochaine peut apparaitre à l'endroit exact ou la queue est censée s'allonger
 
 ## Bibliotheques
 

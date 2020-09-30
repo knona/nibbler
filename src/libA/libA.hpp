@@ -1,8 +1,9 @@
 #ifndef LIB_A_HPP
 #define LIB_A_HPP
 
-#include "ncurses.h"
+#include "ncursesw/ncurses.h"
 #include "Game.hpp"
+#include <clocale>
 
 namespace libA
 {

@@ -46,7 +46,7 @@ $(OBJS_DIRS):
 
 $(NAME): $(OBJS) libs/glad/src/glad.o
 	@printf "\033[2K\r\033[36m>>Linking...\033[0m"
-	@$(CC) -o $@ $(OBJS) $(GLAD_DIR)/src/glad.o -L$(BOOST_DIR)/binaries -lboost_program_options -L$(GLFW_DIR)/binaries -lglfw3 -L$(NCURSES_DIR)/binaries -lncurses -pthread -ldl -lGL -lrt -lXrandr -lXi -lXinerama -lX11 -lXcursor
+	@$(CC) -o $@ $(OBJS) $(GLAD_DIR)/src/glad.o -L$(BOOST_DIR)/binaries -lboost_program_options -L$(GLFW_DIR)/binaries -lglfw3 -L$(NCURSES_DIR)/binaries -lncursesw -pthread -ldl -lGL -lrt -lXrandr -lXi -lXinerama -lX11 -lXcursor
 
 	@echo "\t\033[32m[OK]\033[0m"
 	@echo "\033[31m...$(shell echo $(NAME) | tr a-z A-Z)\033[0m"
