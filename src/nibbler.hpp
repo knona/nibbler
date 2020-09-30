@@ -15,6 +15,7 @@
 #include "Walls.hpp"
 #include "Options.hpp"
 #include "Game.hpp"
+#include "libA.hpp"
 
 #include <iostream>
 #include <string>
@@ -22,6 +23,5 @@
 #include <ctime>
 
 Options parseCommandLine(int argc, const char **argv);
-int libA();
 
 #endif // !NIBBLER_HPP

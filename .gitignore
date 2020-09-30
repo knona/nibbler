@@ -36,6 +36,7 @@ nibbler
 libs/boost/
 libs/glfw/
 libs/glad/
+libs/ncurses/
 
 # others
 *.tmp

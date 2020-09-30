@@ -32,6 +32,7 @@ INCLUDES = $(addprefix -I, $(SRCS_MAIN_DIR) $(HEADERS_DIRS))
 BOOST_DIR = libs/boost
 GLFW_DIR = libs/glfw
 GLAD_DIR = libs/glad
+NCURSES_DIR = libs/ncurses
 
 # COMPILATEUR
 CC		= clang++
@@ -45,22 +46,22 @@ $(OBJS_DIRS):
 
 $(NAME): $(OBJS) libs/glad/src/glad.o
 	@printf "\033[2K\r\033[36m>>Linking...\033[0m"
-	@$(CC) -o $@ $(OBJS) libs/glad/src/glad.o -Llibs/boost/binaries -lboost_program_options -Llibs/glfw/binaries -lglfw3 -pthread -ldl -lGL -lrt -lXrandr -lXi -lXinerama -lX11 -lXcursor
+	@$(CC) -o $@ $(OBJS) $(GLAD_DIR)/src/glad.o -L$(BOOST_DIR)/binaries -lboost_program_options -L$(GLFW_DIR)/binaries -lglfw3 -L$(NCURSES_DIR)/binaries -lncurses -pthread -ldl -lGL -lrt -lXrandr -lXi -lXinerama -lX11 -lXcursor
 
 	@echo "\t\033[32m[OK]\033[0m"
 	@echo "\033[31m...$(shell echo $(NAME) | tr a-z A-Z)\033[0m"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
 	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
-	@$(CC) $(CFLAGS) -I libs/boost/includes -I libs/glfw/includes -I libs/glad/include $(INCLUDES) -o $@ -c $<
+	@$(CC) $(CFLAGS) -I $(BOOST_DIR)/include -I $(GLFW_DIR)/include -I $(GLAD_DIR)/include -I $(NCURSES_DIR)/include $(INCLUDES) -o $@ -c $<
 
 libs/glad/src/glad.o: libs/glad/src/glad.c
 	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
 	@clang -Wall -Wextra -Werror -I libs/glad/include -o $@ -c $<
 
-.PHONY: clean fclean re libs clean-boost clean-glfw clean-glad clean-libs ffclean
+.PHONY: clean fclean re libs clean-boost clean-glfw clean-glad clean-ncurses clean-libs ffclean
 
-libs: $(BOOST_DIR) $(GLFW_DIR) $(GLAD_DIR)
+libs: $(BOOST_DIR) $(GLFW_DIR) $(GLAD_DIR) $(NCURSES_DIR)
 
 $(BOOST_DIR):
 	@echo "\033[36mInstalling boost...\033[0m"
@@ -73,6 +74,10 @@ $(GLFW_DIR):
 $(GLAD_DIR):
 	@echo "\033[36mInstalling glad...\033[0m"
 	@./scripts/install-glad.bash
+
+$(NCURSES_DIR):
+	@echo "\033[36mInstalling ncurses...\033[0m"
+	@./scripts/install-ncurses.bash
 
 clean:
 	@echo "\033[31mCleaning .o\033[0m"
@@ -94,7 +99,11 @@ clean-glad:
 	@echo "\033[31mRemoving glad...\033[0m"
 	@rm -rf $(GLAD_DIR)
 
-clean-libs: clean-boost clean-glfw clean-glad
+clean-ncurses:
+	@echo "\033[31mRemoving ncurses...\033[0m"
+	@rm -rf $(NCURSES_DIR)
+
+clean-libs: clean-boost clean-glfw clean-glad clean-ncurses
 
 ffclean: clean-libs fclean
 

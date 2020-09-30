@@ -4,7 +4,7 @@ void loop(Game &game)
 {
 	std::string line;
 
-	std::cout << game.area << std::endl;
+	libA::render(game);
 	while (std::getline(std::cin, line) && line != "q")
 	{
 		game.snake.grow(game.area);
@@ -18,7 +18,7 @@ void loop(Game &game)
 			game.snake.moveRight(game.area, game.foods);
 		else
 			game.snake.moveForward(game.area, game.foods);
-		std::cout << game.area << std::endl;
+		libA::render(game);
 	}
 }
 
@@ -35,8 +35,16 @@ void startGame(const Options &options)
 	game.walls.addRandomWall(game.area);
 	game.walls.addRandomWall(game.area);
 
-	loop(game);
-	// libA();
+	libA::init();
+	try
+	{
+		loop(game);
+	}
+	catch (const std::exception &e)
+	{
+		libA::close();
+		throw;
+	}
 }
 
 int parsingErrorHandler(const Exception::ParsingOptions &e)

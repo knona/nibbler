@@ -4,9 +4,9 @@
 
 current_directory=$(pwd)
 
-includes=libs/glfw/includes
+include=libs/glfw/include
 binaries=libs/glfw/binaries
-mkdir -p $includes
+mkdir -p $include
 mkdir -p $binaries
 
 mkdir .tmp
@@ -22,7 +22,7 @@ cmake .
 make
 
 mv src/libglfw3.a $current_directory/$binaries
-mv include/* $current_directory/$includes
+mv include/* $current_directory/$include
 
 cd ../..
 rm -rf .tmp

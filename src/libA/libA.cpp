@@ -1,53 +1,38 @@
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
+#include "libA.hpp"
 
-#include <iostream>
-
-void displayError(int errorCode, const char *error)
+namespace libA
 {
-	std::cout << "Error code: " << errorCode << std::endl;
-	std::cout << error << std::endl;
-}
-
-int libA()
-{
-	glfwSetErrorCallback(displayError);
-
-	GLFWwindow *window;
-
-	/* Initialize the library */
-	if (!glfwInit())
+	void init()
 	{
-		std::cerr << "Init failed" << std::endl;
-		return -1;
+		initscr();
 	}
 
-	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-	if (!window)
+	void close()
 	{
-		std::cerr << "Window creation failed" << std::endl;
-		glfwTerminate();
-		return -1;
+		endwin();
 	}
 
-	/* Make the window's context current */
-	glfwMakeContextCurrent(window);
-	gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
-
-	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(window))
+	void render(Game &game)
 	{
-		/* Render here */
-		glClear(GL_COLOR_BUFFER_BIT);
+		Area &area = game.area;
+		for (int y = 0; y < area.getSize().height; y++)
+		{
+			for (int x = 0; x < area.getSize().width; x++)
+			{
+				Position pos = {x, y};
+				std::string color;
 
-		/* Swap front and back buffers */
-		glfwSwapBuffers(window);
-
-		/* Poll for and process events */
-		glfwPollEvents();
+				if (area.isWall(pos))
+					color = "🟥";
+				else if (area.isFood(pos))
+					color = "🟦";
+				else if (area.isSnake(pos))
+					color = "🟨";
+				else
+					color = "⬜";
+				mvprintw(x, y, color.c_str());
+			}
+		}
+		refresh();
 	}
-
-	glfwTerminate();
-	return 0;
-}
+} // namespace libA
