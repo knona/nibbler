@@ -133,3 +133,13 @@ void Snake::setSnakeOnArea(Area &area)
 		this->_positions.push_back(pos);
 	}
 }
+
+bool Snake::isHead(const Position &pos) const
+{
+	return this->_positions.front() == pos;
+}
+
+bool Snake::isTail(const Position &pos) const
+{
+	return this->_positions.back() == pos;
+}

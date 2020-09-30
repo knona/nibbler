@@ -22,11 +22,15 @@ public:
 	Snake &operator=(const Snake &);
 
 	void setSnakeOnArea(Area &area);
+
 	void moveTop(Area &area, Foods &foods, bool forward = false);
 	void moveRight(Area &area, Foods &foods, bool forward = false);
 	void moveBottom(Area &area, Foods &foods, bool forward = false);
 	void moveLeft(Area &area, Foods &foods, bool forward = false);
 	void moveForward(Area &area, Foods &foods);
+
+	bool isHead(const Position &pos) const;
+	bool isTail(const Position &pos) const;
 
 	void grow(Area &area);
 };

@@ -1,4 +1,5 @@
 #include "libA.hpp"
+#include <sstream>
 
 namespace libA
 {
@@ -8,11 +9,17 @@ namespace libA
 	{
 		setlocale(LC_ALL, "");
 		initscr();
+		start_color();
 		noecho();
 		cbreak();
 		curs_set(0);
 		refresh();
-		win = newwin(game.area.getSize().height + 2, game.area.getSize().width + 2, 1, 1);
+		init_pair(1, COLOR_RED, COLOR_BLACK);
+		init_pair(2, COLOR_CYAN, COLOR_BLACK);
+		init_pair(3, COLOR_GREEN, COLOR_BLACK);
+		init_pair(4, COLOR_YELLOW, COLOR_BLACK);
+		init_pair(5, COLOR_WHITE, COLOR_BLACK);
+		win = newwin(game.area.getSize().height + 2, game.area.getSize().width * 2 + 2, 1, 1);
 	}
 
 	void close()
@@ -44,23 +51,25 @@ namespace libA
 	void render(Game &game)
 	{
 		wclear(win);
+		wattron(win, COLOR_PAIR(5));
 		box(win, 0, 0);
-		Area &area = game.area;
-		for (int y = 0; y < area.getSize().height; y++)
+
+		for (int y = 0; y < game.area.getSize().height; y++)
 		{
-			for (int x = 0; x < area.getSize().width; x++)
+			for (int x = 0; x < game.area.getSize().width; x++)
 			{
 				Position pos = {x, y};
 				std::string color;
 
-				if (area.isWall(pos))
-					color = "w";
-				else if (area.isFood(pos))
-					color = "f";
-				else if (area.isSnake(pos))
-					color = "▪";
-				if (!area.isFree(pos))
-					mvwprintw(win, y + 1, x + 1, color.c_str());
+				if (game.area.isWall(pos))
+					wattron(win, COLOR_PAIR(1));
+				else if (game.area.isFood(pos))
+					wattron(win, COLOR_PAIR(2));
+				else if (game.area.isSnake(pos))
+					game.snake.isHead({x, y}) ? wattron(win, COLOR_PAIR(4)) : wattron(win, COLOR_PAIR(3));
+
+				if (!game.area.isFree(pos))
+					mvwprintw(win, y + 1, x * 2 + 1, "◼");
 			}
 		}
 		wrefresh(win);

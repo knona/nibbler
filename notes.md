@@ -1,13 +1,17 @@
 # Nibbler
 
 features:
+Faire en sorte qu'un wall ne puisse pas spawn a cote des bords de la map
 Optimiser les fonctions pour placer les walls et les foods
 Optimisation générale
-Faire une diff avec une ancienne map avant de render, pour render seulement les différences
 Pour ncurses ne pas render si taille trop petite, afficher un message
+Taille et nombre des walls en fonction de la taille de la map
+Mode jeu sans/avec mur
+Score avec noms des joueurs 
 
 bug:
 Lorsqu'une food est mangée, la prochaine peut apparaitre à l'endroit exact ou la queue est censée s'allonger
+
 
 ## Bibliotheques
 
