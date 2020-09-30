@@ -39,12 +39,12 @@ CC		= clang++
 CFLAGS	= -Wall -Wextra -g3
 
 # REGLES
-all: libs $(OBJS_DIRS) $(NAME)
+all: $(NAME)
 
 $(OBJS_DIRS):
 	@mkdir -p $@
 
-$(NAME): $(OBJS) libs/glad/src/glad.o
+$(NAME): $(BOOST_DIR) $(GLFW_DIR) $(GLAD_DIR) $(NCURSES_DIR) $(OBJS_DIRS) libs/glad/src/glad.o $(OBJS)
 	@printf "\033[2K\r\033[36m>>Linking...\033[0m"
 	@$(CC) -o $@ $(OBJS) $(GLAD_DIR)/src/glad.o -L$(BOOST_DIR)/binaries -lboost_program_options -L$(GLFW_DIR)/binaries -lglfw3 -L$(NCURSES_DIR)/binaries -lncursesw -pthread -ldl -lGL -lrt -lXrandr -lXi -lXinerama -lX11 -lXcursor
 
@@ -59,9 +59,7 @@ libs/glad/src/glad.o: libs/glad/src/glad.c
 	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
 	@clang -Wall -Wextra -Werror -I libs/glad/include -o $@ -c $<
 
-.PHONY: clean fclean re libs clean-boost clean-glfw clean-glad clean-ncurses clean-libs ffclean
-
-libs: $(BOOST_DIR) $(GLFW_DIR) $(GLAD_DIR) $(NCURSES_DIR)
+.PHONY: clean fclean re clean-boost clean-glfw clean-glad clean-ncurses clean-libs ffclean
 
 $(BOOST_DIR):
 	@echo "\033[36mInstalling boost...\033[0m"
