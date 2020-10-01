@@ -22,14 +22,18 @@ void Cron::addEvent(CronData &cronData, int relativeCycle)
 
 void Cron::checkEvents()
 {
-	std::map<int, std::list<CronData>>::iterator it;
-	for (it = this->_cronTable.begin(); it != this->_cronTable.end(); it++)
+	std::map<int, std::list<CronData>>::iterator it = this->_cronTable.begin();
+	while (it != this->_cronTable.end())
 	{
 		if (it->first == 0)
 		{
 			for (CronData &cronData : it->second)
 				cronData.eventFunction(cronData.args);
+
 			it = this->_cronTable.erase(it);
+			std::cout << "1" << std::endl;
+			std::cout << std::boolalpha << (it == this->_cronTable.end()) << std::endl;
+			std::cout << "2" << std::endl;
 		}
 		else
 		{

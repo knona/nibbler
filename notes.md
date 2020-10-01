@@ -8,6 +8,7 @@ features:
 - Taille et nombre des walls en fonction de la taille de la map
 - Mode jeu sans/avec mur
 - Score avec noms des joueurs, sauvegarde des classements
+- Vérifier les constructeurs par copie
 
 - faire des libs des classes qui héritent d'une même interface
 

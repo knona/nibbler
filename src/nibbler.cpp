@@ -1,6 +1,26 @@
 #include "nibbler.hpp"
 
-#include <fstream>
+void loopDebug(Game &game)
+{
+	std::string line;
+
+	std::cout << game.area << std::endl;
+	while (std::getline(std::cin, line) && line != "q")
+	{
+		game.cron.checkEvents();
+		if (line == "w")
+			game.snake.moveTop(game.area, game.foods, game.cron);
+		else if (line == "d")
+			game.snake.moveRight(game.area, game.foods, game.cron);
+		else if (line == "s")
+			game.snake.moveBottom(game.area, game.foods, game.cron);
+		else if (line == "a")
+			game.snake.moveLeft(game.area, game.foods, game.cron);
+		else
+			game.snake.moveForward(game.area, game.foods, game.cron);
+		std::cout << game.area << std::endl;
+	}
+}
 
 void loop(Game &game)
 {
@@ -9,17 +29,17 @@ void loop(Game &game)
 	libA::render(game);
 	while ((input = libA::getInput()) != Input::EXIT)
 	{
-		game.snake.grow(game.area);
+		game.cron.checkEvents();
 		if (input == Input::UP)
-			game.snake.moveTop(game.area, game.foods);
-		else if (input == Input::LEFT)
-			game.snake.moveLeft(game.area, game.foods);
-		else if (input == Input::DOWN)
-			game.snake.moveBottom(game.area, game.foods);
+			game.snake.moveTop(game.area, game.foods, game.cron);
 		else if (input == Input::RIGHT)
-			game.snake.moveRight(game.area, game.foods);
+			game.snake.moveRight(game.area, game.foods, game.cron);
+		else if (input == Input::DOWN)
+			game.snake.moveBottom(game.area, game.foods, game.cron);
+		else if (input == Input::LEFT)
+			game.snake.moveLeft(game.area, game.foods, game.cron);
 		else
-			game.snake.moveForward(game.area, game.foods);
+			game.snake.moveForward(game.area, game.foods, game.cron);
 		libA::render(game);
 	}
 }
@@ -33,9 +53,9 @@ void startGame(const Options &options)
 
 	game.foods.addRandomFood(game.area);
 
-	game.walls.addRandomWall(game.area);
-	game.walls.addRandomWall(game.area);
-	game.walls.addRandomWall(game.area);
+	// game.walls.addRandomWall(game.area);
+	// game.walls.addRandomWall(game.area);
+	// game.walls.addRandomWall(game.area);
 
 	libA::init(game);
 	try

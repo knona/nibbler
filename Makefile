@@ -8,7 +8,7 @@ define uniq =
 endef
 
 # SOURCES
-SRCS_FILES_WILDCARD	= $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
+SRCS_FILES_WILDCARD	= $(wildcard src/*.cpp) $(wildcard src/*/*.cpp) $(wildcard src/*/*/*.cpp)
 SRCS_FILES			= $(SRCS_FILES_WILDCARD:src/%=%)
 SRCS_MAIN_DIR		= src/
 SRCS				= $(addprefix $(SRCS_MAIN_DIR), $(SRCS_FILES))
@@ -20,7 +20,7 @@ OBJS 			= $(addprefix $(OBJS_MAIN_DIR), $(OBJS_FILES))
 OBJS_DIRS 		= $(call uniq, $(dir $(OBJS)))
 
 # HEADERS
-HEADERS_FILES_WILDCARD	= $(wildcard src/*.hpp) $(wildcard src/*/*.hpp)
+HEADERS_FILES_WILDCARD	= $(wildcard src/*.hpp) $(wildcard src/*/*.hpp) $(wildcard src/*/*/*.hpp)
 HEADERS_FILES 			= $(HEADERS_FILES_WILDCARD:src/%=%)
 HEADERS					= $(addprefix $(SRCS_MAIN_DIR), $(HEADERS_FILES))
 HEADERS_DIRS			= $(call uniq, $(dir $(HEADERS)))
