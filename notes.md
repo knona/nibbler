@@ -7,7 +7,14 @@ Optimisation générale
 Pour ncurses ne pas render si taille trop petite, afficher un message
 Taille et nombre des walls en fonction de la taille de la map
 Mode jeu sans/avec mur
-Score avec noms des joueurs 
+Score avec noms des joueurs, sauvegarde des classements
+
+- faire de la struct game une class
+  - lui ajouter un attribut privé cronTable map\<int, list\<{void (*)(const unique_ptr<void>&), unique_ptr<void>}\>\>, 
+  - lui ajouter une fonction membre cronAddEvent(f, args, int relativeCycle)
+  - lui ajouter une fonction membre checkCronTable()
+
+- pour les events faire une table de hashage qui associe un event clavier à une fonction
 
 bug:
 Lorsqu'une food est mangée, la prochaine peut apparaitre à l'endroit exact ou la queue est censée s'allonger
