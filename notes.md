@@ -1,13 +1,15 @@
 # Nibbler
 
 features:
-Faire en sorte qu'un wall ne puisse pas spawn a cote des bords de la map
-Optimiser les fonctions pour placer les walls et les foods
-Optimisation générale
-Pour ncurses ne pas render si taille trop petite, afficher un message
-Taille et nombre des walls en fonction de la taille de la map
-Mode jeu sans/avec mur
-Score avec noms des joueurs, sauvegarde des classements
+- Faire en sorte qu'un wall ne puisse pas spawn a cote des bords de la map
+- Optimiser les fonctions pour placer les walls et les foods
+- Optimisation générale
+- Pour ncurses ne pas render si taille trop petite, afficher un message
+- Taille et nombre des walls en fonction de la taille de la map
+- Mode jeu sans/avec mur
+- Score avec noms des joueurs, sauvegarde des classements
+
+- faire des libs des classes qui héritent d'une même interface
 
 - faire de la struct game une class
   - lui ajouter un attribut privé cronTable map\<int, list\<{void (*)(const unique_ptr<void>&), unique_ptr<void>}\>\>, 
