@@ -7,7 +7,6 @@ void loopDebug(Game &game)
 	std::cout << game.area << std::endl;
 	while (std::getline(std::cin, line) && line != "q")
 	{
-		game.cron.checkEvents();
 		if (line == "w")
 			game.snake.moveTop(game.area, game.foods, game.cron);
 		else if (line == "d")
@@ -18,6 +17,7 @@ void loopDebug(Game &game)
 			game.snake.moveLeft(game.area, game.foods, game.cron);
 		else
 			game.snake.moveForward(game.area, game.foods, game.cron);
+		game.cron.checkEvents();
 		std::cout << game.area << std::endl;
 	}
 }
@@ -29,7 +29,6 @@ void loop(Game &game)
 	libA::render(game);
 	while ((input = libA::getInput()) != Input::EXIT)
 	{
-		game.cron.checkEvents();
 		if (input == Input::UP)
 			game.snake.moveTop(game.area, game.foods, game.cron);
 		else if (input == Input::RIGHT)
@@ -40,6 +39,7 @@ void loop(Game &game)
 			game.snake.moveLeft(game.area, game.foods, game.cron);
 		else
 			game.snake.moveForward(game.area, game.foods, game.cron);
+		game.cron.checkEvents();
 		libA::render(game);
 	}
 }

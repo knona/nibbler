@@ -21,20 +21,23 @@ void Snake::move(Area &area, const Position &newHead, Foods &foods, Cron &cron)
 		throw Exception::GameOver();
 
 	Position tail = this->_positions.back();
+	area[tail].reset();
 	this->_positions.pop_back();
 
-	this->_positions.push_front(newHead);
 	if (area.isFood(newHead))
 	{
 		foods.removeFood(newHead, area);
 		CronData data;
-		data.eventFunction = Snake::grow;
-		data.args = std::make_shared<SnakeGrowData>(SnakeGrowData({this, &area, tail}));
+		data.eventFunction = Snake::growFromCron;
+		data.args = std::make_shared<GrowArgs>(GrowArgs({this, &area, this->_positions.back()}));
 		cron.addEvent(data, 1);
+		data.eventFunction = Foods::addRandomFoodFromCron;
+		data.args = std::make_shared<AddRandomFoodArgs>(AddRandomFoodArgs({&foods, &area}));
+		cron.addEvent(data, 0);
 	}
+	this->_positions.push_front(newHead);
 	area[newHead].id = this->_id;
 	area[newHead].type = ElementType::SnakeT;
-	area[tail].reset();
 }
 
 void Snake::moveTop(Area &area, Foods &foods, Cron &cron, bool forward)
@@ -107,12 +110,17 @@ void Snake::moveForward(Area &area, Foods &foods, Cron &cron)
 	(this->*fMap[this->_direction])(area, foods, cron, true);
 }
 
-void Snake::grow(const std::shared_ptr<void> &args)
+void Snake::grow(Area &area, Position oldTail)
 {
-	SnakeGrowData &data = *(std::static_pointer_cast<SnakeGrowData>(args));
-	(*data.area)[data.oldTail].id = data.snake->_id;
-	(*data.area)[data.oldTail].type = ElementType::SnakeT;
-	data.snake->_positions.push_back(data.oldTail);
+	area[oldTail].id = this->_id;
+	area[oldTail].type = ElementType::SnakeT;
+	this->_positions.push_back(oldTail);
+}
+
+void Snake::growFromCron(const std::shared_ptr<void> &args)
+{
+	GrowArgs &data = *(std::static_pointer_cast<GrowArgs>(args));
+	(data.snake->Snake::grow)(*data.area, data.oldTail);
 }
 
 void Snake::setSnakeOnArea(Area &area)

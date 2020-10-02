@@ -7,7 +7,8 @@
 #include "Exceptions.hpp"
 #include "Foods.hpp"
 #include "Cron.hpp"
-#include "SnakeGrowData.hpp"
+#include "GrowArgs.hpp"
+#include "AddRandomFoodArgs.hpp"
 
 #include <memory>
 #include <unordered_map>
@@ -19,7 +20,6 @@ class Snake : public Element
 private:
 	Direction _direction;
 	void move(Area &area, const Position &newHead, Foods &foods, Cron &cron);
-	static void grow(const std::shared_ptr<void> &);
 
 public:
 	Snake();
@@ -34,6 +34,9 @@ public:
 	void moveBottom(Area &area, Foods &foods, Cron &cron, bool forward = false);
 	void moveLeft(Area &area, Foods &foods, Cron &cron, bool forward = false);
 	void moveForward(Area &area, Foods &foods, Cron &cron);
+
+	void grow(Area &area, Position oldTail);
+	static void growFromCron(const std::shared_ptr<void> &);
 
 	bool isHead(const Position &pos) const;
 	bool isTail(const Position &pos) const;

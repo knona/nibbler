@@ -1,16 +1,16 @@
-#ifndef SNAKE_GROW_DATA_HPP
-#define SNAKE_GROW_DATA_HPP
+#ifndef GROW_ARGS_HPP
+#define GROW_ARGS_HPP
 
 #include "Snake.hpp"
 #include "Area.hpp"
 
 class Snake;
 
-struct SnakeGrowData
+struct GrowArgs
 {
 	Snake *snake;
 	Area *area;
 	Position oldTail;
 };
 
-#endif // !SNAKE_GROW_DATA_HPP
+#endif // !GROW_ARGS_HPP

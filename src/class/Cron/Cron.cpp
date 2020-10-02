@@ -15,9 +15,9 @@ Cron &Cron::operator=(const Cron &cron)
 	return *this;
 }
 
-void Cron::addEvent(CronData &cronData, int relativeCycle)
+void Cron::addEvent(CronData cronData, int relativeCycle)
 {
-	this->_cronTable[relativeCycle - 1].push_back(cronData);
+	this->_cronTable[relativeCycle].push_back(cronData);
 }
 
 void Cron::checkEvents()
@@ -29,16 +29,9 @@ void Cron::checkEvents()
 		{
 			for (CronData &cronData : it->second)
 				cronData.eventFunction(cronData.args);
-
-			it = this->_cronTable.erase(it);
-			std::cout << "1" << std::endl;
-			std::cout << std::boolalpha << (it == this->_cronTable.end()) << std::endl;
-			std::cout << "2" << std::endl;
 		}
 		else
-		{
 			this->_cronTable[it->first - 1] = it->second;
-			it = this->_cronTable.erase(it);
-		}
+		it = this->_cronTable.erase(it);
 	}
 }

@@ -21,7 +21,7 @@ public:
 	~Cron();
 	Cron &operator=(const Cron &);
 
-	void addEvent(CronData &cronData, int relativeCycle);
+	void addEvent(CronData cronData, int relativeCycle);
 	void checkEvents();
 };
 
