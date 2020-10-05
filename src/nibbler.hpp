@@ -22,6 +22,7 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <unordered_map>
 
 Options parseCommandLine(int argc, const char **argv);
 void debug(Game &game);

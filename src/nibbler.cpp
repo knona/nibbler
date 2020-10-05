@@ -1,22 +1,47 @@
 #include "nibbler.hpp"
 
+void moveTop(Game &game)
+{
+	game.snake.moveTop(game.area, game.foods, game.cron);
+}
+
+void moveRight(Game &game)
+{
+	game.snake.moveRight(game.area, game.foods, game.cron);
+}
+
+void moveBottom(Game &game)
+{
+	game.snake.moveBottom(game.area, game.foods, game.cron);
+}
+
+void moveLeft(Game &game)
+{
+	game.snake.moveLeft(game.area, game.foods, game.cron);
+}
+
+void moveForward(Game &game)
+{
+	game.snake.moveForward(game.area, game.foods, game.cron);
+}
+
 void loop(Game &game)
 {
+	std::unordered_map<Input, void (*)(Game & game)> fMap =
+		{{Input::UP, moveTop},
+		 {Input::RIGHT, moveRight},
+		 {Input::DOWN, moveBottom},
+		 {Input::LEFT, moveLeft}};
+
 	Input input;
 
 	libA::render(game);
 	while ((input = libA::getInput()) != Input::EXIT)
 	{
-		if (input == Input::UP)
-			game.snake.moveTop(game.area, game.foods, game.cron);
-		else if (input == Input::RIGHT)
-			game.snake.moveRight(game.area, game.foods, game.cron);
-		else if (input == Input::DOWN)
-			game.snake.moveBottom(game.area, game.foods, game.cron);
-		else if (input == Input::LEFT)
-			game.snake.moveLeft(game.area, game.foods, game.cron);
+		if (fMap.count(input))
+			fMap[input](game);
 		else
-			game.snake.moveForward(game.area, game.foods, game.cron);
+			moveForward(game);
 		game.cron.checkEvents();
 		libA::render(game);
 	}
