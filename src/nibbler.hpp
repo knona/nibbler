@@ -24,5 +24,6 @@
 #include <ctime>
 
 Options parseCommandLine(int argc, const char **argv);
+void debug(Game &game);
 
 #endif // !NIBBLER_HPP
