@@ -1,5 +1,7 @@
 #include "libA.hpp"
 #include <sstream>
+#include <fstream>
+#include <iostream>
 
 namespace libA
 {
@@ -11,7 +13,7 @@ namespace libA
 		initscr();
 		start_color();
 		noecho();
-		cbreak();
+		raw();
 		curs_set(0);
 		refresh();
 		init_pair(1, COLOR_RED, COLOR_BLACK);
@@ -20,6 +22,7 @@ namespace libA
 		init_pair(4, COLOR_YELLOW, COLOR_BLACK);
 		init_pair(5, COLOR_WHITE, COLOR_BLACK);
 		win = newwin(game.area.getSize().height + 2, game.area.getSize().width * 2 + 2, 1, 1);
+		keypad(win, true);
 	}
 
 	void close()
@@ -30,16 +33,24 @@ namespace libA
 
 	Input getInput()
 	{
-		int c = getch();
+		// wtimeout(win, 500);
+		int c = wgetch(win);
 
+		// std::ofstream file("log.txt", std::ios_base::app);
+		// file << c << std::endl;
+		// file.close();
 		switch (c)
 		{
+		case 259:
 		case 119:
 			return Input::UP;
+		case 261:
 		case 100:
 			return Input::RIGHT;
+		case 258:
 		case 115:
 			return Input::DOWN;
+		case 260:
 		case 97:
 			return Input::LEFT;
 		case 27:
