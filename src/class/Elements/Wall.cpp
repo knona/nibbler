@@ -19,8 +19,7 @@ bool checkSides(Area &area, const Element &element)
 		for (int i = -1; i <= 1; i++)
 			for (int j = -1; j <= 1; j++)
 				if (j != pos.x || i != pos.y)
-					res = res &&
-						  (area.isOverArea({pos.x + j, pos.y + i}) || !area.isDanger({pos.x + j, pos.y + i}));
+					res = res && !area.isDanger({pos.x + j, pos.y + i});
 		if (!res)
 			return false;
 	}
