@@ -20,8 +20,13 @@ void Snake::move(Area &area, const Position &newHead, Foods &foods, Cron &cron)
 	if (area.isDanger(newHead))
 		throw Exception::GameOver();
 
-	Position tail = this->_positions.back();
-	area[tail].reset();
+	// std::cout << "DEBUG ---" << std::endl;
+	// for (const Position &pos : this->_positions)
+	// 	std::cout << "|" << pos << "| ";
+	// std::cout << std::endl;
+
+	// this->_positions.back().print(area.getSize());
+	area[this->_positions.back()].reset();
 	this->_positions.pop_back();
 
 	if (area.isFood(newHead))
@@ -29,6 +34,10 @@ void Snake::move(Area &area, const Position &newHead, Foods &foods, Cron &cron)
 		foods.removeFood(newHead, area);
 		CronData data;
 		data.eventFunction = Snake::growFromCron;
+		std::cout << "POSITION TO ADD" << std::endl;
+		this->_positions.back().print(area.getSize());
+		std::cout << "---------------" << std::endl;
+
 		data.args = std::make_shared<GrowArgs>(GrowArgs({this, &area, this->_positions.back()}));
 		cron.addEvent(data, 1);
 		data.eventFunction = Foods::addRandomFoodFromCron;
@@ -112,6 +121,8 @@ void Snake::moveForward(Area &area, Foods &foods, Cron &cron)
 
 void Snake::grow(Area &area, Position oldTail)
 {
+	if (oldTail == this->_positions.back())
+		return;
 	area[oldTail].id = this->_id;
 	area[oldTail].type = ElementType::SnakeT;
 	this->_positions.push_back(oldTail);

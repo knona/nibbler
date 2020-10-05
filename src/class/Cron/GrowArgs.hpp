@@ -5,6 +5,7 @@
 #include "Area.hpp"
 
 class Snake;
+class Area;
 
 struct GrowArgs
 {

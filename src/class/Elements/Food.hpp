@@ -3,6 +3,7 @@
 
 #include "Element.hpp"
 #include "Area.hpp"
+
 class Food : public Element
 {
 private:

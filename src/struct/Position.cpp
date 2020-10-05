@@ -53,6 +53,22 @@ Position Position::getRandomPosition(int xMax, int yMax)
 	return {rand() % xMax, rand() % yMax};
 }
 
+void Position::print(const Size &size)
+{
+	this->print(size.width, size.height);
+}
+
+void Position::print(int width, int height)
+{
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+			std::cout << (Position(x, y) == *this ? "🟥" : "⬜");
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+}
+
 std::ostream &operator<<(std::ostream &os, const Position &pos)
 {
 	os << "x: " << pos.x << ", y: " << pos.y;

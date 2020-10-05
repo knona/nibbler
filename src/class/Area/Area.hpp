@@ -14,6 +14,8 @@
 #include "Cell.hpp"
 #include "Exceptions.hpp"
 
+class Snake;
+
 class Area
 {
 private:
@@ -43,6 +45,7 @@ public:
 	Position getRandomFreePosition() const;
 	std::vector<Element> getFreeElements(int size) const;
 	Element getRandomFreeElement(int size) const;
+	void print(std::ostream &os, const Snake *snake = nullptr) const;
 };
 
 std::ostream &operator<<(std::ostream &os, const Area &);

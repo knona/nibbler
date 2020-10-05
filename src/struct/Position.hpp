@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cstdlib>
 
+#include "Size.hpp"
+
 struct Position
 {
 	int x;
@@ -15,6 +17,8 @@ struct Position
 	Position &operator=(const Position &b);
 	~Position();
 
+	void print(int width, int height);
+	void print(const Size &size);
 	bool operator==(const Position &b) const;
 	bool operator!=(const Position &b) const;
 	bool operator<(const Position &b) const;

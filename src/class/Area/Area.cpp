@@ -1,4 +1,5 @@
 #include "Area.hpp"
+#include "Snake.hpp"
 
 std::unique_ptr<Cell[]> alloc(const Size &size)
 {
@@ -163,27 +164,32 @@ Element Area::getRandomFreeElement(int size) const
 	return elements[std::rand() % nbElements];
 }
 
-std::ostream &operator<<(std::ostream &os, const Area &area)
+void Area::print(std::ostream &os, const Snake *snake) const
 {
-	for (int y = 0; y < area.getSize().height; y++)
+	for (int y = 0; y < this->_size.height; y++)
 	{
 		if (y != 0)
 			os << std::endl;
-		for (int x = 0; x < area.getSize().width; x++)
+		for (int x = 0; x < this->_size.width; x++)
 		{
 			Position pos = {x, y};
 			std::string color;
 
-			if (area.isWall(pos))
-				color = "🟥";
-			else if (area.isFood(pos))
-				color = "🟦";
-			else if (area.isSnake(pos))
-				color = "🟨";
+			if (this->isWall(pos))
+				color = "🟫";
+			else if (this->isFood(pos))
+				color = "🟪";
+			else if (this->isSnake(pos))
+				color = snake && snake->isHead(pos) ? "🟦" : (snake && snake->isTail(pos) ? "⬛" : "🟩");
 			else
 				color = "⬜";
 			os << color;
 		}
 	}
+}
+
+std::ostream &operator<<(std::ostream &os, const Area &area)
+{
+	(area.Area::print)(os);
 	return os;
 }

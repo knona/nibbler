@@ -5,6 +5,7 @@
 #include "Foods.hpp"
 
 class Foods;
+class Area;
 
 struct AddRandomFoodArgs
 {

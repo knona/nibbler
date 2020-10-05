@@ -4,7 +4,8 @@ void loopDebug(Game &game)
 {
 	std::string line;
 
-	std::cout << game.area << std::endl;
+	game.area.print(std::cout, &game.snake);
+	std::cout << std::endl;
 	while (std::getline(std::cin, line) && line != "q")
 	{
 		if (line == "w")
@@ -17,8 +18,13 @@ void loopDebug(Game &game)
 			game.snake.moveLeft(game.area, game.foods, game.cron);
 		else
 			game.snake.moveForward(game.area, game.foods, game.cron);
+		std::cout << "BEFORE EVENTS --" << std::endl;
+		game.area.print(std::cout, &game.snake);
+		std::cout << std::endl
+				  << "----------------" << std::endl;
 		game.cron.checkEvents();
-		std::cout << game.area << std::endl;
+		game.area.print(std::cout, &game.snake);
+		std::cout << std::endl;
 	}
 }
 
@@ -57,17 +63,17 @@ void startGame(const Options &options)
 	// game.walls.addRandomWall(game.area);
 	// game.walls.addRandomWall(game.area);
 
-	libA::init(game);
+	// libA::init(game);
 	try
 	{
-		loop(game);
+		loopDebug(game);
 	}
 	catch (const std::exception &e)
 	{
-		libA::close();
+		// libA::close();
 		throw;
 	}
-	libA::close();
+	// libA::close();
 }
 
 int parsingErrorHandler(const Exception::ParsingOptions &e)
