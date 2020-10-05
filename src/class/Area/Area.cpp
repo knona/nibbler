@@ -186,6 +186,8 @@ void Area::print(std::ostream &os, const Snake *snake) const
 			os << color;
 		}
 	}
+	os << std::endl;
+	os << std::endl;
 }
 
 std::ostream &operator<<(std::ostream &os, const Area &area)

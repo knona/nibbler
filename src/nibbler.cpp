@@ -1,30 +1,39 @@
 #include "nibbler.hpp"
+#include <termios.h>
+#include <unistd.h>
+
+char getcharr()
+{
+	char c;
+	struct termios old_tio, new_tio;
+	tcgetattr(STDIN_FILENO, &old_tio);
+	new_tio = old_tio;
+	new_tio.c_lflag &= (~ICANON & ~ECHO);
+	tcsetattr(STDIN_FILENO, TCSANOW, &new_tio);
+	c = getchar();
+	tcsetattr(STDIN_FILENO, TCSANOW, &old_tio);
+	return c;
+}
 
 void loopDebug(Game &game)
 {
-	std::string line;
+	char c;
 
 	game.area.print(std::cout, &game.snake);
-	std::cout << std::endl;
-	while (std::getline(std::cin, line) && line != "q")
+	while ((c = getcharr()) != 'q')
 	{
-		if (line == "w")
+		if (c == 'w')
 			game.snake.moveTop(game.area, game.foods, game.cron);
-		else if (line == "d")
+		else if (c == 'd')
 			game.snake.moveRight(game.area, game.foods, game.cron);
-		else if (line == "s")
+		else if (c == 's')
 			game.snake.moveBottom(game.area, game.foods, game.cron);
-		else if (line == "a")
+		else if (c == 'a')
 			game.snake.moveLeft(game.area, game.foods, game.cron);
 		else
 			game.snake.moveForward(game.area, game.foods, game.cron);
-		std::cout << "BEFORE EVENTS --" << std::endl;
-		game.area.print(std::cout, &game.snake);
-		std::cout << std::endl
-				  << "----------------" << std::endl;
 		game.cron.checkEvents();
 		game.area.print(std::cout, &game.snake);
-		std::cout << std::endl;
 	}
 }
 
@@ -50,6 +59,26 @@ void loop(Game &game)
 	}
 }
 
+void debug(Game &game)
+{
+	loopDebug(game);
+}
+
+void ncurses(Game &game)
+{
+	libA::init(game);
+	try
+	{
+		loop(game);
+	}
+	catch (const std::exception &e)
+	{
+		libA::close();
+		throw;
+	}
+	libA::close();
+}
+
 void startGame(const Options &options)
 {
 	Game game = {.area = {options.areaSize}};
@@ -59,21 +88,12 @@ void startGame(const Options &options)
 
 	game.foods.addRandomFood(game.area);
 
-	// game.walls.addRandomWall(game.area);
-	// game.walls.addRandomWall(game.area);
-	// game.walls.addRandomWall(game.area);
+	game.walls.addRandomWall(game.area);
+	game.walls.addRandomWall(game.area);
+	game.walls.addRandomWall(game.area);
 
-	// libA::init(game);
-	try
-	{
-		loopDebug(game);
-	}
-	catch (const std::exception &e)
-	{
-		// libA::close();
-		throw;
-	}
-	// libA::close();
+	ncurses(game);
+	// debug(game);
 }
 
 int parsingErrorHandler(const Exception::ParsingOptions &e)

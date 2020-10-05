@@ -1,6 +1,6 @@
 #include "Snake.hpp"
 
-Snake::Snake() : _direction(Direction::Right) {}
+Snake::Snake() : _direction(Direction::Right), _grow(0) {}
 
 Snake::Snake(const Snake &snake)
 {
@@ -12,6 +12,7 @@ Snake::~Snake() {}
 Snake &Snake::operator=(const Snake &snake)
 {
 	this->_direction = snake._direction;
+	this->_grow = snake._grow;
 	return *this;
 }
 
@@ -20,30 +21,24 @@ void Snake::move(Area &area, const Position &newHead, Foods &foods, Cron &cron)
 	if (area.isDanger(newHead))
 		throw Exception::GameOver();
 
-	// std::cout << "DEBUG ---" << std::endl;
-	// for (const Position &pos : this->_positions)
-	// 	std::cout << "|" << pos << "| ";
-	// std::cout << std::endl;
-
-	// this->_positions.back().print(area.getSize());
-	area[this->_positions.back()].reset();
-	this->_positions.pop_back();
+	if (this->_grow == 0)
+	{
+		area[this->_positions.back()].reset();
+		this->_positions.pop_back();
+	}
 
 	if (area.isFood(newHead))
 	{
 		foods.removeFood(newHead, area);
 		CronData data;
-		data.eventFunction = Snake::growFromCron;
-		std::cout << "POSITION TO ADD" << std::endl;
-		this->_positions.back().print(area.getSize());
-		std::cout << "---------------" << std::endl;
-
-		data.args = std::make_shared<GrowArgs>(GrowArgs({this, &area, this->_positions.back()}));
-		cron.addEvent(data, 1);
 		data.eventFunction = Foods::addRandomFoodFromCron;
 		data.args = std::make_shared<AddRandomFoodArgs>(AddRandomFoodArgs({&foods, &area}));
 		cron.addEvent(data, 0);
+		this->_grow++;
 	}
+	else if (this->_grow > 0)
+		this->_grow--;
+
 	this->_positions.push_front(newHead);
 	area[newHead].id = this->_id;
 	area[newHead].type = ElementType::SnakeT;
@@ -117,21 +112,6 @@ void Snake::moveForward(Area &area, Foods &foods, Cron &cron)
 		 {Direction::Bottom, &Snake::moveBottom},
 		 {Direction::Left, &Snake::moveLeft}};
 	(this->*fMap[this->_direction])(area, foods, cron, true);
-}
-
-void Snake::grow(Area &area, Position oldTail)
-{
-	if (oldTail == this->_positions.back())
-		return;
-	area[oldTail].id = this->_id;
-	area[oldTail].type = ElementType::SnakeT;
-	this->_positions.push_back(oldTail);
-}
-
-void Snake::growFromCron(const std::shared_ptr<void> &args)
-{
-	GrowArgs &data = *(std::static_pointer_cast<GrowArgs>(args));
-	(data.snake->Snake::grow)(*data.area, data.oldTail);
 }
 
 void Snake::setSnakeOnArea(Area &area)

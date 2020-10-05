@@ -9,7 +9,7 @@ features:
 - Mode jeu sans/avec mur
 - Score avec noms des joueurs, sauvegarde des classements
 - Vérifier les constructeurs par copie
-
+- faire un menu  new game / walls / scores / exit
 - faire des libs des classes qui héritent d'une même interface
 
 bug:
