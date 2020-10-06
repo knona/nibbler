@@ -28,5 +28,6 @@
 #include <memory>
 
 Options parseCommandLine(int argc, const char **argv);
+void loop(Game &game, GUI &gui);
 
 #endif // !NIBBLER_HPP
