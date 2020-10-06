@@ -25,7 +25,7 @@ void moveForward(Game &game)
 	game.snake.moveForward(game.area, game.foods, game.cron);
 }
 
-void loop(Game &game)
+void loop(Game &game, GUI &gui)
 {
 	std::unordered_map<Input, void (*)(Game & game)> fMap =
 		{{Input::UP, moveTop},
@@ -35,31 +35,24 @@ void loop(Game &game)
 
 	Input input;
 
-	libA::render(game);
-	while ((input = libA::getInput()) != Input::EXIT)
+	gui.init(game);
+	gui.render(game);
+	while ((input = gui.getInput()) != Input::EXIT)
 	{
 		if (fMap.count(input))
 			fMap[input](game);
 		else
 			moveForward(game);
 		game.cron.checkEvents();
-		libA::render(game);
+		gui.render(game);
 	}
 }
 
-void ncurses(Game &game)
+void addWalls(Game &game)
 {
-	libA::init(game);
-	try
-	{
-		loop(game);
-	}
-	catch (const std::exception &e)
-	{
-		libA::close();
-		throw;
-	}
-	libA::close();
+	game.walls.addRandomWall(game.area);
+	game.walls.addRandomWall(game.area);
+	game.walls.addRandomWall(game.area);
 }
 
 void startGame(const Options &options)
@@ -71,12 +64,10 @@ void startGame(const Options &options)
 
 	game.foods.addRandomFood(game.area);
 
-	game.walls.addRandomWall(game.area);
-	game.walls.addRandomWall(game.area);
-	game.walls.addRandomWall(game.area);
+	addWalls(game);
 
-	ncurses(game);
-	// debug(game);
+	std::unique_ptr<GUI> gui = GUI::createGui<Retro>();
+	loop(game, *gui);
 }
 
 int parsingErrorHandler(const Exception::ParsingOptions &e)
