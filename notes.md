@@ -12,6 +12,7 @@ features:
 - faire un menu new game / walls / scores / exit
 - Mode de jeu ou les commandes flèches sont inversées
 - Utiliser conan / cmake pour les dépendances ?
+- set right values for width / height in parsing
 
 bugs:
 
