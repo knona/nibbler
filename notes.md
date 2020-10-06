@@ -11,6 +11,7 @@ features:
 - Vérifier les constructeurs par copie
 - faire un menu new game / walls / scores / exit
 - Mode de jeu ou les commandes flèches sont inversées
+- Utiliser conan / cmake pour les dépendances ?
 
 bugs:
 
