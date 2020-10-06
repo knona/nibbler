@@ -1,7 +1,4 @@
 #include "libA.hpp"
-#include <sstream>
-#include <fstream>
-#include <iostream>
 
 namespace libA
 {
@@ -33,27 +30,24 @@ namespace libA
 
 	Input getInput()
 	{
-		// wtimeout(win, 500);
+		// wtimeout(win, 200);
 		int c = wgetch(win);
 
-		// std::ofstream file("log.txt", std::ios_base::app);
-		// file << c << std::endl;
-		// file.close();
 		switch (c)
 		{
-		case 259:
-		case 119:
+		case KEY_UP:
+		case 'w':
 			return Input::UP;
-		case 261:
-		case 100:
+		case KEY_RIGHT:
+		case 'd':
 			return Input::RIGHT;
-		case 258:
-		case 115:
+		case KEY_DOWN:
+		case 's':
 			return Input::DOWN;
-		case 260:
-		case 97:
+		case KEY_LEFT:
+		case 'a':
 			return Input::LEFT;
-		case 27:
+		case 27: // ESC
 			return Input::EXIT;
 		default:
 			return Input::NONE;
