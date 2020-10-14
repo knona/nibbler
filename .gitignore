@@ -33,10 +33,7 @@
 nibbler
 
 # libraries src
-libs/boost/
-libs/glfw/
-libs/glad/
-libs/ncurses/
+libs/
 
 # others
 *.tmp

@@ -6,7 +6,7 @@ current_directory=$(pwd)
 
 ncurses=$(pwd)/libs/ncurses
 include=$(pwd)/libs/ncurses/include
-binaries=$(pwd)/libs/ncurses/binaries
+bin=$(pwd)/libs/ncurses/bin
 mkdir -p $ncurses
 
 mkdir .tmp
@@ -19,7 +19,7 @@ tar -xf $ncurses_archive
 
 cd ncurses-6.2
 
-./configure --prefix=$ncurses --libdir=$binaries --enable-widec --without-ada --without-manpages --without-progs --without-tack --without-tests --with-normal
+./configure --prefix=$ncurses --libdir=$bin --enable-widec --without-ada --without-manpages --without-progs --without-tack --without-tests --with-normal
 make
 make install
 

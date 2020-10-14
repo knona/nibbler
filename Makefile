@@ -32,6 +32,7 @@ INCLUDES = $(addprefix -I, $(SRCS_MAIN_DIR) $(HEADERS_DIRS))
 BOOST_DIR = libs/boost
 GLFW_DIR = libs/glfw
 GLAD_DIR = libs/glad
+STB_IMAGE_DIR = libs/stb_image
 NCURSES_DIR = libs/ncurses
 
 # COMPILATEUR
@@ -44,22 +45,26 @@ all: $(NAME)
 $(OBJS_DIRS):
 	@mkdir -p $@
 
-$(NAME): $(BOOST_DIR) $(GLFW_DIR) $(GLAD_DIR) $(NCURSES_DIR) $(OBJS_DIRS) libs/glad/src/glad.o $(OBJS)
+$(NAME): $(BOOST_DIR) $(GLFW_DIR) $(GLAD_DIR) $(STB_IMAGE_DIR) $(NCURSES_DIR) $(OBJS_DIRS) $(GLAD_DIR)/src/glad.o $(STB_IMAGE_DIR)/src/stb_image.o $(OBJS)
 	@printf "\033[2K\r\033[36m>>Linking...\033[0m"
-	@$(CC) -o $@ $(OBJS) $(GLAD_DIR)/src/glad.o -L$(BOOST_DIR)/binaries -lboost_program_options -L$(GLFW_DIR)/binaries -lglfw3 -L$(NCURSES_DIR)/binaries -lncursesw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+	@$(CC) -o $@ $(OBJS) $(GLAD_DIR)/src/glad.o $(STB_IMAGE_DIR)/src/stb_image.o -L$(BOOST_DIR)/bin -lboost_program_options -L$(GLFW_DIR)/bin -lglfw3 -L$(NCURSES_DIR)/bin -lncursesw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
 
 	@echo "\t\033[32m[OK]\033[0m"
 	@echo "\033[31m...$(shell echo $(NAME) | tr a-z A-Z)\033[0m"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
 	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
-	@$(CC) $(CFLAGS) -I $(BOOST_DIR)/include -I $(GLFW_DIR)/include -I $(GLAD_DIR)/include -I $(NCURSES_DIR)/include $(INCLUDES) -o $@ -c $<
+	@$(CC) $(CFLAGS) -I $(BOOST_DIR)/include -I $(GLFW_DIR)/include -I $(GLAD_DIR)/include -I $(STB_IMAGE_DIR)/include -I $(NCURSES_DIR)/include $(INCLUDES) -o $@ -c $<
 
-libs/glad/src/glad.o: libs/glad/src/glad.c
+$(GLAD_DIR)/src/glad.o: $(GLAD_DIR)/src/glad.c
 	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
-	@clang -Wall -Wextra -Werror -I libs/glad/include -o $@ -c $<
+	@clang -I $(GLAD_DIR)/include -o $@ -c $<
 
-.PHONY: clean fclean re clean-boost clean-glfw clean-glad clean-ncurses clean-libs ffclean
+$(STB_IMAGE_DIR)/src/stb_image.o: $(STB_IMAGE_DIR)/src/stb_image.c
+	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
+	@clang -I $(STB_IMAGE_DIR)/include -o $@ -c $<
+
+.PHONY: clean fclean re clean-boost clean-glfw clean-glad clean-ncurses clean-stb_image clean-libs ffclean
 
 $(BOOST_DIR):
 	@echo "\033[36mInstalling boost...\033[0m"
@@ -72,6 +77,10 @@ $(GLFW_DIR):
 $(GLAD_DIR):
 	@echo "\033[36mInstalling glad...\033[0m"
 	@./scripts/install-glad.bash
+
+$(STB_IMAGE_DIR):
+	@echo "\033[36mInstalling stb_image...\033[0m"
+	@./scripts/install-stb_image.bash
 
 $(NCURSES_DIR):
 	@echo "\033[36mInstalling ncurses...\033[0m"
@@ -97,11 +106,17 @@ clean-glad:
 	@echo "\033[31mRemoving glad...\033[0m"
 	@rm -rf $(GLAD_DIR)
 
+clean-stb_image:
+	@echo "\033[31mRemoving stb_image...\033[0m"
+	@rm -rf $(STB_IMAGE_DIR)
+
 clean-ncurses:
 	@echo "\033[31mRemoving ncurses...\033[0m"
 	@rm -rf $(NCURSES_DIR)
 
-clean-libs: clean-boost clean-glfw clean-glad clean-ncurses
+clean-libs:
+	@echo "\033[31mRemoving all libs...\033[0m"
+	@rm -rf libs
 
 ffclean: clean-libs fclean
 
