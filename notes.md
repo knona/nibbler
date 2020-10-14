@@ -13,6 +13,7 @@ features:
 - Mode de jeu ou les commandes flèches sont inversées
 - Utiliser conan / cmake pour les dépendances ?
 - set right values for width / height in parsing
+- ajouter des erreurs si par ex init fail dans ncurses
 
 bugs:
 

@@ -17,6 +17,7 @@
 #include "Game.hpp"
 #include "Retro.hpp"
 #include "Debug.hpp"
+#include "Gl.hpp"
 #include "Input.hpp"
 #include "GUI.hpp"
 
