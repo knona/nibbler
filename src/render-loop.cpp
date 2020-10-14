@@ -44,6 +44,8 @@ void loop(Game &game, GUI &gui)
 		else
 			moveForward(game);
 		game.cron.checkEvents();
+		// std::chrono::milliseconds timespan(1000);
+		// std::this_thread::sleep_for(timespan);
 		gui.render(game);
 	}
 }

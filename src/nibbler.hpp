@@ -27,6 +27,7 @@
 #include <ctime>
 #include <unordered_map>
 #include <memory>
+#include <thread>
 
 Options parseCommandLine(int argc, const char **argv);
 void loop(Game &game, GUI &gui);

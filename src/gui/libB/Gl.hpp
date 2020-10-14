@@ -13,12 +13,11 @@
 class Gl : public GUI
 {
 private:
-	GLFWwindow *_win;
+	GLFWwindow *_window;
 
 	Gl(const Gl &) = delete;
 	Gl &operator=(const Gl &) = delete;
 	static void errorCb(int error, const char *description);
-	static void keyEventHandler(GLFWwindow *window, int key, int scancode, int action, int mods);
 
 public:
 	Gl();

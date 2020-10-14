@@ -1,17 +1,34 @@
 #include "Gl.hpp"
 
-Gl::Gl() : _win(nullptr) {}
+Gl::Gl() : _window(nullptr) {}
 
 Gl::~Gl()
 {
-	_win = nullptr;
+	_window = nullptr;
 	this->close();
 }
 
 void Gl::init(Game &game)
 {
+	if (!glfwInit())
+		throw std::runtime_error("Failed to initliaze GLFW");
+
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+	_window = glfwCreateWindow(1280, 720, "NIBBLER", NULL, NULL);
+	if (!_window)
+		throw std::runtime_error("Failed to create GLFW window");
+
+	glfwMakeContextCurrent(_window);
+
+	if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
+		throw std::runtime_error("Failed to initialize GLAD");
+
+	glViewport(0, 0, 1280, 720);
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 }
 
 void Gl::close()
@@ -21,14 +38,16 @@ void Gl::close()
 
 Input Gl::getInput()
 {
-	if (glfwWindowShouldClose(_win))
+	if (glfwWindowShouldClose(_window))
 		return Input::EXIT;
 	return Input::NONE;
 }
 
 void Gl::render(Game &game)
 {
-	(void)game;
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glfwSwapBuffers(_window);
 }
 
 void Gl::errorCb(int err, const char *description)
@@ -40,7 +59,7 @@ void Gl::errorCb(int err, const char *description)
 	throw std::runtime_error(error);
 }
 
-void Gl::keyEventHandler(GLFWwindow *window, int key, int scancode, int action, int mods)
+void keyEventHandler(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
 	// if (action == GLFW_PRESS)
 	// {
