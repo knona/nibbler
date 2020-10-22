@@ -41,3 +41,4 @@ libs/
 *.DS_Store
 tmp/
 .tmp/
+.cache

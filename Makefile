@@ -2,9 +2,7 @@
 NAME = nibbler
 
 define uniq =
-  $(eval seen :=)
-  $(foreach _,$1,$(if $(filter $_,${seen}),,$(eval seen += $_)))
-  ${seen}
+	$(shell echo $(1) | tr " " "\n" | cat -n | sort -uk2 | sort -nk1| cut -f2- | tr "\n" " ")
 endef
 
 # SOURCES
@@ -26,7 +24,7 @@ HEADERS					= $(addprefix $(SRCS_MAIN_DIR), $(HEADERS_FILES))
 HEADERS_DIRS			= $(call uniq, $(dir $(HEADERS)))
 
 # INCLUDES FOLDER
-INCLUDES = $(addprefix -I, $(SRCS_MAIN_DIR) $(HEADERS_DIRS))
+INCLUDES = $(addprefix -I, $(call uniq,$(SRCS_MAIN_DIR) $(HEADERS_DIRS)))
 
 # LIBRARIES
 BOOST_DIR = libs/boost

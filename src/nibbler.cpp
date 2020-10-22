@@ -9,7 +9,7 @@ void addWalls(Game &game)
 
 void startGame(const Options &options)
 {
-	Game game = {.area = {options.areaSize}};
+	Game game = { .area = { options.areaSize } };
 
 	game.snake.setId();
 	game.snake.setSnakeOnArea(game.area);
@@ -18,7 +18,7 @@ void startGame(const Options &options)
 
 	addWalls(game);
 
-	std::unique_ptr<GUI> gui = GUI::createGui<Gl>();
+	std::unique_ptr<GUI> gui = GUI::createGui<Retro>();
 	loop(game, *gui);
 }
 
