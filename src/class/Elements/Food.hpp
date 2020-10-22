@@ -1,19 +1,19 @@
 #ifndef FOOD_HPP
 #define FOOD_HPP
 
-#include "Element.hpp"
 #include "Area.hpp"
+#include "Element.hpp"
 
-class Food : public Element
+class Food: public Element
 {
-private:
+	private:
 	static int _idCounter;
 
-public:
+	public:
 	Food();
 	Food(const Element &element);
 
-	int &getIdCounter() const;
+	int &       getIdCounter() const;
 	static Food getRandomFood(Area &area);
 };
 

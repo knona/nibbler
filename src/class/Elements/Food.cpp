@@ -1,8 +1,10 @@
 #include "Food.hpp"
 
-Food::Food() {}
+Food::Food()
+{}
 
-Food::Food(const Element &element) : Element(element) {}
+Food::Food(const Element &element): Element(element)
+{}
 
 int &Food::getIdCounter() const
 {
@@ -14,7 +16,7 @@ int Food::_idCounter = 0;
 Food Food::getRandomFood(Area &area)
 {
 	Position pos = area.getRandomFreePosition();
-	Element element({pos});
+	Element  element({ pos });
 
 	return element;
 }

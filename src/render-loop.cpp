@@ -27,11 +27,9 @@ void moveForward(Game &game)
 
 void loop(Game &game, GUI &gui)
 {
-	std::unordered_map<Input, void (*)(Game & game)> fMap =
-		{{Input::UP, moveTop},
-		 {Input::RIGHT, moveRight},
-		 {Input::DOWN, moveBottom},
-		 {Input::LEFT, moveLeft}};
+	std::unordered_map<Input, void (*)(Game & game)> fMap = {
+		{ Input::UP, moveTop }, { Input::RIGHT, moveRight }, { Input::DOWN, moveBottom }, { Input::LEFT, moveLeft }
+	};
 
 	Input input;
 

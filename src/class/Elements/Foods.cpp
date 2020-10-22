@@ -39,7 +39,7 @@ void Foods::removeFood(int id, Area &area)
 		throw std::out_of_range("Food id does not exist");
 
 	Food &food = (*this)[id];
-	for (const Position &pos : food.getPositions())
+	for (const Position &pos: food.getPositions())
 		area[pos].reset();
 	this->erase(id);
 }

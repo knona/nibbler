@@ -1,15 +1,17 @@
 #include "Position.hpp"
 
-Position::Position() : x(0), y(0) {}
+Position::Position(): x(0), y(0)
+{}
 
-Position::Position(int x, int y) : x(x), y(y) {}
+Position::Position(int x, int y): x(x), y(y)
+{}
 
 Position::Position(const Position &pos)
 {
 	*this = pos;
 }
 
-Position::~Position(){};
+Position::~Position() {};
 
 Position &Position::operator=(const Position &b)
 {
@@ -50,7 +52,7 @@ bool Position::operator>=(const Position &b) const
 
 Position Position::getRandomPosition(int xMax, int yMax)
 {
-	return {rand() % xMax, rand() % yMax};
+	return { rand() % xMax, rand() % yMax };
 }
 
 void Position::print(const Size &size)

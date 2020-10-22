@@ -1,6 +1,7 @@
 #include "Debug.hpp"
 
-Debug::Debug() {}
+Debug::Debug()
+{}
 
 Debug::~Debug()
 {
@@ -12,11 +13,12 @@ void Debug::init(Game &game)
 	(void)game;
 }
 
-void Debug::close() {}
+void Debug::close()
+{}
 
 char Debug::getchar()
 {
-	char c;
+	char           c;
 	struct termios old_tio, new_tio;
 	tcgetattr(STDIN_FILENO, &old_tio);
 	new_tio = old_tio;
@@ -33,18 +35,12 @@ Input Debug::getInput()
 
 	switch (c)
 	{
-	case 'w':
-		return Input::UP;
-	case 'd':
-		return Input::RIGHT;
-	case 's':
-		return Input::DOWN;
-	case 'a':
-		return Input::LEFT;
-	case 'q':
-		return Input::EXIT;
-	default:
-		return Input::NONE;
+	case 'w': return Input::UP;
+	case 'd': return Input::RIGHT;
+	case 's': return Input::DOWN;
+	case 'a': return Input::LEFT;
+	case 'q': return Input::EXIT;
+	default: return Input::NONE;
 	}
 }
 

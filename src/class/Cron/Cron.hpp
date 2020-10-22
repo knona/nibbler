@@ -2,20 +2,20 @@
 #define CRON_HPP
 
 #include "Area.hpp"
-#include "Foods.hpp"
-#include "Walls.hpp"
-#include "Snake.hpp"
 #include "CronData.hpp"
+#include "Foods.hpp"
+#include "Snake.hpp"
+#include "Walls.hpp"
 
-#include <map>
 #include <list>
+#include <map>
 
 class Cron
 {
-private:
+	private:
 	std::map<int, std::list<CronData>> _cronTable;
 
-public:
+	public:
 	Cron();
 	Cron(const Cron &);
 	~Cron();

@@ -5,7 +5,7 @@
 
 struct Cell
 {
-	int id;
+	int         id;
 	ElementType type;
 
 	Cell();

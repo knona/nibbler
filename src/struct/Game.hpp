@@ -2,19 +2,19 @@
 #define GAME_HPP
 
 #include "Area.hpp"
-#include "Foods.hpp"
-#include "Walls.hpp"
-#include "Snake.hpp"
 #include "Cron.hpp"
+#include "Foods.hpp"
+#include "Snake.hpp"
+#include "Walls.hpp"
 
 struct Game
 {
-public:
-	Area area;
+	public:
+	Area  area;
 	Foods foods;
 	Walls walls;
 	Snake snake;
-	Cron cron;
+	Cron  cron;
 };
 
 #endif // !GAME_HPP

@@ -4,7 +4,8 @@
 
 Shader::Shader(const GLenum shaderType, const char *shaderPath)
 {
-	std::unordered_map<GLenum, const char *> map = {{GL_VERTEX_SHADER, "Vertex"}, {GL_FRAGMENT_SHADER, "Fragment"}};
+	std::unordered_map<GLenum, const char *> map = { { GL_VERTEX_SHADER, "Vertex" },
+		                                             { GL_FRAGMENT_SHADER, "Fragment" } };
 
 	this->_id = glCreateShader(shaderType);
 	this->_shaderType = shaderType;
@@ -52,7 +53,7 @@ const GLuint &Shader::getId() const
 
 std::vector<std::unique_ptr<char[]>> Shader::readShaderCode(const char *path) const
 {
-	std::ifstream file(path);
+	std::ifstream                        file(path);
 	std::vector<std::unique_ptr<char[]>> shaderCode;
 
 	if (!file)

@@ -10,7 +10,7 @@ class Area;
 struct AddRandomFoodArgs
 {
 	Foods *foods;
-	Area *area;
+	Area * area;
 };
 
 #endif // !ADD_RANDOM_FOOD_ARGS_HPP

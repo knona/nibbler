@@ -1,57 +1,57 @@
 #ifndef EXCEPTIONS_HPP
 #define EXCEPTIONS_HPP
 
-#include <string>
 #include <exception>
 #include <sstream>
+#include <string>
 
 class Exception
 {
-public:
+	public:
 	static std::string error;
 
-	class GameOver : public std::exception
+	class GameOver: public std::exception
 	{
-	public:
+		public:
 		virtual const char *what() const throw();
 	};
 
-	class Win : public std::exception
+	class Win: public std::exception
 	{
-	public:
+		public:
 		virtual const char *what() const throw();
 	};
 
-	class ParsingOptions : public std::exception
+	class ParsingOptions: public std::exception
 	{
-	private:
+		private:
 		int _exitStatus;
 		ParsingOptions();
 
-	public:
+		public:
 		ParsingOptions(const std::string &detail, int exitStatus);
 		virtual const char *what() const throw();
-		int getExitStatus() const;
+		int                 getExitStatus() const;
 	};
 
-	class NoSpace : public std::exception
+	class NoSpace: public std::exception
 	{
-	public:
+		public:
 		virtual const char *what() const throw();
 	};
 
-	class Classic : public std::exception
+	class Classic: public std::exception
 	{
-	public:
+		public:
 		virtual const char *what() const throw();
 	};
 
-	class Detail : public std::exception
+	class Detail: public std::exception
 	{
-	private:
+		private:
 		Detail();
 
-	public:
+		public:
 		Detail(const std::string &detail);
 		virtual const char *what() const throw();
 	};

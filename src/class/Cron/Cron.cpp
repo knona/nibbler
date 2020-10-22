@@ -1,13 +1,15 @@
 #include "Cron.hpp"
 
-Cron::Cron() {}
+Cron::Cron()
+{}
 
 Cron::Cron(const Cron &cron)
 {
 	*this = cron;
 }
 
-Cron::~Cron() {}
+Cron::~Cron()
+{}
 
 Cron &Cron::operator=(const Cron &cron)
 {
@@ -27,10 +29,9 @@ void Cron::checkEvents()
 	{
 		if (it->first == 0)
 		{
-			for (CronData &cronData : it->second)
+			for (CronData &cronData: it->second)
 				cronData.eventFunction(cronData.args);
-		}
-		else
+		} else
 			this->_cronTable[it->first - 1] = it->second;
 		it = this->_cronTable.erase(it);
 	}

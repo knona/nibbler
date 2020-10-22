@@ -2,11 +2,11 @@
 
 void Walls::addRandomWall(Area &area)
 {
-	int size = std::rand() % 3 + 2;
+	int  size = std::rand() % 3 + 2;
 	Wall wall = Wall::getRandomWall(area, size);
-	int newId = wall.setId();
+	int  newId = wall.setId();
 
-	for (const Position &pos : wall.getPositions())
+	for (const Position &pos: wall.getPositions())
 	{
 		area[pos].id = newId;
 		area[pos].type = ElementType::WallT;
@@ -21,7 +21,7 @@ void Walls::removeWall(int id, Area &area)
 
 	Wall &wall = (*this)[id];
 
-	for (const Position &pos : wall.getPositions())
+	for (const Position &pos: wall.getPositions())
 		area[pos].reset();
 
 	this->erase(id);

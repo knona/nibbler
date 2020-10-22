@@ -1,15 +1,17 @@
 #include "Size.hpp"
 
-Size::Size() : width(0), height(0) {}
+Size::Size(): width(0), height(0)
+{}
 
-Size::Size(int width, int height) : width(width), height(height) {}
+Size::Size(int width, int height): width(width), height(height)
+{}
 
 Size::Size(const Size &size)
 {
 	*this = size;
 }
 
-Size::~Size(){};
+Size::~Size() {};
 
 Size &Size::operator=(const Size &b)
 {

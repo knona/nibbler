@@ -1,6 +1,7 @@
 #include "Retro.hpp"
 
-Retro::Retro() : _win(nullptr) {}
+Retro::Retro(): _win(nullptr)
+{}
 
 Retro::~Retro()
 {
@@ -45,21 +46,16 @@ Input Retro::getInput()
 	switch (c)
 	{
 	case KEY_UP:
-	case 'w':
-		return Input::UP;
+	case 'w': return Input::UP;
 	case KEY_RIGHT:
-	case 'd':
-		return Input::RIGHT;
+	case 'd': return Input::RIGHT;
 	case KEY_DOWN:
-	case 's':
-		return Input::DOWN;
+	case 's': return Input::DOWN;
 	case KEY_LEFT:
-	case 'a':
-		return Input::LEFT;
+	case 'a': return Input::LEFT;
 	case 27: // ESC
 		return Input::EXIT;
-	default:
-		return Input::NONE;
+	default: return Input::NONE;
 	}
 }
 
@@ -73,7 +69,7 @@ void Retro::render(Game &game)
 	{
 		for (int x = 0; x < game.area.getSize().width; x++)
 		{
-			Position pos = {x, y};
+			Position    pos = { x, y };
 			std::string color;
 
 			if (game.area.isWall(pos))
@@ -81,7 +77,7 @@ void Retro::render(Game &game)
 			else if (game.area.isFood(pos))
 				wattron(_win, COLOR_PAIR(2));
 			else if (game.area.isSnake(pos))
-				game.snake.isHead({x, y}) ? wattron(_win, COLOR_PAIR(4)) : wattron(_win, COLOR_PAIR(3));
+				game.snake.isHead({ x, y }) ? wattron(_win, COLOR_PAIR(4)) : wattron(_win, COLOR_PAIR(3));
 
 			if (!game.area.isFree(pos))
 				mvwprintw(_win, y + 1, x * 2 + 1, "◼");

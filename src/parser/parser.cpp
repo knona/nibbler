@@ -1,10 +1,10 @@
-#include "boost/program_options.hpp"
-#include "Options.hpp"
 #include "../exceptions/Exceptions.hpp"
+#include "Options.hpp"
+#include "boost/program_options.hpp"
 
 #include <iostream>
-#include <string>
 #include <sstream>
+#include <string>
 
 namespace po = boost::program_options;
 
@@ -13,10 +13,10 @@ Options parseCommandLine(int argc, const char **argv)
 	Size areaSize;
 
 	po::options_description desc("Allowed options");
-	desc.add_options()																	//
-		("help,h", "produce help message")												//
-		("width,W", po::value<int>(&areaSize.width), "set the area's width (required)") //
-		("height,H", po::value<int>(&areaSize.height), "set the area's height (required)");
+	desc.add_options()                                                                      //
+		("help,h", "produce help message")                                                  //
+		("width,W", po::value<int>(&areaSize.width), "set the area's width (required)")     //
+		("height,H", po::value<int>(&areaSize.height), "set the area's height (required)"); //
 
 	po::variables_map vm;
 
@@ -47,5 +47,5 @@ Options parseCommandLine(int argc, const char **argv)
 	if (areaSize.height > 200 || areaSize.height < 2)
 		throw Exception::ParsingOptions("Area's height must be between 7 and 200", EXIT_FAILURE);
 
-	return {.areaSize = areaSize};
+	return { .areaSize = areaSize };
 }

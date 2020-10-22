@@ -1,13 +1,15 @@
 #include "Snake.hpp"
 
-Snake::Snake() : _direction(Direction::Right), _grow(0) {}
+Snake::Snake(): _direction(Direction::Right), _grow(0)
+{}
 
 Snake::Snake(const Snake &snake)
 {
 	*this = snake;
 }
 
-Snake::~Snake() {}
+Snake::~Snake()
+{}
 
 Snake &Snake::operator=(const Snake &snake)
 {
@@ -32,11 +34,10 @@ void Snake::move(Area &area, const Position &newHead, Foods &foods, Cron &cron)
 		foods.removeFood(newHead, area);
 		CronData data;
 		data.eventFunction = Foods::addRandomFoodFromCron;
-		data.args = std::make_shared<AddRandomFoodArgs>(AddRandomFoodArgs({&foods, &area}));
+		data.args = std::make_shared<AddRandomFoodArgs>(AddRandomFoodArgs({ &foods, &area }));
 		cron.addEvent(data, 0);
 		this->_grow++;
-	}
-	else if (this->_grow > 0)
+	} else if (this->_grow > 0)
 		this->_grow--;
 
 	this->_positions.push_front(newHead);
@@ -48,7 +49,7 @@ void Snake::moveTop(Area &area, Foods &foods, Cron &cron, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Top || this->_direction == Direction::Bottom))
 	{
-		if (this->_direction == Direction::Top)	  // to remove
+		if (this->_direction == Direction::Top)   // to remove
 			this->moveForward(area, foods, cron); // to remove
 		return;
 	}
@@ -106,24 +107,25 @@ void Snake::moveLeft(Area &area, Foods &foods, Cron &cron, bool forward)
 
 void Snake::moveForward(Area &area, Foods &foods, Cron &cron)
 {
-	std::unordered_map<Direction, void (Snake::*)(Area &, Foods &, Cron &, bool)> fMap =
-		{{Direction::Top, &Snake::moveTop},
-		 {Direction::Right, &Snake::moveRight},
-		 {Direction::Bottom, &Snake::moveBottom},
-		 {Direction::Left, &Snake::moveLeft}};
+	std::unordered_map<Direction, void (Snake::*)(Area &, Foods &, Cron &, bool)> fMap = {
+		{ Direction::Top, &Snake::moveTop },
+		{ Direction::Right, &Snake::moveRight },
+		{ Direction::Bottom, &Snake::moveBottom },
+		{ Direction::Left, &Snake::moveLeft }
+	};
 	(this->*fMap[this->_direction])(area, foods, cron, true);
 }
 
 void Snake::setSnakeOnArea(Area &area)
 {
 	Size areaSize = area.getSize();
-	int y = areaSize.height / 2;
-	int x = areaSize.width / 2 - 2;
+	int  y = areaSize.height / 2;
+	int  x = areaSize.width / 2 - 2;
 
 	for (int i = 3; i >= 0; i--)
 	{
-		Position pos = {x + i, y};
-		Cell &cell = area[pos];
+		Position pos = { x + i, y };
+		Cell &   cell = area[pos];
 		cell.id = this->_id;
 		cell.type = ElementType::SnakeT;
 		this->_positions.push_back(pos);

@@ -1,19 +1,19 @@
 #ifndef WALL_HPP
 #define WALL_HPP
 
-#include "Element.hpp"
 #include "Area.hpp"
+#include "Element.hpp"
 
-class Wall : public Element
+class Wall: public Element
 {
-private:
+	private:
 	static int _idCounter;
 
-public:
+	public:
 	Wall();
 	Wall(const Element &element);
 
-	int &getIdCounter() const;
+	int &       getIdCounter() const;
 	static Wall getRandomWall(Area &area, int size);
 };
 

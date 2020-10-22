@@ -1,10 +1,10 @@
 #ifndef POSITION_HPP
 #define POSITION_HPP
 
-#include <iostream>
-#include <cstdlib>
-
 #include "Size.hpp"
+
+#include <cstdlib>
+#include <iostream>
 
 struct Position
 {
@@ -17,14 +17,14 @@ struct Position
 	Position &operator=(const Position &b);
 	~Position();
 
-	void print(int width, int height);
-	void print(const Size &size);
-	bool operator==(const Position &b) const;
-	bool operator!=(const Position &b) const;
-	bool operator<(const Position &b) const;
-	bool operator>(const Position &b) const;
-	bool operator<=(const Position &b) const;
-	bool operator>=(const Position &b) const;
+	void            print(int width, int height);
+	void            print(const Size &size);
+	bool            operator==(const Position &b) const;
+	bool            operator!=(const Position &b) const;
+	bool            operator<(const Position &b) const;
+	bool            operator>(const Position &b) const;
+	bool            operator<=(const Position &b) const;
+	bool            operator>=(const Position &b) const;
 	static Position getRandomPosition(int xMax, int yMax);
 };
 

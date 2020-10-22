@@ -1,4 +1,5 @@
 #include "Area.hpp"
+
 #include "Snake.hpp"
 
 std::unique_ptr<Cell[]> alloc(const Size &size)
@@ -6,13 +7,17 @@ std::unique_ptr<Cell[]> alloc(const Size &size)
 	return std::make_unique<Cell[]>(size.width * size.height);
 }
 
-Area::Area() {}
+Area::Area()
+{}
 
-Area::Area(int width, int height) : _size({width, height}), _data(alloc(_size)) {}
+Area::Area(int width, int height): _size({ width, height }), _data(alloc(_size))
+{}
 
-Area::Area(const Size &size) : _size(size), _data(alloc(_size)) {}
+Area::Area(const Size &size): _size(size), _data(alloc(_size))
+{}
 
-Area::~Area() {}
+Area::~Area()
+{}
 
 Cell &Area::operator[](const Position &pos)
 {
@@ -50,8 +55,8 @@ std::vector<Position> Area::getFreePositions() const
 
 	for (int y = 0; y < this->_size.height; y++)
 		for (int x = 0; x < this->_size.width; x++)
-			if (this->isFree({x, y}))
-				freePositions.push_back({x, y});
+			if (this->isFree({ x, y }))
+				freePositions.push_back({ x, y });
 	return freePositions;
 }
 
@@ -93,7 +98,7 @@ bool Area::isDanger(const Position &pos) const
 Position Area::getRandomFreePosition() const
 {
 	std::vector<Position> freePositions = this->getFreePositions();
-	size_t size = freePositions.size();
+	size_t                size = freePositions.size();
 
 	if (size == 0)
 		throw Exception::NoSpace();
@@ -103,35 +108,35 @@ Position Area::getRandomFreePosition() const
 std::list<Position> allFreeColumn(const Area *area, int x, int y, int size)
 {
 	std::list<Position> positions;
-	bool allFree = true;
+	bool                allFree = true;
 
 	for (int j = y; j < y + size; j++)
-		allFree = allFree && area->isFree({x, j});
+		allFree = allFree && area->isFree({ x, j });
 
 	if (allFree)
 		for (int j = y; j < y + size; j++)
-			positions.push_back({x, j});
+			positions.push_back({ x, j });
 	return positions;
 }
 
 std::list<Position> allFreeLine(const Area *area, int x, int y, int size)
 {
 	std::list<Position> positions;
-	bool allFree = true;
+	bool                allFree = true;
 
 	for (int i = x; i < x + size; i++)
-		allFree = allFree && area->isFree({i, y});
+		allFree = allFree && area->isFree({ i, y });
 
 	if (allFree)
 		for (int i = x; i < x + size; i++)
-			positions.push_back({i, y});
+			positions.push_back({ i, y });
 	return positions;
 }
 
 std::vector<Element> Area::getFreeElements(int size) const
 {
 	std::vector<Element> elements;
-	std::list<Position> tmp;
+	std::list<Position>  tmp;
 
 	for (int y = 0; y < this->_size.height; y++)
 	{
@@ -157,7 +162,7 @@ std::vector<Element> Area::getFreeElements(int size) const
 Element Area::getRandomFreeElement(int size) const
 {
 	std::vector<Element> elements = this->getFreeElements(size);
-	int nbElements = elements.size();
+	int                  nbElements = elements.size();
 
 	if (nbElements == 0)
 		throw Exception::NoSpace();
@@ -172,7 +177,7 @@ void Area::print(std::ostream &os, const Snake *snake) const
 			os << std::endl;
 		for (int x = 0; x < this->_size.width; x++)
 		{
-			Position pos = {x, y};
+			Position    pos = { x, y };
 			std::string color;
 
 			if (this->isWall(pos))

@@ -1,15 +1,18 @@
 #include "Cell.hpp"
 
-Cell::Cell() : id(-1), type(ElementType::FreeT) {}
+Cell::Cell(): id(-1), type(ElementType::FreeT)
+{}
 
-Cell::Cell(int id, ElementType type) : id(id), type(type) {}
+Cell::Cell(int id, ElementType type): id(id), type(type)
+{}
 
 Cell::Cell(const Cell &cell)
 {
 	*this = cell;
 }
 
-Cell::~Cell() {}
+Cell::~Cell()
+{}
 
 Cell &Cell::operator=(const Cell &cell)
 {

@@ -1,27 +1,27 @@
 #ifndef SNAKE_HPP
 #define SNAKE_HPP
 
-#include "Direction.hpp"
+#include "AddRandomFoodArgs.hpp"
 #include "Area.hpp"
+#include "Cron.hpp"
+#include "Direction.hpp"
 #include "Element.hpp"
 #include "Exceptions.hpp"
 #include "Foods.hpp"
-#include "Cron.hpp"
-#include "AddRandomFoodArgs.hpp"
 
 #include <memory>
 #include <unordered_map>
 
 class Cron;
 
-class Snake : public Element
+class Snake: public Element
 {
-private:
+	private:
 	Direction _direction;
-	void move(Area &area, const Position &newHead, Foods &foods, Cron &cron);
-	int _grow;
+	void      move(Area &area, const Position &newHead, Foods &foods, Cron &cron);
+	int       _grow;
 
-public:
+	public:
 	Snake();
 	Snake(const Snake &);
 	~Snake();

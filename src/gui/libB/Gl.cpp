@@ -1,6 +1,7 @@
 #include "Gl.hpp"
 
-Gl::Gl() : _window(nullptr) {}
+Gl::Gl(): _window(nullptr)
+{}
 
 Gl::~Gl()
 {

@@ -1,19 +1,19 @@
 #ifndef FOODS_HPP
 #define FOODS_HPP
 
-#include <unordered_map>
-#include <memory>
-#include <exception>
-
+#include "AddRandomFoodArgs.hpp"
 #include "Area.hpp"
-#include "Position.hpp"
 #include "ElementType.hpp"
 #include "Food.hpp"
-#include "AddRandomFoodArgs.hpp"
+#include "Position.hpp"
 
-class Foods : public std::unordered_map<int, Food>
+#include <exception>
+#include <memory>
+#include <unordered_map>
+
+class Foods: public std::unordered_map<int, Food>
 {
-public:
+	public:
 	void addRandomFood(Area &area);
 	void removeFood(int id, Area &area);
 	void removeFood(const Position &pos, Area &area);
