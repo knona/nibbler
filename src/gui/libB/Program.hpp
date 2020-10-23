@@ -24,6 +24,7 @@ class Program
 
 	public:
 	Program();
+	Program(GLuint id);
 	Program(Program &&);
 	Program &operator=(Program &&);
 	~Program();
@@ -32,6 +33,7 @@ class Program
 	void   link() const;
 	void   use() const;
 	void   addShader(Shader &&shader);
+	void   setId();
 	GLuint getId() const;
 
 	void uniformSet(const std::string &uniformName, bool v0) const;

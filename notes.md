@@ -16,6 +16,7 @@ features:
 - ajouter des erreurs si par ex init fail dans ncurses
 
 bugs:
+- leak quand pas de size donné en argument
 
 ## Bibliotheques
 

@@ -1,9 +1,7 @@
 #include "Program.hpp"
 
-Program::Program()
-{
-	this->_id = glCreateProgram();
-}
+Program::Program(): _id(0)
+{}
 
 Program::Program(Program &&program)
 {
@@ -22,7 +20,8 @@ Program &Program::operator=(Program &&program)
 
 Program::~Program()
 {
-	glDeleteProgram(this->_id);
+	if (this->_id != 0)
+		glDeleteProgram(this->_id);
 }
 
 void Program::use() const
@@ -51,6 +50,11 @@ void Program::addShader(Shader &&shader)
 GLuint Program::getId() const
 {
 	return this->_id;
+}
+
+void Program::setId()
+{
+	this->_id = glCreateProgram();
 }
 
 GLint Program::getUniformLocation(const std::string &uniformName) const

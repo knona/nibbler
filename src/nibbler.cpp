@@ -18,7 +18,7 @@ void startGame(const Options &options)
 
 	addWalls(game);
 
-	std::unique_ptr<GUI> gui = GUI::createGui<Retro>();
+	std::unique_ptr<GUI> gui = GUI::createGui<Gl>();
 	loop(game, *gui);
 }
 

@@ -31,17 +31,21 @@ char Debug::getchar()
 
 Input Debug::getInput()
 {
+	const std::unordered_map<int, Input> map = {
+		{ 'q', Input::EXIT },  // EXIT
+		{ 'w', Input::UP },    // UP
+		{ 'd', Input::RIGHT }, // RIGHT
+		{ 's', Input::DOWN },  // DOWN
+		{ 'a', Input::LEFT },  // LEFT
+	};
+
 	char c = this->getchar();
 
-	switch (c)
-	{
-	case 'w': return Input::UP;
-	case 'd': return Input::RIGHT;
-	case 's': return Input::DOWN;
-	case 'a': return Input::LEFT;
-	case 'q': return Input::EXIT;
-	default: return Input::NONE;
-	}
+	for (const std::pair<int, Input> &pair: map)
+		if (c == pair.first)
+			return pair.second;
+
+	return Input::NONE;
 }
 
 void Debug::render(Game &game)

@@ -31,19 +31,21 @@ void loop(Game &game, GUI &gui)
 		{ Input::UP, moveTop }, { Input::RIGHT, moveRight }, { Input::DOWN, moveBottom }, { Input::LEFT, moveLeft }
 	};
 
-	Input input;
+	Input       input;
+	std::string pause;
 
 	gui.init(game);
-	gui.render(game);
 	while ((input = gui.getInput()) != Input::EXIT)
 	{
-		if (fMap.count(input))
-			fMap[input](game);
-		else
-			moveForward(game);
-		game.cron.checkEvents();
-		// std::chrono::milliseconds timespan(1000);
-		// std::this_thread::sleep_for(timespan);
 		gui.render(game);
+		std::chrono::milliseconds timespan(100);
+		std::this_thread::sleep_for(timespan);
 	}
+	// {
+	// 	if (fMap.count(input))
+	// 		fMap[input](game);
+	// 	else
+	// 		moveForward(game);
+	// 	game.cron.checkEvents();
+	// 	gui.render(game);
 }

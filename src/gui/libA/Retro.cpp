@@ -40,23 +40,21 @@ void Retro::close()
 
 Input Retro::getInput()
 {
-	// wtimeout(win, 200);
+	const std::unordered_map<int, Input> map = {
+		{ 27, Input::EXIT },                                // EXIT
+		{ KEY_UP, Input::UP },       { 'w', Input::UP },    // UP
+		{ KEY_RIGHT, Input::RIGHT }, { 'd', Input::RIGHT }, // RIGHT
+		{ KEY_DOWN, Input::DOWN },   { 's', Input::DOWN },  // DOWN
+		{ KEY_LEFT, Input::LEFT },   { 'a', Input::LEFT },  // LEFT
+	};
+
 	int c = wgetch(_win);
 
-	switch (c)
-	{
-	case KEY_UP:
-	case 'w': return Input::UP;
-	case KEY_RIGHT:
-	case 'd': return Input::RIGHT;
-	case KEY_DOWN:
-	case 's': return Input::DOWN;
-	case KEY_LEFT:
-	case 'a': return Input::LEFT;
-	case 27: // ESC
-		return Input::EXIT;
-	default: return Input::NONE;
-	}
+	for (const std::pair<int, Input> &pair: map)
+		if (c == pair.first)
+			return pair.second;
+
+	return Input::NONE;
 }
 
 void Retro::render(Game &game)
