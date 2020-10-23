@@ -48,9 +48,10 @@ Input Retro::getInput()
 		{ KEY_LEFT, Input::LEFT },   { 'a', Input::LEFT },  // LEFT
 	};
 
+	wtimeout(_win, 0);
 	int c = wgetch(_win);
 
-	for (const std::pair<int, Input> &pair: map)
+	for (const std::pair<const int, Input> &pair: map)
 		if (c == pair.first)
 			return pair.second;
 
@@ -75,7 +76,7 @@ void Retro::render(Game &game)
 			else if (game.area.isFood(pos))
 				wattron(_win, COLOR_PAIR(2));
 			else if (game.area.isSnake(pos))
-				game.snake.isHead({ x, y }) ? wattron(_win, COLOR_PAIR(4)) : wattron(_win, COLOR_PAIR(3));
+				game.snake.isHead(pos) ? wattron(_win, COLOR_PAIR(4)) : wattron(_win, COLOR_PAIR(3));
 
 			if (!game.area.isFree(pos))
 				mvwprintw(_win, y + 1, x * 2 + 1, "◼");

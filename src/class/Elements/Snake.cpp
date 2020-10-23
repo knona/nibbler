@@ -49,8 +49,7 @@ void Snake::moveTop(Area &area, Foods &foods, Cron &cron, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Top || this->_direction == Direction::Bottom))
 	{
-		if (this->_direction == Direction::Top)   // to remove
-			this->moveForward(area, foods, cron); // to remove
+		this->moveForward(area, foods, cron);
 		return;
 	}
 
@@ -64,8 +63,7 @@ void Snake::moveRight(Area &area, Foods &foods, Cron &cron, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Left || this->_direction == Direction::Right))
 	{
-		if (this->_direction == Direction::Right) // to remove
-			this->moveForward(area, foods, cron); // to remove
+		this->moveForward(area, foods, cron);
 		return;
 	}
 
@@ -79,8 +77,7 @@ void Snake::moveBottom(Area &area, Foods &foods, Cron &cron, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Top || this->_direction == Direction::Bottom))
 	{
-		if (this->_direction == Direction::Bottom) // to remove
-			this->moveForward(area, foods, cron);  // to remove
+		this->moveForward(area, foods, cron);
 		return;
 	}
 
@@ -94,8 +91,7 @@ void Snake::moveLeft(Area &area, Foods &foods, Cron &cron, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Left || this->_direction == Direction::Right))
 	{
-		if (this->_direction == Direction::Left)  // to remove
-			this->moveForward(area, foods, cron); // to remove
+		this->moveForward(area, foods, cron);
 		return;
 	}
 

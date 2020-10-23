@@ -35,17 +35,22 @@ void loop(Game &game, GUI &gui)
 	std::string pause;
 
 	gui.init(game);
+	gui.render(game);
 	while ((input = gui.getInput()) != Input::EXIT)
 	{
+		auto time1 = std::chrono::high_resolution_clock::now();
+		if (fMap.count(input))
+			fMap[input](game);
+		else
+			moveForward(game);
+		game.cron.checkEvents();
 		gui.render(game);
-		std::chrono::milliseconds timespan(100);
-		std::this_thread::sleep_for(timespan);
+		auto time2 = std::chrono::high_resolution_clock::now();
+
+		int64_t timeElapsed = std::chrono::duration_cast<std::chrono::microseconds>(time2 - time1).count();
+		if (timeElapsed < 0)
+			timeElapsed = 0;
+		std::chrono::milliseconds max(200);
+		std::this_thread::sleep_for(std::chrono::microseconds(max) - std::chrono::microseconds(timeElapsed));
 	}
-	// {
-	// 	if (fMap.count(input))
-	// 		fMap[input](game);
-	// 	else
-	// 		moveForward(game);
-	// 	game.cron.checkEvents();
-	// 	gui.render(game);
 }

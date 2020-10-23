@@ -23,6 +23,7 @@ void Gl::init(Game &game)
 		throw std::runtime_error("Failed to create GLFW window");
 
 	// glfwSetInputMode(_window, GLFW_STICKY_KEYS, GLFW_TRUE);
+	glfwSetInputMode(_window, GLFW_STICKY_KEYS, GLFW_FALSE);
 	glfwMakeContextCurrent(_window);
 
 	if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
@@ -36,12 +37,11 @@ void Gl::init(Game &game)
 	_program.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/fragment/shader.frag" });
 	_program.link();
 
-	float vertices[] = {
-		// positions  // colors
-		00.0f, 30.0f, 1.0f, 0.0f, 0.0f, // top left
-		00.0f, 00.0f, 1.0f, 0.0f, 0.0f, // bottom left
-		30.0f, 30.0f, 1.0f, 0.0f, 0.0f, // top right
-		30.0f, 00.0f, 1.0f, 0.0f, 0.0f  // bottom right
+	float square[] = {
+		00.0f, 01.0f, // top left
+		00.0f, 00.0f, // bottom left
+		01.0f, 01.0f, // top right
+		01.0f, 00.0f, // bottom right
 	};
 
 	uint indices[] = {
@@ -58,17 +58,20 @@ void Gl::init(Game &game)
 
 	glGenBuffers(1, &_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, _VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(square), square, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<void *>(0));
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), reinterpret_cast<void *>(0));
 	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<void *>(2 * sizeof(float)));
-	glEnableVertexAttribArray(1);
 
 	glBindVertexArray(0);
 
 	_program.use();
+
+	glm::mat4 view = glm::mat4(1.0f);
+	_program.uniformSet("view", view);
+
+	glm::mat4 projection = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, -1.0f, 1.0f);
+	_program.uniformSet("projection", projection);
 }
 
 void Gl::close()
@@ -82,7 +85,7 @@ void Gl::close()
 
 Input Gl::getInput()
 {
-	std::unordered_map<int, Input> map = {
+	const std::unordered_map<int, Input> map = {
 		{ GLFW_KEY_ESCAPE, Input::EXIT },                               // EXIT
 		{ GLFW_KEY_UP, Input::UP },       { GLFW_KEY_W, Input::UP },    // UP
 		{ GLFW_KEY_RIGHT, Input::RIGHT }, { GLFW_KEY_D, Input::RIGHT }, // RIGHT
@@ -93,7 +96,7 @@ Input Gl::getInput()
 	if (glfwWindowShouldClose(_window))
 		return Input::EXIT;
 
-	for (std::pair<const int, Input> &pair: map)
+	for (const std::pair<const int, Input> &pair: map)
 		if (glfwGetKey(_window, pair.first) == GLFW_PRESS)
 			return pair.second;
 
@@ -106,23 +109,38 @@ void Gl::render(Game &game)
 
 	glBindVertexArray(_VAO);
 
-	glm::mat4 model = glm::mat4(1.0f);
+	float cellSize = 30.0f;
+	float xStart = 50.0f;
+	float yStart = 720.0f - 50.0f;
 
-	glm::mat4 view = glm::mat4(1.0f);
-	// view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	// _program.uniformSet("view", view);
+	for (int i = 0; i < game.area.getSize().height; i++)
+	{
+		for (int j = 0; j < game.area.getSize().width; j++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, glm::vec3(xStart + cellSize * j, yStart - cellSize * i, 0.0f));
+			model = glm::scale(model, glm::vec3(cellSize, cellSize, 0.0f));
+			_program.uniformSet("model", model);
 
-	glm::mat4 projection;
-	projection = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, 0.0f, 10.0f);
+			Position  pos(j, i);
+			glm::vec3 color(1.0f, 1.0f, 1.0f);
 
-	glm::mat4 transform = projection * view * model;
-	_program.uniformSet("transform", transform);
+			if (game.area.isWall(pos))
+				color = glm::vec3(0.46f, 0.33f, 0.0f);
+			else if (game.area.isFood(pos))
+				color = glm::vec3(0.61f, 0.62f, 1.0f);
+			else if (game.area.isSnake(pos))
+				color = game.snake.isHead(pos) ? glm::vec3(0.83f, 1.0f, 0.0f) : glm::vec3(0.06f, 1.0f, 0.16f);
 
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			_program.uniformSet("color", color.x, color.y, color.z);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		}
+	}
 	glBindVertexArray(0);
 
+	// glfwWaitEventsTimeout(0);
+	glfwPollEvents();
 	glfwSwapBuffers(_window);
-	glfwWaitEventsTimeout(0);
 }
 
 void Gl::errorCb(int err, const char *description)
