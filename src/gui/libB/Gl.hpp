@@ -1,14 +1,13 @@
 #ifndef GL_HPP
 #define GL_HPP
 
-#define GLFW_INCLUDE_NONE
-#include "GLFW/glfw3.h"
 #include "GUI.hpp"
 #include "Game.hpp"
 #include "Input.hpp"
 #include "Program.hpp"
 #include "glad/glad.h"
 
+#include <SDL2/SDL.h>
 #include <clocale>
 #include <exception>
 #include <glm/glm.hpp>
@@ -19,15 +18,14 @@
 class Gl: public GUI
 {
 	private:
-	GLFWwindow *_window;
+	SDL_Window *_window;
 	GLuint      _EBO;
 	GLuint      _VAO;
 	GLuint      _VBO;
 	Program     _program;
 
 	Gl(const Gl &) = delete;
-	Gl &        operator=(const Gl &) = delete;
-	static void errorCb(int error, const char *description);
+	Gl &operator=(const Gl &) = delete;
 
 	public:
 	Gl();
