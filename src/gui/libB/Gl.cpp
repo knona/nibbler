@@ -10,23 +10,25 @@ Gl::~Gl()
 
 void Gl::init(Game &game)
 {
-	if (!glfwInit())
-		throw std::runtime_error("Failed to initliaze GLFW");
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+		throw std::runtime_error("Failed to initliaze SDL");
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	SDL_GL_LoadLibrary(NULL);
 
-	_window = glfwCreateWindow(1280, 720, "NIBBLER", NULL, NULL);
+	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+
+	_window = SDL_CreateWindow("NIBBLER", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);
 	if (!_window)
-		throw std::runtime_error("Failed to create GLFW window");
+		throw std::runtime_error("Failed to create SDL window");
 
-	// glfwSetInputMode(_window, GLFW_STICKY_KEYS, GLFW_TRUE);
-	glfwSetInputMode(_window, GLFW_STICKY_KEYS, GLFW_FALSE);
-	glfwMakeContextCurrent(_window);
+	SDL_SetWindowResizable(_window, SDL_FALSE);
 
-	if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
+	SDL_GLContext maincontext = SDL_GL_CreateContext(_window);
+
+	if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
 		throw std::runtime_error("Failed to initialize GLAD");
 
 	glViewport(0, 0, 1280, 720);
@@ -76,29 +78,40 @@ void Gl::init(Game &game)
 
 void Gl::close()
 {
-	_window = nullptr;
+	if (_window)
+	{
+		SDL_DestroyWindow(_window);
+		_window = nullptr;
+	}
 	glDeleteVertexArrays(1, &_VAO);
 	glDeleteBuffers(1, &_VBO);
 	glDeleteBuffers(1, &_EBO);
-	glfwTerminate();
+	SDL_Quit();
 }
 
 Input Gl::getInput()
 {
+	SDL_Event event;
+
 	const std::unordered_map<int, Input> map = {
-		{ GLFW_KEY_ESCAPE, Input::EXIT },                               // EXIT
-		{ GLFW_KEY_UP, Input::UP },       { GLFW_KEY_W, Input::UP },    // UP
-		{ GLFW_KEY_RIGHT, Input::RIGHT }, { GLFW_KEY_D, Input::RIGHT }, // RIGHT
-		{ GLFW_KEY_DOWN, Input::DOWN },   { GLFW_KEY_S, Input::DOWN },  // DOWN
-		{ GLFW_KEY_LEFT, Input::LEFT },   { GLFW_KEY_A, Input::LEFT },  // LEFT
+		{ SDL_SCANCODE_ESCAPE, Input::EXIT },                                   // EXIT
+		{ SDL_SCANCODE_UP, Input::UP },       { SDL_SCANCODE_W, Input::UP },    // UP
+		{ SDL_SCANCODE_RIGHT, Input::RIGHT }, { SDL_SCANCODE_D, Input::RIGHT }, // RIGHT
+		{ SDL_SCANCODE_DOWN, Input::DOWN },   { SDL_SCANCODE_S, Input::DOWN },  // DOWN
+		{ SDL_SCANCODE_LEFT, Input::LEFT },   { SDL_SCANCODE_A, Input::LEFT },  // LEFT
 	};
 
-	if (glfwWindowShouldClose(_window))
-		return Input::EXIT;
-
-	for (const std::pair<const int, Input> &pair: map)
-		if (glfwGetKey(_window, pair.first) == GLFW_PRESS)
-			return pair.second;
+	while (SDL_PollEvent(&event))
+	{
+		if (event.type == SDL_QUIT)
+			return Input::EXIT;
+		if (event.type == SDL_KEYDOWN)
+		{
+			for (const std::pair<const int, Input> &pair: map)
+				if (event.key.keysym.scancode == pair.first)
+					return pair.second;
+		}
+	}
 
 	return Input::NONE;
 }
@@ -109,7 +122,7 @@ void Gl::render(Game &game)
 
 	glBindVertexArray(_VAO);
 
-	float cellSize = 30.0f;
+	float cellSize = 20.0f;
 	float xStart = 50.0f;
 	float yStart = 720.0f - 50.0f;
 
@@ -138,16 +151,5 @@ void Gl::render(Game &game)
 	}
 	glBindVertexArray(0);
 
-	// glfwWaitEventsTimeout(0);
-	glfwPollEvents();
-	glfwSwapBuffers(_window);
-}
-
-void Gl::errorCb(int err, const char *description)
-{
-	std::string error = "Code ";
-	error += std::to_string(err);
-	error += " , ";
-	error += description;
-	throw std::runtime_error(error);
+	SDL_GL_SwapWindow(_window);
 }
