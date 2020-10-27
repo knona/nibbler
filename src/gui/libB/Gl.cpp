@@ -3,6 +3,8 @@
 Gl::Gl(): _window(nullptr), _EBO(0), _VAO(0), _VBO(0)
 {}
 
+Size Gl::_screen = { 1280, 720 };
+
 Gl::~Gl()
 {
 	this->close();
@@ -20,7 +22,8 @@ void Gl::init(Game &game)
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
-	_window = SDL_CreateWindow("NIBBLER", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);
+	_window = SDL_CreateWindow("NIBBLER", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screen.width, _screen.height,
+	                           SDL_WINDOW_OPENGL);
 	if (!_window)
 		throw std::runtime_error("Failed to create SDL window");
 
@@ -31,7 +34,7 @@ void Gl::init(Game &game)
 	if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
 		throw std::runtime_error("Failed to initialize GLAD");
 
-	glViewport(0, 0, 1280, 720);
+	glViewport(0, 0, _screen.width, _screen.height);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
 	_program.setId();
@@ -72,7 +75,8 @@ void Gl::init(Game &game)
 	glm::mat4 view = glm::mat4(1.0f);
 	_program.uniformSet("view", view);
 
-	glm::mat4 projection = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, -1.0f, 1.0f);
+	glm::mat4 projection =
+		glm::ortho(0.0f, static_cast<float>(_screen.width), 0.0f, static_cast<float>(_screen.height), -1.0f, 1.0f);
 	_program.uniformSet("projection", projection);
 }
 
@@ -105,7 +109,7 @@ Input Gl::getInput()
 	{
 		if (event.type == SDL_QUIT)
 			return Input::EXIT;
-		if (event.type == SDL_KEYDOWN)
+		if (event.type == SDL_KEYDOWN && event.key.repeat == 0)
 		{
 			for (const std::pair<const int, Input> &pair: map)
 				if (event.key.keysym.scancode == pair.first)
@@ -123,15 +127,15 @@ void Gl::render(Game &game)
 	glBindVertexArray(_VAO);
 
 	float cellSize = 20.0f;
-	float xStart = 50.0f;
-	float yStart = 720.0f - 50.0f;
+	float xStart = _screen.width / 2 - game.area.getSize().width / 2 * cellSize;
+	float yStart = _screen.height / 2 + game.area.getSize().height / 2 * cellSize;
 
 	for (int i = 0; i < game.area.getSize().height; i++)
 	{
 		for (int j = 0; j < game.area.getSize().width; j++)
 		{
 			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(xStart + cellSize * j, yStart - cellSize * i, 0.0f));
+			model = glm::translate(model, glm::vec3(xStart + cellSize * j, yStart - cellSize * (i + 1), 0.0f));
 			model = glm::scale(model, glm::vec3(cellSize, cellSize, 0.0f));
 			_program.uniformSet("model", model);
 

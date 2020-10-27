@@ -24,6 +24,8 @@ class Gl: public GUI
 	GLuint      _VBO;
 	Program     _program;
 
+	static Size _screen;
+
 	Gl(const Gl &) = delete;
 	Gl &operator=(const Gl &) = delete;
 
