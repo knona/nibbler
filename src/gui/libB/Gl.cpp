@@ -35,7 +35,7 @@ void Gl::init(Game &game)
 
 	SDL_SetWindowResizable(_window, SDL_FALSE);
 
-	SDL_GLContext maincontext = SDL_GL_CreateContext(_window);
+	SDL_GL_CreateContext(_window);
 
 	if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
 		throw std::runtime_error("Failed to initialize GLAD");
