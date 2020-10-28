@@ -11,6 +11,7 @@ Ncurses:
 
 SDL:
 - ajouter des textures
+- ajout son ?
 
 ## Bibliotheques
 https://stackoverflow.com/questions/496664/c-dynamic-shared-library-on-linux
