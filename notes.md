@@ -9,7 +9,6 @@ features:
 - Vérifier les constructeurs par copie
 - Utiliser conan / cmake pour les dépendances ?
 - mettre les bonnes valeurs pour la width / height dans le parsing
-- pouvoir mettre pause avec p
 - pouvoir prendre un paramètre --lib qui lance le jeu avec la lib voulue
 
 Ncurses:
