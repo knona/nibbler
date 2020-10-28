@@ -4,14 +4,13 @@ features:
 
 - Optimiser les fonctions pour placer les walls et les foods
 - Optimisation générale
-- Pour ncurses ne pas render si taille trop petite, afficher un message
 - Taille et nombre des walls en fonction de la taille de la map
 - Vérifier les constructeurs par copie
 - Utiliser conan / cmake pour les dépendances ?
-- mettre les bonnes valeurs pour la width / height dans le parsing
-- pouvoir prendre un paramètre --lib qui lance le jeu avec la lib voulue
+- pouvoir prendre un paramètre --gui qui lance le jeu avec la lib voulue
 
 Ncurses:
+- Pour ncurses ne pas render si taille trop petite, afficher un message
 - ajouter des erreurs si par ex init fail
 - ecran de win / loose
 
