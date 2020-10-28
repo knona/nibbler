@@ -3,10 +3,14 @@
 
 #include "Size.tpp"
 
+#include <chrono>
+
 struct Options
 {
-	Size<int>   areaSize;
-	std::string gui;
+	Size<int>                 areaSize;
+	std::string               gui;
+	bool                      noWall;
+	std::chrono::milliseconds cycleTime;
 };
 
 #endif // !OPTIONS_HPP

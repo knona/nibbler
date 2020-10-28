@@ -25,11 +25,12 @@ void startGame(const Options &options)
 
 	game.foods.addRandomFood(game.area);
 
-	addWalls(game);
+	if (!options.noWall)
+		addWalls(game);
 
 	std::unique_ptr<GUI> gui = fMap[options.gui]();
 
-	loop(game, *gui);
+	loop(game, *gui, options);
 }
 
 int parsingErrorHandler(const Exception::ParsingOptions &e)

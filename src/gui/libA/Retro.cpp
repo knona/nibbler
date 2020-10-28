@@ -22,9 +22,7 @@ void Retro::init(Game &game)
 	init_pair(3, COLOR_GREEN, COLOR_BLACK);
 	init_pair(4, COLOR_YELLOW, COLOR_BLACK);
 	init_pair(5, COLOR_WHITE, COLOR_BLACK);
-	int width = game.area.width();
-	int height = game.area.height();
-	_win = newwin(height + 2, width * 2 + 2, 1, 1);
+	_win = newwin(game.area.height() + 2, game.area.width() * 2 + 2, 1, 1);
 	keypad(_win, true);
 }
 

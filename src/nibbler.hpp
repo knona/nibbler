@@ -30,6 +30,6 @@
 #include <unordered_map>
 
 Options parseCommandLine(int argc, const char **argv);
-void    loop(Game &game, GUI &gui);
+void    loop(Game &game, GUI &gui, const Options &options);
 
 #endif // !NIBBLER_HPP

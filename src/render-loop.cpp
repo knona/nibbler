@@ -25,7 +25,7 @@ void moveForward(Game &game)
 	game.snake.moveForward(game.area, game.foods, game.cron);
 }
 
-void loop(Game &game, GUI &gui)
+void loop(Game &game, GUI &gui, const Options &options)
 {
 	std::unordered_map<Input, void (*)(Game & game)> fMap = {
 		{ Input::UP, moveTop }, { Input::RIGHT, moveRight }, { Input::DOWN, moveBottom }, { Input::LEFT, moveLeft }
@@ -48,10 +48,10 @@ void loop(Game &game, GUI &gui)
 		gui.render(game);
 		auto time2 = std::chrono::high_resolution_clock::now();
 
-		int64_t timeElapsed = std::chrono::duration_cast<std::chrono::microseconds>(time2 - time1).count();
-		if (timeElapsed < 0)
-			timeElapsed = 0;
-		std::chrono::milliseconds max(200);
-		std::this_thread::sleep_for(std::chrono::microseconds(max) - std::chrono::microseconds(timeElapsed));
+		std::chrono::microseconds timeElapsed = std::chrono::duration_cast<std::chrono::microseconds>(time2 - time1);
+		std::chrono::microseconds timeToSleep = std::chrono::microseconds(options.cycleTime) - timeElapsed;
+		if (timeToSleep.count() < 0)
+			timeToSleep = std::chrono::microseconds(0);
+		std::this_thread::sleep_for(timeToSleep);
 	}
 }
