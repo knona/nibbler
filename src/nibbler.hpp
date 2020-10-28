@@ -16,7 +16,7 @@
 #include "Options.hpp"
 #include "Position.hpp"
 #include "Retro.hpp"
-#include "Size.hpp"
+#include "Size.tpp"
 #include "Snake.hpp"
 #include "Wall.hpp"
 #include "Walls.hpp"

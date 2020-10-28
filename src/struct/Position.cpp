@@ -55,7 +55,7 @@ Position Position::getRandomPosition(int xMax, int yMax)
 	return { rand() % xMax, rand() % yMax };
 }
 
-void Position::print(const Size &size)
+void Position::print(const Size<int> &size)
 {
 	this->print(size.width, size.height);
 }

@@ -10,7 +10,7 @@ namespace po = boost::program_options;
 
 Options parseCommandLine(int argc, const char **argv)
 {
-	Size areaSize;
+	Size<int> areaSize;
 
 	po::options_description desc("Allowed options");
 	desc.add_options()                                                                      //

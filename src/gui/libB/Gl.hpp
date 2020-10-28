@@ -23,8 +23,8 @@ class Gl: public GUI
 	GLuint      _VAO;
 	GLuint      _VBO;
 	Program     _program;
-
-	static Size _screen;
+	Size<float> _screen;
+	float       _cellSize;
 
 	Gl(const Gl &) = delete;
 	Gl &operator=(const Gl &) = delete;

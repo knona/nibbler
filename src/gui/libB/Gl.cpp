@@ -1,9 +1,7 @@
 #include "Gl.hpp"
 
-Gl::Gl(): _window(nullptr), _EBO(0), _VAO(0), _VBO(0)
+Gl::Gl(): _window(nullptr), _EBO(0), _VAO(0), _VBO(0), _screen(1280, 720)
 {}
-
-Size Gl::_screen = { 1280, 720 };
 
 Gl::~Gl()
 {
@@ -21,6 +19,14 @@ void Gl::init(Game &game)
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+
+	Size<int> areaSize = game.area.getSize();
+
+	_cellSize = std::min(_screen.width / areaSize.width, _screen.height / areaSize.height);
+	if (_cellSize > 40)
+		_cellSize = 40;
+	_screen.width = areaSize.width * _cellSize;
+	_screen.height = areaSize.height * _cellSize;
 
 	_window = SDL_CreateWindow("NIBBLER", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screen.width, _screen.height,
 	                           SDL_WINDOW_OPENGL);
@@ -126,17 +132,16 @@ void Gl::render(Game &game)
 
 	glBindVertexArray(_VAO);
 
-	float cellSize = 20.0f;
-	float xStart = _screen.width / 2 - game.area.getSize().width / 2 * cellSize;
-	float yStart = _screen.height / 2 + game.area.getSize().height / 2 * cellSize;
+	float xStart = 0;
+	float yStart = _screen.height;
 
 	for (int i = 0; i < game.area.getSize().height; i++)
 	{
 		for (int j = 0; j < game.area.getSize().width; j++)
 		{
 			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(xStart + cellSize * j, yStart - cellSize * (i + 1), 0.0f));
-			model = glm::scale(model, glm::vec3(cellSize, cellSize, 0.0f));
+			model = glm::translate(model, glm::vec3(xStart + _cellSize * j, yStart - _cellSize * (i + 1), 0.0f));
+			model = glm::scale(model, glm::vec3(_cellSize, _cellSize, 0.0f));
 			_program.uniformSet("model", model);
 
 			Position  pos(j, i);

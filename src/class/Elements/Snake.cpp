@@ -114,9 +114,9 @@ void Snake::moveForward(Area &area, Foods &foods, Cron &cron)
 
 void Snake::setSnakeOnArea(Area &area)
 {
-	Size areaSize = area.getSize();
-	int  y = areaSize.height / 2;
-	int  x = areaSize.width / 2 - 2;
+	Size<int> areaSize = area.getSize();
+	int       y = areaSize.height / 2;
+	int       x = areaSize.width / 2 - 2;
 
 	for (int i = 3; i >= 0; i--)
 	{

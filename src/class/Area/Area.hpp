@@ -6,7 +6,7 @@
 #include "ElementType.hpp"
 #include "Exceptions.hpp"
 #include "Position.hpp"
-#include "Size.hpp"
+#include "Size.tpp"
 
 #include <algorithm>
 #include <cstdlib>
@@ -19,7 +19,7 @@ class Snake;
 class Area
 {
 	private:
-	Size                    _size;
+	Size<int>               _size;
 	std::unique_ptr<Cell[]> _data;
 	Area();
 	Area(const Area &);
@@ -27,14 +27,14 @@ class Area
 
 	public:
 	Area(int width, int height);
-	Area(const Size &size);
+	Area(const Size<int> &size);
 	~Area();
 
 	Cell &                operator[](size_t);
 	Cell &                operator[](const Position &pos);
 	const Cell &          operator[](size_t) const;
 	const Cell &          operator[](const Position &pos) const;
-	Size                  getSize() const;
+	Size<int>             getSize() const;
 	bool                  isOverArea(const Position &) const;
 	bool                  isFree(const Position &) const;
 	bool                  isFood(const Position &) const;

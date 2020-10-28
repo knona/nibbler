@@ -1,11 +1,11 @@
 #ifndef OPTIONS_HPP
 #define OPTIONS_HPP
 
-#include "Size.hpp"
+#include "Size.tpp"
 
 struct Options
 {
-	Size areaSize;
+	Size<int> areaSize;
 };
 
 #endif // !OPTIONS_HPP

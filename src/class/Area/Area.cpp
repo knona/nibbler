@@ -2,7 +2,7 @@
 
 #include "Snake.hpp"
 
-std::unique_ptr<Cell[]> alloc(const Size &size)
+std::unique_ptr<Cell[]> alloc(const Size<int> &size)
 {
 	return std::make_unique<Cell[]>(size.width * size.height);
 }
@@ -13,7 +13,7 @@ Area::Area()
 Area::Area(int width, int height): _size({ width, height }), _data(alloc(_size))
 {}
 
-Area::Area(const Size &size): _size(size), _data(alloc(_size))
+Area::Area(const Size<int> &size): _size(size), _data(alloc(_size))
 {}
 
 Area::~Area()
@@ -39,7 +39,7 @@ const Cell &Area::operator[](size_t index) const
 	return _data[index];
 }
 
-Size Area::getSize(void) const
+Size<int> Area::getSize(void) const
 {
 	return this->_size;
 }
