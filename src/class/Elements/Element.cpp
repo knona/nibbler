@@ -23,12 +23,12 @@ Element &Element::operator=(const Element &element)
 	return *this;
 }
 
-std::list<Position> &Element::getPositions(void)
+std::list<Position> &Element::getPositions()
 {
 	return this->_positions;
 }
 
-const std::list<Position> &Element::getPositions(void) const
+const std::list<Position> &Element::getPositions() const
 {
 	return this->_positions;
 }

@@ -135,9 +135,9 @@ void Gl::render(Game &game)
 	float xStart = 0;
 	float yStart = _screen.height;
 
-	for (int i = 0; i < game.area.getSize().height; i++)
+	for (int i = 0; i < game.area.height(); i++)
 	{
-		for (int j = 0; j < game.area.getSize().width; j++)
+		for (int j = 0; j < game.area.width(); j++)
 		{
 			glm::mat4 model = glm::mat4(1.0f);
 			model = glm::translate(model, glm::vec3(xStart + _cellSize * j, yStart - _cellSize * (i + 1), 0.0f));

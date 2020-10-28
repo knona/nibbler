@@ -1,8 +1,7 @@
 #include "Walls.hpp"
 
-void Walls::addRandomWall(Area &area)
+void Walls::addRandomWall(Area &area, int size)
 {
-	int  size = std::rand() % 3 + 2;
 	Wall wall = Wall::getRandomWall(area, size);
 	int  newId = wall.setId();
 

@@ -2,10 +2,11 @@
 
 features:
 
-- Taille et nombre des walls en fonction de la taille de la map
 - Vérifier les constructeurs par copie
 - Utiliser conan / cmake pour les dépendances ?
 - ajouter un système de score qui est affiché à la fin du jeu sur la sortie standard
+- ajouter une option pour ne pas ajouter des murs
+- ajouter une option pour modifier la vitesse --speed low / fast / normal
 
 Ncurses:
 - ajouter des erreurs si par ex init fail

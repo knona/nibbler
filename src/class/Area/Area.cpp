@@ -39,9 +39,19 @@ const Cell &Area::operator[](size_t index) const
 	return _data[index];
 }
 
-Size<int> Area::getSize(void) const
+Size<int> Area::getSize() const
 {
 	return this->_size;
+}
+
+int Area::height() const
+{
+	return this->_size.height;
+}
+
+int Area::width() const
+{
+	return this->_size.width;
 }
 
 bool Area::isOverArea(const Position &pos) const

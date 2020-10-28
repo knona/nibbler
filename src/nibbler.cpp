@@ -2,14 +2,20 @@
 
 void addWalls(Game &game)
 {
-	game.walls.addRandomWall(game.area);
-	game.walls.addRandomWall(game.area);
-	game.walls.addRandomWall(game.area);
+	int surfaceArea = game.area.width() * game.area.height();
+	int surfaceWalls = 0.03f * surfaceArea;
+
+	while (surfaceWalls > 0)
+	{
+		int size = rand() % static_cast<int>(std::round(std::log(surfaceArea / 2))) + 2;
+		game.walls.addRandomWall(game.area, size);
+		surfaceWalls -= size;
+	}
 }
 
 void startGame(const Options &options)
 {
-	std::unordered_map<std::string, std::unique_ptr<GUI> (*)(void)> fMap = //
+	std::unordered_map<std::string, std::unique_ptr<GUI> (*)()> fMap = //
 		{ { "Gl", GUI::createGui<Gl> }, { "Retro", GUI::createGui<Retro> } };
 
 	Game game = { .area = { options.areaSize } };

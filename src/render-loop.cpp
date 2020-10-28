@@ -36,6 +36,7 @@ void loop(Game &game, GUI &gui)
 
 	gui.init(game);
 	gui.render(game);
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	while ((input = gui.getInput()) != Input::EXIT)
 	{
 		auto time1 = std::chrono::high_resolution_clock::now();

@@ -16,7 +16,7 @@ class Walls: public std::unordered_map<int, Wall>
 	static int _id;
 
 	public:
-	void addRandomWall(Area &area);
+	void addRandomWall(Area &area, int size);
 	void removeWall(int id, Area &area);
 };
 

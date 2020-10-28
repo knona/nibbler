@@ -46,6 +46,8 @@ class Area
 	std::vector<Element>  getFreeElements(int size) const;
 	Element               getRandomFreeElement(int size) const;
 	void                  print(std::ostream &os, const Snake *snake = nullptr) const;
+	int                   height() const;
+	int                   width() const;
 };
 
 std::ostream &operator<<(std::ostream &os, const Area &);

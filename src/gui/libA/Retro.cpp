@@ -22,8 +22,8 @@ void Retro::init(Game &game)
 	init_pair(3, COLOR_GREEN, COLOR_BLACK);
 	init_pair(4, COLOR_YELLOW, COLOR_BLACK);
 	init_pair(5, COLOR_WHITE, COLOR_BLACK);
-	int width = game.area.getSize().width;
-	int height = game.area.getSize().height;
+	int width = game.area.width();
+	int height = game.area.height();
 	_win = newwin(height + 2, width * 2 + 2, 1, 1);
 	keypad(_win, true);
 }
@@ -64,9 +64,9 @@ void Retro::render(Game &game)
 	wattron(_win, COLOR_PAIR(5));
 	box(_win, 0, 0);
 
-	for (int y = 0; y < game.area.getSize().height; y++)
+	for (int y = 0; y < game.area.height(); y++)
 	{
-		for (int x = 0; x < game.area.getSize().width; x++)
+		for (int x = 0; x < game.area.width(); x++)
 		{
 			Position    pos = { x, y };
 			std::string color;
