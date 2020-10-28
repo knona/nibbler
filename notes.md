@@ -2,11 +2,10 @@
 
 features:
 
-- Optimiser les fonctions pour placer les walls et les foods
-- Optimisation générale
 - Taille et nombre des walls en fonction de la taille de la map
 - Vérifier les constructeurs par copie
 - Utiliser conan / cmake pour les dépendances ?
+- ajouter un système de score qui est affiché à la fin du jeu sur la sortie standard
 
 Ncurses:
 - ajouter des erreurs si par ex init fail

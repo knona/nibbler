@@ -37,7 +37,8 @@ void Snake::move(Area &area, const Position &newHead, Foods &foods, Cron &cron)
 		data.args = std::make_shared<AddRandomFoodArgs>(AddRandomFoodArgs({ &foods, &area }));
 		cron.addEvent(data, 0);
 		this->_grow++;
-	} else if (this->_grow > 0)
+	}
+	else if (this->_grow > 0)
 		this->_grow--;
 
 	this->_positions.push_front(newHead);

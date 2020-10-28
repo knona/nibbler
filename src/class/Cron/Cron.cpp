@@ -31,7 +31,8 @@ void Cron::checkEvents()
 		{
 			for (CronData &cronData: it->second)
 				cronData.eventFunction(cronData.args);
-		} else
+		}
+		else
 			this->_cronTable[it->first - 1] = it->second;
 		it = this->_cronTable.erase(it);
 	}

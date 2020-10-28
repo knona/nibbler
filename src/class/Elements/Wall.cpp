@@ -13,18 +13,63 @@ int &Wall::getIdCounter() const
 
 int Wall::_idCounter = 0;
 
+bool checkSidesHorizontalElement(Area &area, const Position &pos, const Position &back, const Position &front)
+{
+	bool res = true;
+	res = res && !area.isDanger({ pos.x, pos.y + 1 }) && !area.isDanger({ pos.x, pos.y - 1 });
+	if (Position(pos.x, pos.y) == front)
+	{
+		res = res &&                                      //
+		      !area.isDanger({ pos.x - 1, pos.y }) &&     //
+		      !area.isDanger({ pos.x - 1, pos.y + 1 }) && //
+		      !area.isDanger({ pos.x - 1, pos.y - 1 });
+	}
+	if (Position(pos.x, pos.y) == back)
+	{
+		res = res &&                                      //
+		      !area.isDanger({ pos.x + 1, pos.y }) &&     //
+		      !area.isDanger({ pos.x + 1, pos.y + 1 }) && //
+		      !area.isDanger({ pos.x + 1, pos.y - 1 });
+	}
+	return res;
+}
+
+bool checkSidesVerticalElement(Area &area, const Position &pos, const Position &back, const Position &front)
+{
+	bool res = true;
+	res = res && !area.isDanger({ pos.x + 1, pos.y }) && !area.isDanger({ pos.x - 1, pos.y });
+	if (Position(pos.x, pos.y) == front)
+	{
+		res = res &&                                      //
+		      !area.isDanger({ pos.x, pos.y - 1 }) &&     //
+		      !area.isDanger({ pos.x + 1, pos.y - 1 }) && //
+		      !area.isDanger({ pos.x - 1, pos.y - 1 });
+	}
+	if (Position(pos.x, pos.y) == back)
+	{
+		res = res &&                                      //
+		      !area.isDanger({ pos.x, pos.y + 1 }) &&     //
+		      !area.isDanger({ pos.x + 1, pos.y + 1 }) && //
+		      !area.isDanger({ pos.x - 1, pos.y + 1 });
+	}
+	return res;
+}
+
 bool checkSides(Area &area, const Element &element)
 {
+	std::list<Position> positions = element.getPositions();
+	Position            back = positions.back();
+	Position            front = positions.front();
+	bool                isHorizontal = back.y == front.y;
+
 	for (const Position &pos: element.getPositions())
 	{
-		bool res = true;
-		for (int i = -1; i <= 1; i++)
-			for (int j = -1; j <= 1; j++)
-				if (j != pos.x || i != pos.y)
-					res = res && !area.isDanger({ pos.x + j, pos.y + i });
+		bool res = isHorizontal ? checkSidesHorizontalElement(area, pos, back, front) :
+                                  checkSidesVerticalElement(area, pos, back, front);
 		if (!res)
 			return false;
 	}
+
 	return true;
 }
 
