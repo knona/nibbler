@@ -6,24 +6,25 @@ features:
 - Optimisation générale
 - Pour ncurses ne pas render si taille trop petite, afficher un message
 - Taille et nombre des walls en fonction de la taille de la map
-- Mode jeu sans/avec mur
-- Score avec noms des joueurs, sauvegarde des classements
 - Vérifier les constructeurs par copie
-- faire un menu new game / walls / scores / exit
-- Mode de jeu ou les commandes flèches sont inversées
 - Utiliser conan / cmake pour les dépendances ?
-- set right values for width / height in parsing
-- ajouter des erreurs si par ex init fail dans ncurses
+- mettre les bonnes valeurs pour la width / height dans le parsing
+- pouvoir mettre pause avec p
+- pouvoir prendre un paramètre --lib qui lance le jeu avec la lib voulue
+
+Ncurses:
+- ajouter des erreurs si par ex init fail
+- ecran de win / loose
+
+SDL:
+- pour la sdl créer la taille de la fenetre en fonction de la taille de la zone de jeu
+- ajouter des textures
+- ecran de win / loose
 
 bugs:
 - leak quand pas de size donné en argument
 
 ## Bibliotheques
-
-3 bibliothèques dynamiques voir :
 https://stackoverflow.com/questions/496664/c-dynamic-shared-library-on-linux
 
-Elles ont des fichiers communs pour l'affichage.
-On aura donc 3 fichiers libA.cpp libB.cpp libC.cpp qui seront compilés avec un même ensemble de fichiers.
-
-Ces 3 libs mettront à disposition certaines fonctions pour pouvoir être utilisées par l'exécutable. Ces fonctions doivent être définies dans le bloc extern c.
+Ajouter une dernière bibliothèque graphique
