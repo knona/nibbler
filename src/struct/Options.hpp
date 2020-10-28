@@ -5,7 +5,8 @@
 
 struct Options
 {
-	Size<int> areaSize;
+	Size<int>   areaSize;
+	std::string gui;
 };
 
 #endif // !OPTIONS_HPP

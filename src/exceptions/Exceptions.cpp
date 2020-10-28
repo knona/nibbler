@@ -2,12 +2,12 @@
 
 const char *Exception::GameOver::what() const throw()
 {
-	return "GAME OVER";
+	return "\033[0;31mGAME OVER\033[0m";
 }
 
 const char *Exception::Win::what() const throw()
 {
-	return "WIN";
+	return "\033[0;32mWIN\033[0m";
 }
 
 Exception::ParsingOptions::ParsingOptions(const std::string &detail, int exitStatus)

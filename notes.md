@@ -7,17 +7,12 @@ features:
 - Taille et nombre des walls en fonction de la taille de la map
 - Vérifier les constructeurs par copie
 - Utiliser conan / cmake pour les dépendances ?
-- pouvoir prendre un paramètre --gui qui lance le jeu avec la lib voulue
 
 Ncurses:
-- Pour ncurses ne pas render si taille trop petite, afficher un message
 - ajouter des erreurs si par ex init fail
-- ecran de win / loose
 
 SDL:
-- pour la sdl créer la taille de la fenetre en fonction de la taille de la zone de jeu
 - ajouter des textures
-- ecran de win / loose
 
 bugs:
 - leak quand pas de size donné en argument

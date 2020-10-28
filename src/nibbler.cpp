@@ -9,6 +9,9 @@ void addWalls(Game &game)
 
 void startGame(const Options &options)
 {
+	std::unordered_map<std::string, std::unique_ptr<GUI> (*)(void)> fMap = //
+		{ { "Gl", GUI::createGui<Gl> }, { "Retro", GUI::createGui<Retro> } };
+
 	Game game = { .area = { options.areaSize } };
 
 	game.snake.setId();
@@ -18,7 +21,8 @@ void startGame(const Options &options)
 
 	addWalls(game);
 
-	std::unique_ptr<GUI> gui = GUI::createGui<Gl>();
+	std::unique_ptr<GUI> gui = fMap[options.gui]();
+
 	loop(game, *gui);
 }
 
@@ -54,6 +58,14 @@ int main(int argc, const char *argv[])
 	try
 	{
 		startGame(options);
+	}
+	catch (const Exception::GameOver &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	catch (const Exception::Win &e)
+	{
+		std::cout << e.what() << std::endl;
 	}
 	catch (const std::exception &e)
 	{
