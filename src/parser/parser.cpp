@@ -26,7 +26,7 @@ Size<int> getAreaSize(const po::variables_map &vm)
 std::string getGui(const po::variables_map &vm)
 {
 	std::string gui = vm["gui"].as<std::string>();
-	if (gui != "Gl" && gui != "Retro")
+	if (gui != "Gl" && gui != "Retro" && gui != "Debug")
 		throw Exception::ParsingOptions("Invalid gui option", EXIT_FAILURE);
 	return gui;
 }

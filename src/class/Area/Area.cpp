@@ -191,14 +191,14 @@ void Area::print(std::ostream &os, const Snake *snake) const
 			std::string color;
 
 			if (this->isWall(pos))
-				color = "🟫";
+				color = "\033[0;31m";
 			else if (this->isFood(pos))
-				color = "🟪";
+				color = "\033[0;35m";
 			else if (this->isSnake(pos))
-				color = snake && snake->isHead(pos) ? "🟦" : (snake && snake->isTail(pos) ? "⬛" : "🟩");
+				color = snake && snake->isHead(pos) ? "\033[0;33m" : "\033[0;32m";
 			else
-				color = "⬜";
-			os << color;
+				color = "\033[0;97m";
+			os << color << "◼ \033[0m";
 		}
 	}
 	os << std::endl;

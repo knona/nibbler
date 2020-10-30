@@ -29,6 +29,9 @@ void Snake::move(Area &area, const Position &newHead, Foods &foods, Cron &cron)
 		this->_positions.pop_back();
 	}
 
+	if (this->_grow > 0)
+		this->_grow--;
+
 	if (area.isFood(newHead))
 	{
 		foods.removeFood(newHead, area);
@@ -36,8 +39,6 @@ void Snake::move(Area &area, const Position &newHead, Foods &foods, Cron &cron)
 		cron.addEvent(fn, 0);
 		this->_grow++;
 	}
-	else if (this->_grow > 0)
-		this->_grow--;
 
 	this->_positions.push_front(newHead);
 	area[newHead].id = this->_id;

@@ -16,7 +16,7 @@ void addWalls(Game &game)
 void startGame(const Options &options)
 {
 	std::unordered_map<std::string, std::unique_ptr<GUI> (*)()> fMap = //
-		{ { "Gl", GUI::createGui<Gl> }, { "Retro", GUI::createGui<Retro> } };
+		{ { "Gl", GUI::createGui<Gl> }, { "Retro", GUI::createGui<Retro> }, { "Debug", GUI::createGui<Debug> } };
 
 	Game game = { .area = { options.areaSize } };
 
