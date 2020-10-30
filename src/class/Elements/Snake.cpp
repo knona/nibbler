@@ -18,6 +18,11 @@ Snake &Snake::operator=(const Snake &snake)
 	return *this;
 }
 
+Direction Snake::getDirection() const
+{
+	return this->_direction;
+}
+
 void Snake::move(Area &area, const Position &newHead, Foods &foods, Cron &cron)
 {
 	if (area.isDanger(newHead))

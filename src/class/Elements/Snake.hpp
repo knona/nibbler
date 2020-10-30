@@ -17,14 +17,16 @@ class Snake: public Element
 {
 	private:
 	Direction _direction;
-	void      move(Area &area, const Position &newHead, Foods &foods, Cron &cron);
 	int       _grow;
+	void      move(Area &area, const Position &newHead, Foods &foods, Cron &cron);
 
 	public:
 	Snake();
 	Snake(const Snake &);
 	~Snake();
 	Snake &operator=(const Snake &);
+
+	Direction getDirection() const;
 
 	void setSnakeOnArea(Area &area);
 

@@ -22,6 +22,7 @@ class Gl: public GUI
 	GLuint      _EBO;
 	GLuint      _VAO;
 	GLuint      _VBO;
+	GLuint      _textures[8];
 	Program     _program;
 	Size<float> _screen;
 	float       _cellSize;
