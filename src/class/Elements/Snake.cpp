@@ -32,7 +32,7 @@ void Snake::move(Area &area, const Position &newHead, Foods &foods, Cron &cron)
 	if (area.isFood(newHead))
 	{
 		foods.removeFood(newHead, area);
-		std::function<void()> fn = std::bind(Foods::addRandomFood, &foods, area);
+		std::function<void()> fn = std::bind(&Foods::addRandomFood, &foods, std::ref(area));
 		cron.addEvent(fn, 0);
 		this->_grow++;
 	}
