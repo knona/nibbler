@@ -17,20 +17,20 @@ Cron &Cron::operator=(const Cron &cron)
 	return *this;
 }
 
-void Cron::addEvent(CronData cronData, int relativeCycle)
+void Cron::addEvent(const std::function<void()> &fn, int relativeCycle)
 {
-	this->_cronTable[relativeCycle].push_back(cronData);
+	this->_cronTable[relativeCycle].push_back(fn);
 }
 
 void Cron::checkEvents()
 {
-	std::map<int, std::list<CronData>>::iterator it = this->_cronTable.begin();
+	std::map<int, std::list<std::function<void()>>>::iterator it = this->_cronTable.begin();
 	while (it != this->_cronTable.end())
 	{
 		if (it->first == 0)
 		{
-			for (CronData &cronData: it->second)
-				cronData.eventFunction(cronData.args);
+			for (const std::function<void()> &fn: it->second)
+				fn();
 		}
 		else
 			this->_cronTable[it->first - 1] = it->second;

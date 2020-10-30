@@ -1,11 +1,5 @@
 #include "Foods.hpp"
 
-void Foods::addRandomFoodFromCron(const std::shared_ptr<void> &args)
-{
-	AddRandomFoodArgs &data = *(std::static_pointer_cast<AddRandomFoodArgs>(args));
-	(data.foods->Foods::addRandomFood)(*data.area);
-}
-
 void Foods::addRandomFood(Area &area)
 {
 	Food food;

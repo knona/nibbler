@@ -1,7 +1,6 @@
 #ifndef SNAKE_HPP
 #define SNAKE_HPP
 
-#include "AddRandomFoodArgs.hpp"
 #include "Area.hpp"
 #include "Cron.hpp"
 #include "Direction.hpp"

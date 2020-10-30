@@ -2,18 +2,18 @@
 #define CRON_HPP
 
 #include "Area.hpp"
-#include "CronData.hpp"
 #include "Foods.hpp"
 #include "Snake.hpp"
 #include "Walls.hpp"
 
+#include <functional>
 #include <list>
 #include <map>
 
 class Cron
 {
 	private:
-	std::map<int, std::list<CronData>> _cronTable;
+	std::map<int, std::list<std::function<void()>>> _cronTable;
 
 	public:
 	Cron();
@@ -21,7 +21,7 @@ class Cron
 	~Cron();
 	Cron &operator=(const Cron &);
 
-	void addEvent(CronData cronData, int relativeCycle);
+	void addEvent(const std::function<void()> &fn, int relativeCycle);
 	void checkEvents();
 };
 
