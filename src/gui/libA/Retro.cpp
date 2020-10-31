@@ -11,7 +11,8 @@ Retro::~Retro()
 void Retro::init(Game &game)
 {
 	setlocale(LC_ALL, "");
-	initscr();
+	if (!initscr())
+		throw std::runtime_error("Failed to initialize ncurses");
 	start_color();
 	noecho();
 	raw();
@@ -23,6 +24,8 @@ void Retro::init(Game &game)
 	init_pair(4, COLOR_YELLOW, COLOR_BLACK);
 	init_pair(5, COLOR_WHITE, COLOR_BLACK);
 	_win = newwin(game.area.height() + 2, game.area.width() * 2 + 2, 1, 1);
+	if (!_win)
+		throw std::runtime_error("Failed to create window");
 	keypad(_win, true);
 }
 

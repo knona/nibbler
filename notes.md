@@ -6,8 +6,6 @@ features:
 - Vérifier les constructeurs par copie
 - Utiliser conan / cmake pour les dépendances ?
 
-Ncurses:
-- ajouter des erreurs si par ex init fail
 
 ## Bibliotheques
 https://stackoverflow.com/questions/496664/c-dynamic-shared-library-on-linux
