@@ -19,7 +19,7 @@ class Snake: public Element
 	private:
 	Direction _direction;
 	int       _grow;
-	void      move(GameData &game, const Position &newHead);
+	void      move(GameData &gData, const Position &newHead);
 
 	public:
 	Snake();
@@ -31,11 +31,11 @@ class Snake: public Element
 
 	void setSnakeOnArea(Area &area);
 
-	void moveTop(GameData &game, bool forward = false);
-	void moveRight(GameData &game, bool forward = false);
-	void moveBottom(GameData &game, bool forward = false);
-	void moveLeft(GameData &game, bool forward = false);
-	void moveForward(GameData &game);
+	void moveTop(GameData &gData, bool forward = false);
+	void moveRight(GameData &gData, bool forward = false);
+	void moveBottom(GameData &gData, bool forward = false);
+	void moveLeft(GameData &gData, bool forward = false);
+	void moveForward(GameData &gData);
 
 	bool isHead(const Position &pos) const;
 	bool isTail(const Position &pos) const;

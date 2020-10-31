@@ -8,9 +8,9 @@ Debug::~Debug()
 	this->close();
 }
 
-void Debug::init(GameData &game)
+void Debug::init(GameData &gData)
 {
-	(void)game;
+	(void)gData;
 }
 
 void Debug::close()
@@ -48,7 +48,7 @@ Input Debug::getInput()
 	return Input::NONE;
 }
 
-void Debug::render(GameData &game)
+void Debug::render(GameData &gData)
 {
-	game.area.print(std::cout, &game.snake);
+	gData.area.print(std::cout, &gData.snake);
 }

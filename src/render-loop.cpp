@@ -1,34 +1,34 @@
 #include "nibbler.hpp"
 
-std::unordered_map<Input, void (*)(GameData &game)> getInputMap()
+std::unordered_map<Input, void (*)(GameData &gData)> getInputMap()
 {
-	std::unordered_map<Input, void (*)(GameData & game)> inputMap = {
-		{ Input::UP, [](GameData &game) { game.snake.moveTop(game); } },
-		{ Input::RIGHT, [](GameData &game) { game.snake.moveRight(game); } },
-		{ Input::DOWN, [](GameData &game) { game.snake.moveBottom(game); } },
-		{ Input::LEFT, [](GameData &game) { game.snake.moveLeft(game); } }
+	std::unordered_map<Input, void (*)(GameData & gData)> inputMap = {
+		{ Input::UP, [](GameData &gData) { gData.snake.moveTop(gData); } },
+		{ Input::RIGHT, [](GameData &gData) { gData.snake.moveRight(gData); } },
+		{ Input::DOWN, [](GameData &gData) { gData.snake.moveBottom(gData); } },
+		{ Input::LEFT, [](GameData &gData) { gData.snake.moveLeft(gData); } }
 	};
 	return inputMap;
 }
 
-void loop(GameData &game, GUI &gui, const Options &options)
+void loop(GameData &gData, GUI &gui, const Options &options)
 {
-	std::unordered_map<Input, void (*)(GameData & game)> inputMap = getInputMap();
-	Input                                                input;
-	std::string                                          pause;
+	std::unordered_map<Input, void (*)(GameData & gData)> inputMap = getInputMap();
+	Input                                                 input;
+	std::string                                           pause;
 
-	gui.init(game);
-	gui.render(game);
+	gui.init(gData);
+	gui.render(gData);
 	std::this_thread::sleep_for(options.cycleTime * 2);
 	while ((input = gui.getInput()) != Input::EXIT)
 	{
 		auto time1 = std::chrono::high_resolution_clock::now();
 		if (inputMap.count(input))
-			inputMap[input](game);
+			inputMap[input](gData);
 		else
-			game.snake.moveForward(game);
-		game.cron.checkEvents();
-		gui.render(game);
+			gData.snake.moveForward(gData);
+		gData.cron.checkEvents();
+		gui.render(gData);
 		auto time2 = std::chrono::high_resolution_clock::now();
 
 		std::chrono::microseconds timeElapsed = std::chrono::duration_cast<std::chrono::microseconds>(time2 - time1);

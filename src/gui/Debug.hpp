@@ -20,10 +20,10 @@ class Debug: public GUI
 	Debug();
 	~Debug();
 
-	void  init(GameData &game);
+	void  init(GameData &gData);
 	void  close();
 	Input getInput();
-	void  render(GameData &game);
+	void  render(GameData &gData);
 };
 
 #endif // !DEBUG_HPP

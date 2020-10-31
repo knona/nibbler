@@ -32,7 +32,7 @@ class Gl: public GUI
 	Gl(const Gl &) = delete;
 	Gl &operator=(const Gl &) = delete;
 
-	void createWindow(GameData &game);
+	void createWindow(GameData &gData);
 	void createVAO();
 
 	void setTexture(GLuint &texture, const char *path, bool flipY, bool rgba);
@@ -51,10 +51,10 @@ class Gl: public GUI
 	Gl();
 	~Gl();
 
-	void  init(GameData &game);
+	void  init(GameData &gData);
 	void  close();
 	Input getInput();
-	void  render(GameData &game);
+	void  render(GameData &gData);
 };
 
 #endif // !GL_HPP

@@ -19,10 +19,10 @@ class Retro: public GUI
 	Retro();
 	~Retro();
 
-	void  init(GameData &game);
+	void  init(GameData &gData);
 	void  close();
 	Input getInput();
-	void  render(GameData &game);
+	void  render(GameData &gData);
 };
 
 #endif // !RETRO_HPP

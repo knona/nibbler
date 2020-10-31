@@ -8,7 +8,7 @@ Retro::~Retro()
 	this->close();
 }
 
-void Retro::init(GameData &game)
+void Retro::init(GameData &gData)
 {
 	setlocale(LC_ALL, "");
 	if (!initscr())
@@ -23,7 +23,7 @@ void Retro::init(GameData &game)
 	init_pair(3, COLOR_GREEN, COLOR_BLACK);
 	init_pair(4, COLOR_YELLOW, COLOR_BLACK);
 	init_pair(5, COLOR_WHITE, COLOR_BLACK);
-	_win = newwin(game.area.height() + 2, game.area.width() * 2 + 2, 1, 1);
+	_win = newwin(gData.area.height() + 2, gData.area.width() * 2 + 2, 1, 1);
 	if (!_win)
 		throw std::runtime_error("Failed to create window");
 	keypad(_win, true);
@@ -59,27 +59,27 @@ Input Retro::getInput()
 	return Input::NONE;
 }
 
-void Retro::render(GameData &game)
+void Retro::render(GameData &gData)
 {
 	wclear(_win);
 	wattron(_win, COLOR_PAIR(5));
 	box(_win, 0, 0);
 
-	for (int y = 0; y < game.area.height(); y++)
+	for (int y = 0; y < gData.area.height(); y++)
 	{
-		for (int x = 0; x < game.area.width(); x++)
+		for (int x = 0; x < gData.area.width(); x++)
 		{
 			Position    pos = { x, y };
 			std::string color;
 
-			if (game.area.isWall(pos))
+			if (gData.area.isWall(pos))
 				wattron(_win, COLOR_PAIR(1));
-			else if (game.area.isFood(pos))
+			else if (gData.area.isFood(pos))
 				wattron(_win, COLOR_PAIR(2));
-			else if (game.area.isSnake(pos))
-				game.snake.isHead(pos) ? wattron(_win, COLOR_PAIR(4)) : wattron(_win, COLOR_PAIR(3));
+			else if (gData.area.isSnake(pos))
+				gData.snake.isHead(pos) ? wattron(_win, COLOR_PAIR(4)) : wattron(_win, COLOR_PAIR(3));
 
-			if (!game.area.isFree(pos))
+			if (!gData.area.isFree(pos))
 				mvwprintw(_win, y + 1, x * 2 + 1, "◼");
 		}
 	}

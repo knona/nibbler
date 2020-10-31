@@ -10,9 +10,9 @@ Gl::~Gl()
 	this->close();
 }
 
-void Gl::createWindow(GameData &game)
+void Gl::createWindow(GameData &gData)
 {
-	Size<int> areaSize = game.area.getSize();
+	Size<int> areaSize = gData.area.getSize();
 
 	_cellSize = std::min(_screen.width / areaSize.width, _screen.height / areaSize.height);
 	if (_cellSize > 40)
@@ -102,7 +102,7 @@ void Gl::setTextures()
 	this->setTexture(_textures[Texture::WALL], "src/gui/libB/assets/wall.png", false, false);
 }
 
-void Gl::init(GameData &game)
+void Gl::init(GameData &gData)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		throw std::runtime_error("Failed to initliaze SDL");
@@ -113,7 +113,7 @@ void Gl::init(GameData &game)
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
-	this->createWindow(game);
+	this->createWindow(gData);
 
 	if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
 		throw std::runtime_error("Failed to initialize GLAD");
@@ -278,28 +278,28 @@ void Gl::getSnakeTexture(const Snake &snake, std::list<Position>::const_iterator
 	}
 }
 
-void Gl::render(GameData &game)
+void Gl::render(GameData &gData)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glBindVertexArray(_VAO);
 	glActiveTexture(GL_TEXTURE0);
 
-	for (std::pair<const int, Food> &pair: game.foods)
+	for (std::pair<const int, Food> &pair: gData.foods)
 		for (const Position &pos: pair.second.getPositions())
 			drawCell(pos, Texture::FOOD);
 
-	for (std::pair<const int, Wall> &pair: game.walls)
+	for (std::pair<const int, Wall> &pair: gData.walls)
 		for (const Position &pos: pair.second.getPositions())
 			drawCell(pos, Texture::WALL);
 
-	const std::list<Position> &positions = game.snake.getPositions();
+	const std::list<Position> &positions = gData.snake.getPositions();
 	for (std::list<Position>::const_iterator it = positions.cbegin(); it != positions.cend(); it++)
 	{
 		float   rotation = glm::two_pi<float>();
 		Texture texture = Texture::BODY;
 
-		getSnakeTexture(game.snake, it, texture, rotation);
+		getSnakeTexture(gData.snake, it, texture, rotation);
 		drawCell(*it, texture, rotation);
 	}
 
