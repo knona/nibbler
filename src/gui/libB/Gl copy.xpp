@@ -1,5 +1,4 @@
 #include "Gl.hpp"
-
 #include "stb_image.h"
 
 void Gl::setTexture(GLuint &texture, const char *path, bool flipY, bool rgba) const
@@ -191,7 +190,7 @@ void Gl::drawCell(const Position &pos, Texture texture, std::optional<float> rot
 bool Gl::isTextureBody(const Position &prevPos, const Position &pos, const Position &nextPos) const
 {
 	return (prevPos.x + 1 == pos.x && pos.x + 1 == nextPos.x) || (prevPos.x - 1 == pos.x && pos.x - 1 == nextPos.x) ||
-	       (prevPos.y + 1 == pos.y && pos.y + 1 == nextPos.y) || (prevPos.y - 1 == pos.y && pos.y - 1 == nextPos.y);
+	       (prevPos.y - 1 == pos.y && pos.y - 1 == nextPos.y) || (prevPos.y - 1 == pos.y && pos.y - 1 == nextPos.y);
 }
 
 bool Gl::isTextureCornerBL(const Position &prevPos, const Position &pos, const Position &nextPos) const
@@ -251,7 +250,9 @@ void Gl::getSnakeTexture(const Snake &snake, std::list<Position>::const_iterator
 			    (prevPos.x - 1 == pos.x && pos.x - 1 == nextPos.x))
 				outRotation = glm::half_pi<float>();
 
-			if (this->isTextureCornerBL(prevPos, pos, nextPos))
+			if (this->isTextureBody(prevPos, pos, nextPos))
+				outTexture = Texture::BODY;
+			else if (this->isTextureCornerBL(prevPos, pos, nextPos))
 				outTexture = Texture::CORNER_BL;
 			else if (this->isTextureCornerBR(prevPos, pos, nextPos))
 				outTexture = Texture::CORNER_BR;
@@ -268,7 +269,6 @@ void Gl::render(Game &game)
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glBindVertexArray(_VAO);
-	glActiveTexture(GL_TEXTURE0);
 
 	for (std::pair<const int, Food> &pair: game.foods)
 		for (const Position &pos: pair.second.getPositions())
@@ -279,15 +279,16 @@ void Gl::render(Game &game)
 			drawCell(pos, Texture::WALL);
 
 	const std::list<Position> &positions = game.snake.getPositions();
+
 	for (std::list<Position>::const_iterator it = positions.cbegin(); it != positions.cend(); it++)
 	{
-		float   rotation = glm::two_pi<float>();
-		Texture texture = Texture::BODY;
+		float   rotation;
+		Texture texture;
 
+		glActiveTexture(GL_TEXTURE0);
 		getSnakeTexture(game.snake, it, texture, rotation);
 		drawCell(*it, texture, rotation);
 	}
-
 	glBindVertexArray(0);
 	SDL_GL_SwapWindow(_window);
 }

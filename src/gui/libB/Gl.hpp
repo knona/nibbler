@@ -33,7 +33,15 @@ class Gl: public GUI
 	Gl &operator=(const Gl &) = delete;
 
 	void setTexture(GLuint &texture, const char *path, bool flipY, bool rgba) const;
-	void drawCell(const Position &pos, int textureIndex, std::optional<float> rotation = {}) const;
+	void drawCell(const Position &pos, Texture texture, std::optional<float> rotation = {}) const;
+	void getSnakeTexture(const Snake &snake, std::list<Position>::const_iterator it, Texture &outTexture,
+	                     float &outRotation) const;
+
+	bool isTextureBody(const Position &prevPos, const Position &pos, const Position &nextPos) const;
+	bool isTextureCornerBL(const Position &prevPos, const Position &pos, const Position &nextPos) const;
+	bool isTextureCornerBR(const Position &prevPos, const Position &pos, const Position &nextPos) const;
+	bool isTextureCornerTL(const Position &prevPos, const Position &pos, const Position &nextPos) const;
+	bool isTextureCornerTR(const Position &prevPos, const Position &pos, const Position &nextPos) const;
 
 	public:
 	Gl();
