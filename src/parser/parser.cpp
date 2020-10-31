@@ -14,11 +14,11 @@ Size<int> getAreaSize(const po::variables_map &vm)
 	int width = vm["width"].as<int>();
 	int height = vm["height"].as<int>();
 
-	if (width > 50 || width < 10)
-		throw Exception::ParsingOptions("Area's witdh must be between 10 and 50", EXIT_FAILURE);
+	if (width > 50 || width < 8)
+		throw Exception::ParsingOptions("Area's witdh must be between 8 and 50", EXIT_FAILURE);
 
-	if (height > 30 || height < 10)
-		throw Exception::ParsingOptions("Area's height must be between 10 and 30", EXIT_FAILURE);
+	if (height > 30 || height < 8)
+		throw Exception::ParsingOptions("Area's height must be between 8 and 30", EXIT_FAILURE);
 
 	return { width, height };
 }
