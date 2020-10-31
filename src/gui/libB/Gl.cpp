@@ -125,8 +125,8 @@ void Gl::init(Game &game)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	_program.setId();
-	_program.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/vertex/shader.vert" });
-	_program.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/fragment/shader.frag" });
+	_program.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/shader.vert" });
+	_program.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/shader.frag" });
 	_program.link();
 
 	this->createVAO();
