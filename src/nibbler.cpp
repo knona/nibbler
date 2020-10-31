@@ -1,11 +1,11 @@
 #include "nibbler.hpp"
 
-void displayScore(Game &game)
+void displayScore(GameData &game)
 {
 	std::cout << "Score: " << game.score << std::endl;
 }
 
-void addWalls(Game &game)
+void addWalls(GameData &game)
 {
 	int surfaceArea = game.area.width() * game.area.height();
 	int surfaceWalls = 0.03f * surfaceArea;
@@ -23,7 +23,7 @@ void startGame(const Options &options)
 	std::unordered_map<std::string, std::unique_ptr<GUI> (*)()> fMap = //
 		{ { "Gl", GUI::createGui<Gl> }, { "Retro", GUI::createGui<Retro> }, { "Debug", GUI::createGui<Debug> } };
 
-	Game game = { .score = 0, .area = { options.areaSize } };
+	GameData game = { .score = 0, .area = { options.areaSize } };
 
 	game.snake.setId();
 	game.snake.setSnakeOnArea(game.area);

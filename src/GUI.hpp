@@ -1,7 +1,7 @@
 #ifndef GUI_HPP
 #define GUI_HPP
 
-#include "Game.hpp"
+#include "GameData.hpp"
 #include "Input.hpp"
 
 #include <memory>
@@ -9,10 +9,10 @@
 class GUI
 {
 	public:
-	virtual void  init(Game &game) = 0;
+	virtual void  init(GameData &game) = 0;
 	virtual void  close() = 0;
 	virtual Input getInput() = 0;
-	virtual void  render(Game &game) = 0;
+	virtual void  render(GameData &game) = 0;
 	virtual ~GUI() {};
 	template<typename T>
 	static std::unique_ptr<GUI> createGui();

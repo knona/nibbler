@@ -7,7 +7,7 @@
 #include "Snake.hpp"
 #include "Walls.hpp"
 
-struct Game
+struct GameData
 {
 	int   score;
 	Area  area;

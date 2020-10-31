@@ -8,7 +8,7 @@ Retro::~Retro()
 	this->close();
 }
 
-void Retro::init(Game &game)
+void Retro::init(GameData &game)
 {
 	setlocale(LC_ALL, "");
 	if (!initscr())
@@ -59,7 +59,7 @@ Input Retro::getInput()
 	return Input::NONE;
 }
 
-void Retro::render(Game &game)
+void Retro::render(GameData &game)
 {
 	wclear(_win);
 	wattron(_win, COLOR_PAIR(5));

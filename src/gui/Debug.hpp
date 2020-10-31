@@ -2,7 +2,7 @@
 #define DEBUG_HPP
 
 #include "GUI.hpp"
-#include "Game.hpp"
+#include "GameData.hpp"
 #include "Input.hpp"
 #include "ncursesw/ncurses.h"
 
@@ -20,10 +20,10 @@ class Debug: public GUI
 	Debug();
 	~Debug();
 
-	void  init(Game &game);
+	void  init(GameData &game);
 	void  close();
 	Input getInput();
-	void  render(Game &game);
+	void  render(GameData &game);
 };
 
 #endif // !DEBUG_HPP

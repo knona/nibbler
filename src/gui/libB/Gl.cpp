@@ -10,7 +10,7 @@ Gl::~Gl()
 	this->close();
 }
 
-void Gl::createWindow(Game &game)
+void Gl::createWindow(GameData &game)
 {
 	Size<int> areaSize = game.area.getSize();
 
@@ -102,7 +102,7 @@ void Gl::setTextures()
 	this->setTexture(_textures[Texture::WALL], "src/gui/libB/assets/wall.png", false, false);
 }
 
-void Gl::init(Game &game)
+void Gl::init(GameData &game)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		throw std::runtime_error("Failed to initliaze SDL");
@@ -278,7 +278,7 @@ void Gl::getSnakeTexture(const Snake &snake, std::list<Position>::const_iterator
 	}
 }
 
-void Gl::render(Game &game)
+void Gl::render(GameData &game)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 

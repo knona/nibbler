@@ -2,7 +2,7 @@
 #define GL_HPP
 
 #include "GUI.hpp"
-#include "Game.hpp"
+#include "GameData.hpp"
 #include "Input.hpp"
 #include "Program.hpp"
 #include "Texture.hpp"
@@ -32,7 +32,7 @@ class Gl: public GUI
 	Gl(const Gl &) = delete;
 	Gl &operator=(const Gl &) = delete;
 
-	void createWindow(Game &game);
+	void createWindow(GameData &game);
 	void createVAO();
 
 	void setTexture(GLuint &texture, const char *path, bool flipY, bool rgba);
@@ -51,10 +51,10 @@ class Gl: public GUI
 	Gl();
 	~Gl();
 
-	void  init(Game &game);
+	void  init(GameData &game);
 	void  close();
 	Input getInput();
-	void  render(Game &game);
+	void  render(GameData &game);
 };
 
 #endif // !GL_HPP

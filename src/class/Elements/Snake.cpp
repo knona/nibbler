@@ -1,6 +1,6 @@
 #include "Snake.hpp"
 
-#include "Game.hpp"
+#include "GameData.hpp"
 
 Snake::Snake(): _direction(Direction::Right), _grow(0)
 {}
@@ -25,7 +25,7 @@ Direction Snake::getDirection() const
 	return this->_direction;
 }
 
-void Snake::move(Game &game, const Position &newHead)
+void Snake::move(GameData &game, const Position &newHead)
 {
 	if (game.area.isDanger(newHead))
 		throw Exception::GameOver();
@@ -53,7 +53,7 @@ void Snake::move(Game &game, const Position &newHead)
 	game.area[newHead].type = ElementType::SnakeT;
 }
 
-void Snake::moveTop(Game &game, bool forward)
+void Snake::moveTop(GameData &game, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Top || this->_direction == Direction::Bottom))
 	{
@@ -67,7 +67,7 @@ void Snake::moveTop(Game &game, bool forward)
 	this->_direction = Direction::Top;
 }
 
-void Snake::moveRight(Game &game, bool forward)
+void Snake::moveRight(GameData &game, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Left || this->_direction == Direction::Right))
 	{
@@ -81,7 +81,7 @@ void Snake::moveRight(Game &game, bool forward)
 	this->_direction = Direction::Right;
 }
 
-void Snake::moveBottom(Game &game, bool forward)
+void Snake::moveBottom(GameData &game, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Top || this->_direction == Direction::Bottom))
 	{
@@ -95,7 +95,7 @@ void Snake::moveBottom(Game &game, bool forward)
 	this->_direction = Direction::Bottom;
 }
 
-void Snake::moveLeft(Game &game, bool forward)
+void Snake::moveLeft(GameData &game, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Left || this->_direction == Direction::Right))
 	{
@@ -109,12 +109,12 @@ void Snake::moveLeft(Game &game, bool forward)
 	this->_direction = Direction::Left;
 }
 
-void Snake::moveForward(Game &game)
+void Snake::moveForward(GameData &game)
 {
-	std::unordered_map<Direction, void (Snake::*)(Game &, bool)> fMap = { { Direction::Top, &Snake::moveTop },
-		                                                                  { Direction::Right, &Snake::moveRight },
-		                                                                  { Direction::Bottom, &Snake::moveBottom },
-		                                                                  { Direction::Left, &Snake::moveLeft } };
+	std::unordered_map<Direction, void (Snake::*)(GameData &, bool)> fMap = { { Direction::Top, &Snake::moveTop },
+		                                                                      { Direction::Right, &Snake::moveRight },
+		                                                                      { Direction::Bottom, &Snake::moveBottom },
+		                                                                      { Direction::Left, &Snake::moveLeft } };
 	(this->*fMap[this->_direction])(game, true);
 }
 

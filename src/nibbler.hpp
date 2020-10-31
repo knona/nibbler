@@ -10,7 +10,7 @@
 #include "Food.hpp"
 #include "Foods.hpp"
 #include "GUI.hpp"
-#include "Game.hpp"
+#include "GameData.hpp"
 #include "Gl.hpp"
 #include "Input.hpp"
 #include "Options.hpp"
@@ -31,6 +31,6 @@
 #include <unordered_map>
 
 Options parseCommandLine(int argc, const char **argv);
-void    loop(Game &game, GUI &gui, const Options &options);
+void    loop(GameData &game, GUI &gui, const Options &options);
 
 #endif // !NIBBLER_HPP

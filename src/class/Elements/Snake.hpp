@@ -11,7 +11,7 @@
 #include <memory>
 #include <unordered_map>
 
-struct Game;
+struct GameData;
 class Cron;
 
 class Snake: public Element
@@ -19,7 +19,7 @@ class Snake: public Element
 	private:
 	Direction _direction;
 	int       _grow;
-	void      move(Game &game, const Position &newHead);
+	void      move(GameData &game, const Position &newHead);
 
 	public:
 	Snake();
@@ -31,11 +31,11 @@ class Snake: public Element
 
 	void setSnakeOnArea(Area &area);
 
-	void moveTop(Game &game, bool forward = false);
-	void moveRight(Game &game, bool forward = false);
-	void moveBottom(Game &game, bool forward = false);
-	void moveLeft(Game &game, bool forward = false);
-	void moveForward(Game &game);
+	void moveTop(GameData &game, bool forward = false);
+	void moveRight(GameData &game, bool forward = false);
+	void moveBottom(GameData &game, bool forward = false);
+	void moveLeft(GameData &game, bool forward = false);
+	void moveForward(GameData &game);
 
 	bool isHead(const Position &pos) const;
 	bool isTail(const Position &pos) const;

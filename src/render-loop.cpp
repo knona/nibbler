@@ -1,21 +1,21 @@
 #include "nibbler.hpp"
 
-std::unordered_map<Input, void (*)(Game &game)> getInputMap()
+std::unordered_map<Input, void (*)(GameData &game)> getInputMap()
 {
-	std::unordered_map<Input, void (*)(Game & game)> inputMap = {
-		{ Input::UP, [](Game &game) { game.snake.moveTop(game); } },
-		{ Input::RIGHT, [](Game &game) { game.snake.moveRight(game); } },
-		{ Input::DOWN, [](Game &game) { game.snake.moveBottom(game); } },
-		{ Input::LEFT, [](Game &game) { game.snake.moveLeft(game); } }
+	std::unordered_map<Input, void (*)(GameData & game)> inputMap = {
+		{ Input::UP, [](GameData &game) { game.snake.moveTop(game); } },
+		{ Input::RIGHT, [](GameData &game) { game.snake.moveRight(game); } },
+		{ Input::DOWN, [](GameData &game) { game.snake.moveBottom(game); } },
+		{ Input::LEFT, [](GameData &game) { game.snake.moveLeft(game); } }
 	};
 	return inputMap;
 }
 
-void loop(Game &game, GUI &gui, const Options &options)
+void loop(GameData &game, GUI &gui, const Options &options)
 {
-	std::unordered_map<Input, void (*)(Game & game)> inputMap = getInputMap();
-	Input                                            input;
-	std::string                                      pause;
+	std::unordered_map<Input, void (*)(GameData & game)> inputMap = getInputMap();
+	Input                                                input;
+	std::string                                          pause;
 
 	gui.init(game);
 	gui.render(game);

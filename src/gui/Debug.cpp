@@ -8,7 +8,7 @@ Debug::~Debug()
 	this->close();
 }
 
-void Debug::init(Game &game)
+void Debug::init(GameData &game)
 {
 	(void)game;
 }
@@ -48,7 +48,7 @@ Input Debug::getInput()
 	return Input::NONE;
 }
 
-void Debug::render(Game &game)
+void Debug::render(GameData &game)
 {
 	game.area.print(std::cout, &game.snake);
 }
