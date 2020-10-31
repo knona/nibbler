@@ -1,5 +1,7 @@
 #include "Snake.hpp"
 
+#include "Game.hpp"
+
 Snake::Snake(): _direction(Direction::Right), _grow(0)
 {}
 
@@ -23,98 +25,97 @@ Direction Snake::getDirection() const
 	return this->_direction;
 }
 
-void Snake::move(Area &area, const Position &newHead, Foods &foods, Cron &cron)
+void Snake::move(Game &game, const Position &newHead)
 {
-	if (area.isDanger(newHead))
+	if (game.area.isDanger(newHead))
 		throw Exception::GameOver();
 
 	if (this->_grow == 0)
 	{
-		area[this->_positions.back()].reset();
+		game.area[this->_positions.back()].reset();
 		this->_positions.pop_back();
 	}
 
 	if (this->_grow > 0)
 		this->_grow--;
 
-	if (area.isFood(newHead))
+	if (game.area.isFood(newHead))
 	{
-		foods.removeFood(newHead, area);
-		std::function<void()> fn = std::bind(&Foods::addRandomFood, &foods, std::ref(area));
-		cron.addEvent(fn, 0);
+		game.foods.removeFood(newHead, game.area);
+		std::function<void()> fn = std::bind(&Foods::addRandomFood, &game.foods, std::ref(game.area));
+		game.cron.addEvent(fn, 0);
 		this->_grow++;
+		game.score++;
 	}
 
 	this->_positions.push_front(newHead);
-	area[newHead].id = this->_id;
-	area[newHead].type = ElementType::SnakeT;
+	game.area[newHead].id = this->_id;
+	game.area[newHead].type = ElementType::SnakeT;
 }
 
-void Snake::moveTop(Area &area, Foods &foods, Cron &cron, bool forward)
+void Snake::moveTop(Game &game, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Top || this->_direction == Direction::Bottom))
 	{
-		this->moveForward(area, foods, cron);
+		this->moveForward(game);
 		return;
 	}
 
 	Position newHead = this->_positions.front();
 	newHead.y--;
-	this->move(area, newHead, foods, cron);
+	this->move(game, newHead);
 	this->_direction = Direction::Top;
 }
 
-void Snake::moveRight(Area &area, Foods &foods, Cron &cron, bool forward)
+void Snake::moveRight(Game &game, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Left || this->_direction == Direction::Right))
 	{
-		this->moveForward(area, foods, cron);
+		this->moveForward(game);
 		return;
 	}
 
 	Position newHead = this->_positions.front();
 	newHead.x++;
-	this->move(area, newHead, foods, cron);
+	this->move(game, newHead);
 	this->_direction = Direction::Right;
 }
 
-void Snake::moveBottom(Area &area, Foods &foods, Cron &cron, bool forward)
+void Snake::moveBottom(Game &game, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Top || this->_direction == Direction::Bottom))
 	{
-		this->moveForward(area, foods, cron);
+		this->moveForward(game);
 		return;
 	}
 
 	Position newHead = this->_positions.front();
 	newHead.y++;
-	this->move(area, newHead, foods, cron);
+	this->move(game, newHead);
 	this->_direction = Direction::Bottom;
 }
 
-void Snake::moveLeft(Area &area, Foods &foods, Cron &cron, bool forward)
+void Snake::moveLeft(Game &game, bool forward)
 {
 	if (!forward && (this->_direction == Direction::Left || this->_direction == Direction::Right))
 	{
-		this->moveForward(area, foods, cron);
+		this->moveForward(game);
 		return;
 	}
 
 	Position newHead = this->_positions.front();
 	newHead.x--;
-	this->move(area, newHead, foods, cron);
+	this->move(game, newHead);
 	this->_direction = Direction::Left;
 }
 
-void Snake::moveForward(Area &area, Foods &foods, Cron &cron)
+void Snake::moveForward(Game &game)
 {
-	std::unordered_map<Direction, void (Snake::*)(Area &, Foods &, Cron &, bool)> fMap = {
-		{ Direction::Top, &Snake::moveTop },
-		{ Direction::Right, &Snake::moveRight },
-		{ Direction::Bottom, &Snake::moveBottom },
-		{ Direction::Left, &Snake::moveLeft }
-	};
-	(this->*fMap[this->_direction])(area, foods, cron, true);
+	std::unordered_map<Direction, void (Snake::*)(Game &, bool)> fMap = { { Direction::Top, &Snake::moveTop },
+		                                                                  { Direction::Right, &Snake::moveRight },
+		                                                                  { Direction::Bottom, &Snake::moveBottom },
+		                                                                  { Direction::Left, &Snake::moveLeft } };
+	(this->*fMap[this->_direction])(game, true);
 }
 
 void Snake::setSnakeOnArea(Area &area)

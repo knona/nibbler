@@ -3,10 +3,10 @@
 std::unordered_map<Input, void (*)(Game &game)> getInputMap()
 {
 	std::unordered_map<Input, void (*)(Game & game)> inputMap = {
-		{ Input::UP, [](Game &game) { game.snake.moveTop(game.area, game.foods, game.cron); } },
-		{ Input::RIGHT, [](Game &game) { game.snake.moveRight(game.area, game.foods, game.cron); } },
-		{ Input::DOWN, [](Game &game) { game.snake.moveBottom(game.area, game.foods, game.cron); } },
-		{ Input::LEFT, [](Game &game) { game.snake.moveLeft(game.area, game.foods, game.cron); } }
+		{ Input::UP, [](Game &game) { game.snake.moveTop(game); } },
+		{ Input::RIGHT, [](Game &game) { game.snake.moveRight(game); } },
+		{ Input::DOWN, [](Game &game) { game.snake.moveBottom(game); } },
+		{ Input::LEFT, [](Game &game) { game.snake.moveLeft(game); } }
 	};
 	return inputMap;
 }
@@ -26,7 +26,7 @@ void loop(Game &game, GUI &gui, const Options &options)
 		if (inputMap.count(input))
 			inputMap[input](game);
 		else
-			game.snake.moveForward(game.area, game.foods, game.cron);
+			game.snake.moveForward(game);
 		game.cron.checkEvents();
 		gui.render(game);
 		auto time2 = std::chrono::high_resolution_clock::now();

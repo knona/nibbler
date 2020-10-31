@@ -9,7 +9,7 @@
 
 struct Game
 {
-	public:
+	int   score;
 	Area  area;
 	Foods foods;
 	Walls walls;

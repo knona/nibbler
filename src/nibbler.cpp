@@ -1,5 +1,10 @@
 #include "nibbler.hpp"
 
+void displayScore(Game &game)
+{
+	std::cout << "Score: " << game.score << std::endl;
+}
+
 void addWalls(Game &game)
 {
 	int surfaceArea = game.area.width() * game.area.height();
@@ -18,7 +23,7 @@ void startGame(const Options &options)
 	std::unordered_map<std::string, std::unique_ptr<GUI> (*)()> fMap = //
 		{ { "Gl", GUI::createGui<Gl> }, { "Retro", GUI::createGui<Retro> }, { "Debug", GUI::createGui<Debug> } };
 
-	Game game = { .area = { options.areaSize } };
+	Game game = { .score = 0, .area = { options.areaSize } };
 
 	game.snake.setId();
 	game.snake.setSnakeOnArea(game.area);
@@ -30,7 +35,20 @@ void startGame(const Options &options)
 
 	std::unique_ptr<GUI> gui = fMap[options.gui]();
 
-	loop(game, *gui, options);
+	try
+	{
+		loop(game, *gui, options);
+	}
+	catch (const Exception::GameOver &e)
+	{
+		std::cout << e.what() << std::endl;
+		displayScore(game);
+	}
+	catch (const Exception::Win &e)
+	{
+		std::cout << e.what() << std::endl;
+		displayScore(game);
+	}
 }
 
 int parsingErrorHandler(const Exception::ParsingOptions &e)
@@ -65,14 +83,6 @@ int main(int argc, const char *argv[])
 	try
 	{
 		startGame(options);
-	}
-	catch (const Exception::GameOver &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	catch (const Exception::Win &e)
-	{
-		std::cout << e.what() << std::endl;
 	}
 	catch (const std::exception &e)
 	{
