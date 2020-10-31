@@ -16,6 +16,21 @@ Area::Area(int width, int height): _size({ width, height }), _data(alloc(_size))
 Area::Area(const Size<int> &size): _size(size), _data(alloc(_size))
 {}
 
+Area::Area(Area &&area)
+{
+	*this = std::move(area);
+}
+
+Area &Area::operator=(Area &&area)
+{
+	if (this != &area)
+	{
+		this->_data = std::move(area._data);
+		this->_size = area._size;
+	}
+	return *this;
+}
+
 Area::~Area()
 {}
 

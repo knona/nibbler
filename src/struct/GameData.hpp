@@ -1,5 +1,5 @@
-#ifndef GAME_HPP
-#define GAME_HPP
+#ifndef GAME_DATA_HPP
+#define GAME_DATA_HPP
 
 #include "Area.hpp"
 #include "Cron.hpp"
@@ -17,4 +17,4 @@ struct GameData
 	Cron  cron;
 };
 
-#endif // !GAME_HPP
+#endif // !GAME_DATA_HPP

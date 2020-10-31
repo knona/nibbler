@@ -1,15 +1,16 @@
-#include "../exceptions/Exceptions.hpp"
-#include "Options.hpp"
-#include "boost/program_options.hpp"
+#include "Parser.hpp"
 
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <unordered_map>
+int Parser::parsingErrorHandler(const Exception::ParsingOptions &e)
+{
+	int exitStatus = e.getExitStatus();
+	if (exitStatus == EXIT_FAILURE)
+		std::cerr << "\033[0;31mError: \033[0m" << e.what() << std::endl;
+	else
+		std::cout << e.what() << std::endl;
+	return exitStatus;
+}
 
-namespace po = boost::program_options;
-
-Size<int> getAreaSize(const po::variables_map &vm)
+Size<int> Parser::getAreaSize(const po::variables_map &vm)
 {
 	int width = vm["width"].as<int>();
 	int height = vm["height"].as<int>();
@@ -23,7 +24,7 @@ Size<int> getAreaSize(const po::variables_map &vm)
 	return { width, height };
 }
 
-std::string getGui(const po::variables_map &vm)
+std::string Parser::getGui(const po::variables_map &vm)
 {
 	std::string gui = vm["gui"].as<std::string>();
 	if (gui != "Gl" && gui != "Retro" && gui != "Debug")
@@ -31,7 +32,7 @@ std::string getGui(const po::variables_map &vm)
 	return gui;
 }
 
-std::chrono::milliseconds getSpeed(const po::variables_map &vm)
+std::chrono::milliseconds Parser::getSpeed(const po::variables_map &vm)
 {
 	std::unordered_map<std::string, int> map = { { "slow", 300 }, { "normal", 200 }, { "fast", 100 } };
 
@@ -41,7 +42,7 @@ std::chrono::milliseconds getSpeed(const po::variables_map &vm)
 	return std::chrono::milliseconds(map[speed]);
 }
 
-Options parseCommandLine(int argc, const char **argv)
+Options Parser::parseCommandLine(int argc, const char **argv)
 {
 	po::options_description desc("Allowed options");
 	desc.add_options()                                                                                       //
@@ -73,5 +74,6 @@ Options parseCommandLine(int argc, const char **argv)
 		throw Exception::ParsingOptions(buffer.str(), EXIT_SUCCESS);
 	}
 
-	return { getAreaSize(vm), getGui(vm), static_cast<bool>(vm.count("no-wall")), getSpeed(vm) };
+	return { Parser::getAreaSize(vm), Parser::getGui(vm), static_cast<bool>(vm.count("no-wall")),
+		     Parser::getSpeed(vm) };
 }

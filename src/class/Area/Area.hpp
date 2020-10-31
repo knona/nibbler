@@ -21,13 +21,15 @@ class Area
 	private:
 	Size<int>               _size;
 	std::unique_ptr<Cell[]> _data;
-	Area();
 	Area(const Area &);
 	Area &operator=(const Area &);
 
 	public:
+	Area();
 	Area(int width, int height);
 	Area(const Size<int> &size);
+	Area(Area &&);
+	Area &operator=(Area &&);
 	~Area();
 
 	Cell &                operator[](size_t);
