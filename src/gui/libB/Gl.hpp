@@ -5,6 +5,7 @@
 #include "Game.hpp"
 #include "Input.hpp"
 #include "Program.hpp"
+#include "Texture.hpp"
 #include "glad/glad.h"
 
 #include <SDL2/SDL.h>
@@ -14,7 +15,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <memory>
-
 class Gl: public GUI
 {
 	private:
@@ -22,13 +22,15 @@ class Gl: public GUI
 	GLuint      _EBO;
 	GLuint      _VAO;
 	GLuint      _VBO;
-	GLuint      _textures[8];
+	GLuint      _textures[9];
 	Program     _program;
 	Size<float> _screen;
 	float       _cellSize;
 
 	Gl(const Gl &) = delete;
 	Gl &operator=(const Gl &) = delete;
+
+	void setTexture(GLuint &texture, const char *path, bool flipY, bool rgba) const;
 
 	public:
 	Gl();

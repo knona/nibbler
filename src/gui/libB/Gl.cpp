@@ -2,13 +2,13 @@
 
 #include "stb_image.h"
 
-void setTexture(GLuint &texture, const char *path, bool flipY, bool rgba)
+void Gl::setTexture(GLuint &texture, const char *path, bool flipY, bool rgba) const
 {
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -68,10 +68,10 @@ void Gl::init(Game &game)
 		throw std::runtime_error("Failed to initialize GLAD");
 
 	glViewport(0, 0, _screen.width, _screen.height);
-	glClearColor(0.43f, 0.83f, 0.81f, 1.0f);
+	glClearColor(0.95, 0.91, 0.89f, 1.0f);
 
-	// glEnable(GL_BLEND);
-	// glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	_program.setId();
 	_program.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/vertex/shader.vert" });
@@ -109,22 +109,22 @@ void Gl::init(Game &game)
 
 	glBindVertexArray(0);
 
-	setTexture(_textures[0], "src/gui/libB/assets/snake/head.png", true, true);
-	setTexture(_textures[1], "src/gui/libB/assets/snake/body.png", true, true);
-	setTexture(_textures[2], "src/gui/libB/assets/snake/tail.png", true, true);
-	setTexture(_textures[3], "src/gui/libB/assets/snake/corner-bl.png", true, true);
-	setTexture(_textures[4], "src/gui/libB/assets/snake/corner-br.png", true, true);
-	setTexture(_textures[5], "src/gui/libB/assets/snake/corner-tl.png", true, true);
-	setTexture(_textures[6], "src/gui/libB/assets/snake/corner-tr.png", true, true);
-	setTexture(_textures[7], "src/gui/libB/assets/fruit.png", true, true);
+	this->setTexture(_textures[Texture::HEAD], "src/gui/libB/assets/snake/head.png", true, true);
+	this->setTexture(_textures[Texture::BODY], "src/gui/libB/assets/snake/body.png", true, true);
+	this->setTexture(_textures[Texture::TAIL], "src/gui/libB/assets/snake/tail.png", true, true);
+	this->setTexture(_textures[Texture::CORNER_BL], "src/gui/libB/assets/snake/corner-bl.png", true, true);
+	this->setTexture(_textures[Texture::CORNER_BR], "src/gui/libB/assets/snake/corner-br.png", true, true);
+	this->setTexture(_textures[Texture::CORNER_TL], "src/gui/libB/assets/snake/corner-tl.png", true, true);
+	this->setTexture(_textures[Texture::CORNER_TR], "src/gui/libB/assets/snake/corner-tr.png", true, true);
+	this->setTexture(_textures[Texture::FOOD], "src/gui/libB/assets/food.png", true, true);
+	this->setTexture(_textures[Texture::WALL], "src/gui/libB/assets/wall.png", false, false);
 
 	_program.use();
 
 	glm::mat4 view = glm::mat4(1.0f);
 	_program.uniformSet("view", view);
 
-	glm::mat4 projection =
-		glm::ortho(0.0f, static_cast<float>(_screen.width), 0.0f, static_cast<float>(_screen.height), -1.0f, 1.0f);
+	glm::mat4 projection = glm::ortho(0.0f, _screen.width, 0.0f, _screen.height, -1.0f, 1.0f);
 	_program.uniformSet("projection", projection);
 }
 
@@ -182,7 +182,7 @@ void Gl::render(Game &game)
 		for (int j = 0; j < game.area.width(); j++)
 		{
 			Position pos(j, i);
-			if (game.area.isSnake(pos))
+			if (game.area.isSnake(pos) || game.area.isFree(pos))
 				continue;
 
 			glm::mat4 model = glm::mat4(1.0f);
@@ -190,19 +190,10 @@ void Gl::render(Game &game)
 			model = glm::scale(model, glm::vec3(_cellSize, _cellSize, 0.0f));
 			_program.uniformSet("model", model);
 
-			glm::vec3 color(1.0f, 1.0f, 1.0f);
-
-			bool isColor = true;
-
 			if (game.area.isWall(pos))
-				color = glm::vec3(0.46f, 0.33f, 0.0f);
+				glBindTexture(GL_TEXTURE_2D, _textures[Texture::WALL]);
 			else if (game.area.isFood(pos))
-			{
-				isColor = false;
-				glBindTexture(GL_TEXTURE_2D, _textures[7]);
-			}
-			_program.uniformSet("isColor", isColor);
-			_program.uniformSet("color", color.x, color.y, color.z);
+				glBindTexture(GL_TEXTURE_2D, _textures[Texture::FOOD]);
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		}
 	}
@@ -219,7 +210,7 @@ void Gl::render(Game &game)
 		glActiveTexture(GL_TEXTURE0);
 		if (game.snake.isHead(pos))
 		{
-			glBindTexture(GL_TEXTURE_2D, _textures[0]);
+			glBindTexture(GL_TEXTURE_2D, _textures[Texture::HEAD]);
 			Direction direction = game.snake.getDirection();
 			if (direction == Direction::Top)
 				rotation = glm::pi<float>();
@@ -234,7 +225,7 @@ void Gl::render(Game &game)
 			{
 				if (game.snake.isTail(pos))
 				{
-					glBindTexture(GL_TEXTURE_2D, _textures[2]);
+					glBindTexture(GL_TEXTURE_2D, _textures[Texture::TAIL]);
 					rotation = glm::half_pi<float>();
 				}
 				else
@@ -242,20 +233,20 @@ void Gl::render(Game &game)
 					Position nextPos = *std::next(it);
 					if (pos.x + 1 == nextPos.x)
 					{
-						glBindTexture(GL_TEXTURE_2D, _textures[1]);
+						glBindTexture(GL_TEXTURE_2D, _textures[Texture::BODY]);
 						rotation = glm::half_pi<float>();
 					}
 					else if (pos.y + 1 == nextPos.y)
-						glBindTexture(GL_TEXTURE_2D, _textures[3]);
+						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_BL]);
 					else if (pos.y - 1 == nextPos.y)
-						glBindTexture(GL_TEXTURE_2D, _textures[5]);
+						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_TL]);
 				}
 			}
 			else if (prevPos.x - 1 == pos.x)
 			{
 				if (game.snake.isTail(pos))
 				{
-					glBindTexture(GL_TEXTURE_2D, _textures[2]);
+					glBindTexture(GL_TEXTURE_2D, _textures[Texture::TAIL]);
 					rotation = glm::three_over_two_pi<float>();
 				}
 				else
@@ -263,46 +254,46 @@ void Gl::render(Game &game)
 					Position nextPos = *std::next(it);
 					if (pos.x - 1 == nextPos.x)
 					{
-						glBindTexture(GL_TEXTURE_2D, _textures[1]);
+						glBindTexture(GL_TEXTURE_2D, _textures[Texture::BODY]);
 						rotation = glm::half_pi<float>();
 					}
 					else if (pos.y + 1 == nextPos.y)
-						glBindTexture(GL_TEXTURE_2D, _textures[4]);
+						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_BR]);
 					else if (pos.y - 1 == nextPos.y)
-						glBindTexture(GL_TEXTURE_2D, _textures[6]);
+						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_TR]);
 				}
 			}
 			else if (prevPos.y - 1 == pos.y)
 			{
 				if (game.snake.isTail(pos))
 				{
-					glBindTexture(GL_TEXTURE_2D, _textures[2]);
+					glBindTexture(GL_TEXTURE_2D, _textures[Texture::TAIL]);
 					rotation = glm::pi<float>();
 				}
 				else
 				{
 					Position nextPos = *std::next(it);
 					if (pos.y - 1 == nextPos.y)
-						glBindTexture(GL_TEXTURE_2D, _textures[1]);
+						glBindTexture(GL_TEXTURE_2D, _textures[Texture::BODY]);
 					else if (pos.x + 1 == nextPos.x)
-						glBindTexture(GL_TEXTURE_2D, _textures[4]);
+						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_BR]);
 					else if (pos.x - 1 == nextPos.x)
-						glBindTexture(GL_TEXTURE_2D, _textures[3]);
+						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_BL]);
 				}
 			}
 			else if (prevPos.y + 1 == pos.y)
 			{
 				if (game.snake.isTail(pos))
-					glBindTexture(GL_TEXTURE_2D, _textures[2]);
+					glBindTexture(GL_TEXTURE_2D, _textures[Texture::TAIL]);
 				else
 				{
 					Position nextPos = *std::next(it);
 					if (pos.y + 1 == nextPos.y)
-						glBindTexture(GL_TEXTURE_2D, _textures[1]);
+						glBindTexture(GL_TEXTURE_2D, _textures[Texture::BODY]);
 					else if (pos.x + 1 == nextPos.x)
-						glBindTexture(GL_TEXTURE_2D, _textures[6]);
+						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_TR]);
 					else if (pos.x - 1 == nextPos.x)
-						glBindTexture(GL_TEXTURE_2D, _textures[5]);
+						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_TL]);
 				}
 			}
 		}
@@ -313,8 +304,7 @@ void Gl::render(Game &game)
 		model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::translate(model, glm::vec3(-0.5f, -0.5f, 0.0f));
 		_program.uniformSet("model", model);
-		_program.uniformSet("tex", 0);
-		_program.uniformSet("isColor", false);
+		_program.uniformSet("texture1", 0);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		prevPos = *it;
 	}
