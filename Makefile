@@ -34,7 +34,7 @@ NCURSES_DIR = libs/ncurses
 
 # COMPILATEUR
 CC		= clang++
-CFLAGS	= -Wall -Wextra -g3
+CFLAGS	= -Wall -Wextra -g3 --std=c++17
 
 # REGLES
 all: $(NAME)

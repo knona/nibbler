@@ -168,49 +168,55 @@ Input Gl::getInput()
 	return Input::NONE;
 }
 
+void Gl::drawCell(const Position &pos, int textureIndex, std::optional<float> rotation) const
+{
+	float xStart = 0;
+	float yStart = _screen.height;
+
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(xStart + _cellSize * pos.x, yStart - _cellSize * (pos.y + 1), 0.0f));
+	model = glm::scale(model, glm::vec3(_cellSize, _cellSize, 0.0f));
+	if (rotation)
+	{
+		model = glm::translate(model, glm::vec3(0.5f, 0.5f, 0.0f));
+		model = glm::rotate(model, rotation.value(), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(-0.5f, -0.5f, 0.0f));
+	}
+	_program.uniformSet("model", model);
+
+	glBindTexture(GL_TEXTURE_2D, _textures[textureIndex]);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
 void Gl::render(Game &game)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glBindVertexArray(_VAO);
 
-	float xStart = 0;
-	float yStart = _screen.height;
+	for (std::pair<const int, Food> &pair: game.foods)
+		for (const Position &pos: pair.second.getPositions())
+			drawCell(pos, Texture::FOOD);
 
-	for (int i = 0; i < game.area.height(); i++)
-	{
-		for (int j = 0; j < game.area.width(); j++)
-		{
-			Position pos(j, i);
-			if (game.area.isSnake(pos) || game.area.isFree(pos))
-				continue;
+	for (std::pair<const int, Wall> &pair: game.walls)
+		for (const Position &pos: pair.second.getPositions())
+			drawCell(pos, Texture::WALL);
 
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(xStart + _cellSize * j, yStart - _cellSize * (i + 1), 0.0f));
-			model = glm::scale(model, glm::vec3(_cellSize, _cellSize, 0.0f));
-			_program.uniformSet("model", model);
-
-			if (game.area.isWall(pos))
-				glBindTexture(GL_TEXTURE_2D, _textures[Texture::WALL]);
-			else if (game.area.isFood(pos))
-				glBindTexture(GL_TEXTURE_2D, _textures[Texture::FOOD]);
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		}
-	}
 	const std::list<Position> &positions = game.snake.getPositions();
 
 	Position prevPos;
 	for (std::list<Position>::const_iterator it = positions.cbegin(); it != positions.cend(); it++)
 	{
-		Position  pos = *it;
-		glm::mat4 model = glm::mat4(1.0f);
+		Position pos = *it;
 
 		float rotation = glm::two_pi<float>();
 
 		glActiveTexture(GL_TEXTURE0);
+
+		int textureIndex = -1;
 		if (game.snake.isHead(pos))
 		{
-			glBindTexture(GL_TEXTURE_2D, _textures[Texture::HEAD]);
+			textureIndex = Texture::HEAD;
 			Direction direction = game.snake.getDirection();
 			if (direction == Direction::Top)
 				rotation = glm::pi<float>();
@@ -225,7 +231,7 @@ void Gl::render(Game &game)
 			{
 				if (game.snake.isTail(pos))
 				{
-					glBindTexture(GL_TEXTURE_2D, _textures[Texture::TAIL]);
+					textureIndex = Texture::TAIL;
 					rotation = glm::half_pi<float>();
 				}
 				else
@@ -233,20 +239,20 @@ void Gl::render(Game &game)
 					Position nextPos = *std::next(it);
 					if (pos.x + 1 == nextPos.x)
 					{
-						glBindTexture(GL_TEXTURE_2D, _textures[Texture::BODY]);
+						textureIndex = Texture::BODY;
 						rotation = glm::half_pi<float>();
 					}
 					else if (pos.y + 1 == nextPos.y)
-						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_BL]);
+						textureIndex = Texture::CORNER_BL;
 					else if (pos.y - 1 == nextPos.y)
-						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_TL]);
+						textureIndex = Texture::CORNER_TL;
 				}
 			}
 			else if (prevPos.x - 1 == pos.x)
 			{
 				if (game.snake.isTail(pos))
 				{
-					glBindTexture(GL_TEXTURE_2D, _textures[Texture::TAIL]);
+					textureIndex = Texture::TAIL;
 					rotation = glm::three_over_two_pi<float>();
 				}
 				else
@@ -254,61 +260,52 @@ void Gl::render(Game &game)
 					Position nextPos = *std::next(it);
 					if (pos.x - 1 == nextPos.x)
 					{
-						glBindTexture(GL_TEXTURE_2D, _textures[Texture::BODY]);
+						textureIndex = Texture::BODY;
 						rotation = glm::half_pi<float>();
 					}
 					else if (pos.y + 1 == nextPos.y)
-						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_BR]);
+						textureIndex = Texture::CORNER_BR;
 					else if (pos.y - 1 == nextPos.y)
-						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_TR]);
+						textureIndex = Texture::CORNER_TR;
 				}
 			}
 			else if (prevPos.y - 1 == pos.y)
 			{
 				if (game.snake.isTail(pos))
 				{
-					glBindTexture(GL_TEXTURE_2D, _textures[Texture::TAIL]);
+					textureIndex = Texture::TAIL;
 					rotation = glm::pi<float>();
 				}
 				else
 				{
 					Position nextPos = *std::next(it);
 					if (pos.y - 1 == nextPos.y)
-						glBindTexture(GL_TEXTURE_2D, _textures[Texture::BODY]);
+						textureIndex = Texture::BODY;
 					else if (pos.x + 1 == nextPos.x)
-						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_BR]);
+						textureIndex = Texture::CORNER_BR;
 					else if (pos.x - 1 == nextPos.x)
-						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_BL]);
+						textureIndex = Texture::CORNER_BL;
 				}
 			}
 			else if (prevPos.y + 1 == pos.y)
 			{
 				if (game.snake.isTail(pos))
-					glBindTexture(GL_TEXTURE_2D, _textures[Texture::TAIL]);
+					textureIndex = Texture::TAIL;
 				else
 				{
 					Position nextPos = *std::next(it);
 					if (pos.y + 1 == nextPos.y)
-						glBindTexture(GL_TEXTURE_2D, _textures[Texture::BODY]);
+						textureIndex = Texture::BODY;
 					else if (pos.x + 1 == nextPos.x)
-						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_TR]);
+						textureIndex = Texture::CORNER_TR;
 					else if (pos.x - 1 == nextPos.x)
-						glBindTexture(GL_TEXTURE_2D, _textures[Texture::CORNER_TL]);
+						textureIndex = Texture::CORNER_TL;
 				}
 			}
 		}
-
-		model = glm::translate(model, glm::vec3(xStart + _cellSize * pos.x, yStart - _cellSize * (pos.y + 1), 0.0f));
-		model = glm::scale(model, glm::vec3(_cellSize, _cellSize, 1.0f));
-		model = glm::translate(model, glm::vec3(0.5f, 0.5f, 0.0f));
-		model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::translate(model, glm::vec3(-0.5f, -0.5f, 0.0f));
-		_program.uniformSet("model", model);
-		_program.uniformSet("texture1", 0);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		drawCell(pos, textureIndex, rotation);
 		prevPos = *it;
 	}
 	glBindVertexArray(0);
-
 	SDL_GL_SwapWindow(_window);
 }

@@ -15,6 +15,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <memory>
+#include <optional>
+
 class Gl: public GUI
 {
 	private:
@@ -31,6 +33,7 @@ class Gl: public GUI
 	Gl &operator=(const Gl &) = delete;
 
 	void setTexture(GLuint &texture, const char *path, bool flipY, bool rgba) const;
+	void drawCell(const Position &pos, int textureIndex, std::optional<float> rotation = {}) const;
 
 	public:
 	Gl();
