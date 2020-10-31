@@ -148,7 +148,7 @@ void Program::uniformSet(const std::string &uniformName, int vecSize, int nbVec,
 	void (*fMap[4])(GLint, GLsizei, const GLfloat *value) = { glUniform1fv, glUniform2fv, glUniform3fv, glUniform4fv };
 
 	if (vecSize < 1 || vecSize > 4)
-		throw std::runtime_error("Invalid vector size");
+		throw std::logic_error("Invalid vector size");
 	GLint location = this->getUniformLocation(uniformName);
 	fMap[vecSize - 1](location, nbVec, arr);
 }
@@ -158,7 +158,7 @@ void Program::uniformSet(const std::string &uniformName, int vecSize, int nbVec,
 	void (*fMap[4])(GLint, GLsizei, const GLint *value) = { glUniform1iv, glUniform2iv, glUniform3iv, glUniform4iv };
 
 	if (vecSize < 1 || vecSize > 4)
-		throw std::runtime_error("Invalid vector size");
+		throw std::logic_error("Invalid vector size");
 	GLint location = this->getUniformLocation(uniformName);
 	fMap[vecSize - 1](location, nbVec, arr);
 }
@@ -169,7 +169,7 @@ void Program::uniformSet(const std::string &uniformName, int vecSize, int nbVec,
 		                                                     glUniform4uiv };
 
 	if (vecSize < 1 || vecSize > 4)
-		throw std::runtime_error("Invalid vector size");
+		throw std::logic_error("Invalid vector size");
 	GLint location = this->getUniformLocation(uniformName);
 	fMap[vecSize - 1](location, nbVec, arr);
 }
@@ -198,7 +198,7 @@ void Program::uniformSet(const std::string &uniformName, int matSize, int nbMat,
 		                                                                 glUniformMatrix4fv };
 
 	if (matSize < 2 || matSize > 4)
-		throw std::runtime_error("Invalid matrix size");
+		throw std::logic_error("Invalid matrix size");
 	GLint location = this->getUniformLocation(uniformName);
 	fMap[matSize - 1](location, nbMat, transpose, arr);
 }
