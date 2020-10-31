@@ -2,31 +2,6 @@
 
 #include "stb_image.h"
 
-void Gl::setTexture(GLuint &texture, const char *path, bool flipY, bool rgba) const
-{
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	int width, height, nbChannels;
-	if (flipY)
-		stbi_set_flip_vertically_on_load(true);
-	unsigned char *data = stbi_load(path, &width, &height, &nbChannels, 0);
-	if (!data)
-		throw std::runtime_error(std::string("Failed to load texture ") + path);
-
-	int colorBit = rgba ? GL_RGBA : GL_RGB;
-	glTexImage2D(GL_TEXTURE_2D, 0, colorBit, width, height, 0, colorBit, GL_UNSIGNED_BYTE, data);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	stbi_image_free(data);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
 Gl::Gl(): _window(nullptr), _EBO(0), _VAO(0), _VBO(0), _screen(1280, 720)
 {}
 
@@ -35,18 +10,8 @@ Gl::~Gl()
 	this->close();
 }
 
-void Gl::init(Game &game)
+void Gl::createWindow(Game &game)
 {
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-		throw std::runtime_error("Failed to initliaze SDL");
-
-	SDL_GL_LoadLibrary(NULL);
-
-	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-
 	Size<int> areaSize = game.area.getSize();
 
 	_cellSize = std::min(_screen.width / areaSize.width, _screen.height / areaSize.height);
@@ -63,21 +28,10 @@ void Gl::init(Game &game)
 	SDL_SetWindowResizable(_window, SDL_FALSE);
 
 	SDL_GL_CreateContext(_window);
+}
 
-	if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
-		throw std::runtime_error("Failed to initialize GLAD");
-
-	glViewport(0, 0, _screen.width, _screen.height);
-	glClearColor(0.95, 0.91, 0.89f, 1.0f);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	_program.setId();
-	_program.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/vertex/shader.vert" });
-	_program.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/fragment/shader.frag" });
-	_program.link();
-
+void Gl::createVAO()
+{
 	float square[] = {
 		00.0f, 01.0f, 00.0f, 01.0f, // top left
 		00.0f, 00.0f, 00.0f, 00.0f, // bottom left
@@ -108,7 +62,35 @@ void Gl::init(Game &game)
 	glEnableVertexAttribArray(1);
 
 	glBindVertexArray(0);
+}
 
+void Gl::setTexture(GLuint &texture, const char *path, bool flipY, bool rgba)
+{
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	int width, height, nbChannels;
+	if (flipY)
+		stbi_set_flip_vertically_on_load(true);
+	unsigned char *data = stbi_load(path, &width, &height, &nbChannels, 0);
+	if (!data)
+		throw std::runtime_error(std::string("Failed to load texture ") + path);
+
+	int colorBit = rgba ? GL_RGBA : GL_RGB;
+	glTexImage2D(GL_TEXTURE_2D, 0, colorBit, width, height, 0, colorBit, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(data);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Gl::setTextures()
+{
 	this->setTexture(_textures[Texture::HEAD], "src/gui/libB/assets/snake/head.png", true, true);
 	this->setTexture(_textures[Texture::BODY], "src/gui/libB/assets/snake/body.png", true, true);
 	this->setTexture(_textures[Texture::TAIL], "src/gui/libB/assets/snake/tail.png", true, true);
@@ -118,6 +100,38 @@ void Gl::init(Game &game)
 	this->setTexture(_textures[Texture::CORNER_TR], "src/gui/libB/assets/snake/corner-tr.png", true, true);
 	this->setTexture(_textures[Texture::FOOD], "src/gui/libB/assets/food.png", true, true);
 	this->setTexture(_textures[Texture::WALL], "src/gui/libB/assets/wall.png", false, false);
+}
+
+void Gl::init(Game &game)
+{
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+		throw std::runtime_error("Failed to initliaze SDL");
+
+	SDL_GL_LoadLibrary(NULL);
+	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+
+	this->createWindow(game);
+
+	if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
+		throw std::runtime_error("Failed to initialize GLAD");
+
+	glViewport(0, 0, _screen.width, _screen.height);
+	glClearColor(0.95, 0.91, 0.89f, 1.0f);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	_program.setId();
+	_program.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/vertex/shader.vert" });
+	_program.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/fragment/shader.frag" });
+	_program.link();
+
+	this->createVAO();
+
+	this->setTextures();
 
 	_program.use();
 

@@ -32,7 +32,11 @@ class Gl: public GUI
 	Gl(const Gl &) = delete;
 	Gl &operator=(const Gl &) = delete;
 
-	void setTexture(GLuint &texture, const char *path, bool flipY, bool rgba) const;
+	void createWindow(Game &game);
+	void createVAO();
+
+	void setTexture(GLuint &texture, const char *path, bool flipY, bool rgba);
+	void setTextures();
 	void drawCell(const Position &pos, Texture texture, std::optional<float> rotation = {}) const;
 	void getSnakeTexture(const Snake &snake, std::list<Position>::const_iterator it, Texture &outTexture,
 	                     float &outRotation) const;
