@@ -41,9 +41,9 @@ Input Debug::getInput()
 
 	char c = this->getchar();
 
-	for (const std::pair<const int, Input> &pair: map)
-		if (c == pair.first)
-			return pair.second;
+	for (const auto &[key, input]: map)
+		if (c == key)
+			return input;
 
 	return Input::NONE;
 }

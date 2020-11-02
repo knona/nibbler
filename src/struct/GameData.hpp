@@ -4,12 +4,13 @@
 #include "Area.hpp"
 #include "Cron.hpp"
 #include "Foods.hpp"
+#include "Score.hpp"
 #include "Snake.hpp"
 #include "Walls.hpp"
 
 struct GameData
 {
-	int   score;
+	Score score;
 	Area  area;
 	Foods foods;
 	Walls walls;

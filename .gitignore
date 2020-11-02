@@ -42,3 +42,4 @@ libs/
 tmp/
 .tmp/
 .cache
+scores.csv

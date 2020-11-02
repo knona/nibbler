@@ -2,7 +2,6 @@
 
 features:
 
-- ajouter un système de score qui est affiché à la fin du jeu sur la sortie standard
 - Vérifier les constructeurs par copie
 - Utiliser conan / cmake pour les dépendances ?
 

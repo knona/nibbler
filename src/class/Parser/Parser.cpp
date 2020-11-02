@@ -51,6 +51,7 @@ Options Parser::parseCommandLine(int argc, const char **argv)
 		("height,H", po::value<int>()->required(), "set the area's height (required)")                       //
 		("gui", po::value<std::string>()->default_value("Gl"), "use the gui \"Retro\", \"Gl\" or \"third\"") //
 		("no-wall", "do not set wall")                                                                       //
+		("high-score", "check highscore for a specific area size")                                           //
 		("speed", po::value<std::string>()->default_value("normal"),
 	     "set snake's speed: \"slow\", \"normal\" or \"fast\"");
 
@@ -75,5 +76,5 @@ Options Parser::parseCommandLine(int argc, const char **argv)
 	}
 
 	return { Parser::getAreaSize(vm), Parser::getGui(vm), static_cast<bool>(vm.count("no-wall")),
-		     Parser::getSpeed(vm) };
+		     static_cast<bool>(vm.count("high-score")), Parser::getSpeed(vm) };
 }

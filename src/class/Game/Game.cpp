@@ -1,17 +1,10 @@
 #include "Game.hpp"
 
 Game::Game(const Options &options): _options(std::move(options))
-{
-	this->_gData.score = 0;
-}
+{}
 
 Game::~Game()
 {}
-
-void displayScore(GameData &gData)
-{
-	std::cout << "Score: " << gData.score << std::endl;
-}
 
 void Game::addWalls(GameData &gData)
 {
@@ -64,7 +57,14 @@ void Game::start()
 	std::unordered_map<std::string, std::unique_ptr<GUI> (*)()> fMap = //
 		{ { "Gl", GUI::createGui<Gl> }, { "Retro", GUI::createGui<Retro> }, { "Debug", GUI::createGui<Debug> } };
 
+	this->_gData.score = { this->_options };
 	this->_gData.area = { this->_options.areaSize };
+	if (this->_options.highScore)
+	{
+		this->_gData.score.displayHighScore();
+		return;
+	}
+
 	this->_gData.snake.setId();
 	this->_gData.snake.setSnakeOnArea(this->_gData.area);
 	this->_gData.foods.addRandomFood(this->_gData.area);
@@ -79,11 +79,11 @@ void Game::start()
 	catch (const Exception::GameOver &e)
 	{
 		std::cout << e.what() << std::endl;
-		displayScore(this->_gData);
+		this->_gData.score.displayScore();
 	}
 	catch (const Exception::Win &e)
 	{
 		std::cout << e.what() << std::endl;
-		displayScore(this->_gData);
+		this->_gData.score.displayScore();
 	}
 }

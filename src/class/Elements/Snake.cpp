@@ -45,7 +45,7 @@ void Snake::move(GameData &gData, const Position &newHead)
 		std::function<void()> fn = std::bind(&Foods::addRandomFood, &gData.foods, std::ref(gData.area));
 		gData.cron.addEvent(fn, 0);
 		this->_grow++;
-		gData.score++;
+		gData.score.increment();
 	}
 
 	this->_positions.push_front(newHead);
