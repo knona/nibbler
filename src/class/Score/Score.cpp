@@ -1,9 +1,9 @@
 #include "Score.hpp"
 
-Score::Score(): _score(0), _data({})
+Score::Score(): _score(0)
 {}
 
-Score::Score(const Score &score): _data({})
+Score::Score(const Score &score)
 {
 	*this = score;
 }
@@ -20,7 +20,7 @@ Score &Score::operator=(const Score &score)
 	return *this;
 }
 
-Score::Score(const Options &options): _data({})
+Score::Score(const Options &options)
 {
 	this->_score = 0;
 	this->_noWall = options.noWall;
