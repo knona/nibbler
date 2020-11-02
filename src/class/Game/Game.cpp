@@ -79,11 +79,13 @@ void Game::start()
 	catch (const Exception::GameOver &e)
 	{
 		std::cout << e.what() << std::endl;
+		gui.release();
 		this->_gData.score.displayScore();
 	}
 	catch (const Exception::Win &e)
 	{
 		std::cout << e.what() << std::endl;
+		gui.release();
 		this->_gData.score.displayScore();
 	}
 }
