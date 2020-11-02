@@ -52,9 +52,9 @@ Input Retro::getInput()
 	wtimeout(_win, 0);
 	int c = wgetch(_win);
 
-	for (const std::pair<const int, Input> &pair: map)
-		if (c == pair.first)
-			return pair.second;
+	for (const auto &[key, input]: map)
+		if (c == key)
+			return input;
 
 	return Input::NONE;
 }

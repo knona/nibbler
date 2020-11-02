@@ -11,4 +11,4 @@ https://stackoverflow.com/questions/496664/c-dynamic-shared-library-on-linux
 
 Ajouter une dernière bibliothèque graphique, sfml ?
 
-vérifier qu'il y est pas de memory leack lors du changement des libs
+vérifier qu'il y est pas de memory leak lors du changement des libs

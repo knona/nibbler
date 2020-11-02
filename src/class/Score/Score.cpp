@@ -80,7 +80,7 @@ void Score::displayScore()
 
 void Score::displayHighScore()
 {
-	int score = this->_data[{ _areaSize, _noWall }];
+	const int score = this->_data[{ _areaSize, _noWall }];
 	std::cout << "HIGHSCORE: \033[0;92m" << score << "\033[0m";
 	std::cout << " (" << this->_areaSize.width << "x" << this->_areaSize.height;
 	std::cout << ", " << (this->_noWall ? "no" : "") << " walls)" << std::endl;

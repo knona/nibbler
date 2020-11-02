@@ -174,9 +174,9 @@ Input Gl::getInput()
 			return Input::EXIT;
 		if (event.type == SDL_KEYDOWN && event.key.repeat == 0)
 		{
-			for (const std::pair<const int, Input> &pair: map)
-				if (event.key.keysym.scancode == pair.first)
-					return pair.second;
+			for (const auto &[key, input]: map)
+				if (event.key.keysym.scancode == key)
+					return input;
 		}
 	}
 
@@ -285,12 +285,12 @@ void Gl::render(GameData &gData)
 	glBindVertexArray(_VAO);
 	glActiveTexture(GL_TEXTURE0);
 
-	for (std::pair<const int, Food> &pair: gData.foods)
-		for (const Position &pos: pair.second.getPositions())
+	for (const auto &[key, food]: gData.foods)
+		for (const Position &pos: food.getPositions())
 			drawCell(pos, Texture::FOOD);
 
-	for (std::pair<const int, Wall> &pair: gData.walls)
-		for (const Position &pos: pair.second.getPositions())
+	for (const auto &[key, wall]: gData.walls)
+		for (const Position &pos: wall.getPositions())
 			drawCell(pos, Texture::WALL);
 
 	const std::list<Position> &positions = gData.snake.getPositions();
