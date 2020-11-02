@@ -73,7 +73,7 @@ void Score::displayScore()
 		std::cout << "\033[0;36mNEW HIGHSCORE !\033[0m" << std::endl;
 		this->store();
 	}
-	std::cout << "Score: \033[0;36m" << this->_score << "\033[0m";
+	std::cout << "Score: \033[0;92m" << this->_score << "\033[0m";
 	std::cout << " (" << this->_areaSize.width << "x" << this->_areaSize.height;
 	std::cout << ", " << (this->_noWall ? "no" : "") << " walls)" << std::endl;
 }
@@ -81,7 +81,7 @@ void Score::displayScore()
 void Score::displayHighScore()
 {
 	int score = this->_data[{ _areaSize, _noWall }];
-	std::cout << "HIGHSCORE: \033[0;36m" << score << "\033[0m";
+	std::cout << "HIGHSCORE: \033[0;92m" << score << "\033[0m";
 	std::cout << " (" << this->_areaSize.width << "x" << this->_areaSize.height;
 	std::cout << ", " << (this->_noWall ? "no" : "") << " walls)" << std::endl;
 }
