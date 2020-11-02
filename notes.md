@@ -2,7 +2,6 @@
 
 features:
 
-- Vérifier les constructeurs par copie
 - Utiliser conan / cmake pour les dépendances ?
 
 
