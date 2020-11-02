@@ -15,6 +15,8 @@ Snake::~Snake()
 
 Snake &Snake::operator=(const Snake &snake)
 {
+	this->_id = snake._id;
+	this->_grow = snake._grow;
 	this->_direction = snake._direction;
 	this->_grow = snake._grow;
 	return *this;
