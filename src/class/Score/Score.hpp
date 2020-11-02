@@ -35,7 +35,7 @@ class Score
 
 	void increment();
 	void displayScore();
-	void displayHighScore();
+	void displayHighScore() const;
 };
 
 #endif // !SCORE_HPP

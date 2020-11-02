@@ -78,9 +78,17 @@ void Score::displayScore()
 	std::cout << ", " << (this->_noWall ? "no" : "") << " walls)" << std::endl;
 }
 
-void Score::displayHighScore()
+void Score::displayHighScore() const
 {
-	const int score = this->_data[{ _areaSize, _noWall }];
+	int score;
+	try
+	{
+		score = this->_data.at({ _areaSize, _noWall });
+	}
+	catch (const std::exception &e)
+	{
+		score = 0;
+	}
 	std::cout << "HIGHSCORE: \033[0;92m" << score << "\033[0m";
 	std::cout << " (" << this->_areaSize.width << "x" << this->_areaSize.height;
 	std::cout << ", " << (this->_noWall ? "no" : "") << " walls)" << std::endl;
