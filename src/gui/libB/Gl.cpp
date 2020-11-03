@@ -323,7 +323,7 @@ void Gl::RenderText(const std::string &text, unsigned char r, unsigned char g, u
 	model = glm::translate(model, glm::vec3(5.0f, _screen.height - 35, 0.0f));
 	program.uniformSet("model", model);
 
-	float square[] = {
+	float fontShape[] = {
 		00.0f,      size.height, 00.0f, 00.0f, // top left
 		00.0f,      00.0f,       00.0f, 01.0f, // bottom left
 		size.width, size.height, 01.0f, 00.0f, // top right
@@ -344,7 +344,7 @@ void Gl::RenderText(const std::string &text, unsigned char r, unsigned char g, u
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(square), square, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(fontShape), fontShape, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void *>(0));
 	glEnableVertexAttribArray(0);
