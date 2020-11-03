@@ -320,18 +320,14 @@ void Gl::RenderText(const std::string &text, unsigned char r, unsigned char g, u
 	program.uniformSet("projection", projection);
 
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(500.0f, _screen.height - 300.0f, 0.0f));
-	// model = glm::scale(model, glm::vec3(100, 100, 1.0f));
-	// model = glm::rotate(model, )
+	model = glm::translate(model, glm::vec3(5.0f, _screen.height - 35, 0.0f));
 	program.uniformSet("model", model);
 
-	std::cout << size << std::endl;
-
 	float square[] = {
-		00.0f,      size.height, 00.0f, 01.0f, // top left
-		00.0f,      00.0f,       00.0f, 00.0f, // bottom left
-		size.width, size.height, 01.0f, 01.0f, // top right
-		size.width, 00.0f,       01.0f, 00.0f, // bottom right
+		00.0f,      size.height, 00.0f, 00.0f, // top left
+		00.0f,      00.0f,       00.0f, 01.0f, // bottom left
+		size.width, size.height, 01.0f, 00.0f, // top right
+		size.width, 00.0f,       01.0f, 01.0f, // bottom right
 	};
 
 	uint indices[] = {
