@@ -133,12 +133,15 @@ void Gl::init(GameData &gData)
 
 	this->setTextures();
 
+	if (TTF_Init() == -1)
+		throw std::runtime_error("Cannot init ttf");
+
 	_program.use();
 
 	glm::mat4 view = glm::mat4(1.0f);
 	_program.uniformSet("view", view);
 
-	glm::mat4 projection = glm::ortho(0.0f, _screen.width, 0.0f, _screen.height, -1.0f, 1.0f);
+	glm::mat4 projection = glm::ortho(0.0f, _screen.width, 0.0f, _screen.height);
 	_program.uniformSet("projection", projection);
 }
 
@@ -153,6 +156,7 @@ void Gl::close()
 	glDeleteBuffers(1, &_VBO);
 	glDeleteBuffers(1, &_EBO);
 	glDeleteTextures(9, _textures);
+	TTF_Quit();
 	SDL_Quit();
 }
 
@@ -278,6 +282,91 @@ void Gl::getSnakeTexture(const Snake &snake, std::list<Position>::const_iterator
 	}
 }
 
+void Gl::RenderText(const std::string &text, unsigned char r, unsigned char g, unsigned char b)
+{
+	GLuint VAO, VBO, EBO;
+
+	TTF_Font *font = TTF_OpenFont("src/gui/libC/assets/arial.ttf", 26);
+
+	SDL_Color    color = { r, g, b, 0xFF };
+	SDL_Surface *message = TTF_RenderText_Blended(const_cast<TTF_Font *>(font), text.c_str(), color);
+	GLuint       texture = 0;
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+
+	Size<float> size = { static_cast<float>(message->w), static_cast<float>(message->h) };
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.width, size.height, 0, GL_BGRA, GL_UNSIGNED_BYTE, message->pixels);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	Program program;
+	program.setId();
+	program.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/text.vert" });
+	program.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/text.frag" });
+	program.link();
+
+	program.use();
+
+	glm::mat4 view = glm::mat4(1.0f);
+	program.uniformSet("view", view);
+
+	glm::mat4 projection = glm::ortho(0.0f, _screen.width, 0.0f, _screen.height);
+	program.uniformSet("projection", projection);
+
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(500.0f, _screen.height - 300.0f, 0.0f));
+	// model = glm::scale(model, glm::vec3(100, 100, 1.0f));
+	// model = glm::rotate(model, )
+	program.uniformSet("model", model);
+
+	std::cout << size << std::endl;
+
+	float square[] = {
+		00.0f,      size.height, 00.0f, 01.0f, // top left
+		00.0f,      00.0f,       00.0f, 00.0f, // bottom left
+		size.width, size.height, 01.0f, 01.0f, // top right
+		size.width, 00.0f,       01.0f, 00.0f, // bottom right
+	};
+
+	uint indices[] = {
+		0, 1, 2, // first triangle
+		1, 2, 3  // second triangle
+	};
+
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
+
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(square), square, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void *>(0));
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void *>(2 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
+	glDeleteTextures(1, &texture);
+	SDL_FreeSurface(message);
+	TTF_CloseFont(font);
+}
+
 void Gl::render(GameData &gData)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -300,9 +389,14 @@ void Gl::render(GameData &gData)
 		Texture texture = Texture::BODY;
 
 		getSnakeTexture(gData.snake, it, texture, rotation);
+		_program.use();
 		drawCell(*it, texture, rotation);
 	}
 
 	glBindVertexArray(0);
+
+	std::string scoreStr = "Score : " + std::to_string(gData.score.getScore());
+	RenderText(scoreStr, 0, 0, 0);
+
 	SDL_GL_SwapWindow(_window);
 }

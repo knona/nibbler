@@ -9,6 +9,7 @@
 #include "glad/glad.h"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <clocale>
 #include <exception>
 #include <glm/glm.hpp>
@@ -31,6 +32,8 @@ class Gl: public GUI
 
 	Gl(const Gl &) = delete;
 	Gl &operator=(const Gl &) = delete;
+
+	void RenderText(const std::string &Text, unsigned char r, unsigned char g, unsigned char b);
 
 	void createWindow(GameData &gData);
 	void createVAO();
