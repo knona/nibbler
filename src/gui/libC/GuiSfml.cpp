@@ -21,6 +21,12 @@ void GuiSfml::init(GameData &gData)
 	_window.create(sf::VideoMode(_screen.width, _screen.height + 40), "NIBBLER",
 	               sf::Style::Titlebar | sf::Style::Close);
 
+	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+	sf::Vector2i  windowPos;
+	windowPos.x = static_cast<int>(desktop.width / 2 - _window.getSize().x / 2);
+	windowPos.y = static_cast<int>(desktop.height / 2 - _window.getSize().y / 2);
+	_window.setPosition(windowPos);
+
 	_window.setKeyRepeatEnabled(false);
 	_window.pollEvent(_event);
 }
