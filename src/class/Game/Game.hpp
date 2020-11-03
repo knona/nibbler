@@ -5,6 +5,7 @@
 #include "GUI.hpp"
 #include "GameData.hpp"
 #include "Gl.hpp"
+#include "GuiSfml.hpp"
 #include "Input.hpp"
 #include "Options.hpp"
 #include "Parser.hpp"

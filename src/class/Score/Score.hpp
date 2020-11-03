@@ -33,6 +33,7 @@ class Score
 	Score(const Options &);
 	~Score();
 
+	int  getScore() const;
 	void increment();
 	void displayScore();
 	void displayHighScore() const;

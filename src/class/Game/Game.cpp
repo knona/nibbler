@@ -32,7 +32,7 @@ void Game::loop(GUI &gui)
 
 	gui.init(this->_gData);
 	gui.render(this->_gData);
-	std::this_thread::sleep_for(this->_options.cycleTime * 2);
+	std::this_thread::sleep_for(this->_options.cycleTime * 3);
 	while ((input = gui.getInput()) != Input::EXIT)
 	{
 		auto time1 = std::chrono::high_resolution_clock::now();
@@ -55,7 +55,10 @@ void Game::loop(GUI &gui)
 void Game::start()
 {
 	std::unordered_map<std::string, std::unique_ptr<GUI> (*)()> fMap = //
-		{ { "Gl", GUI::createGui<Gl> }, { "Retro", GUI::createGui<Retro> }, { "Debug", GUI::createGui<Debug> } };
+		{ { "Gl", GUI::createGui<Gl> },
+		  { "Retro", GUI::createGui<Retro> },
+		  { "Debug", GUI::createGui<Debug> },
+		  { "Sfml", GUI::createGui<GuiSfml> } };
 
 	this->_gData.score = { this->_options };
 	this->_gData.area = { this->_options.areaSize };

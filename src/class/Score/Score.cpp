@@ -33,6 +33,11 @@ Score::~Score()
 
 const char *Score::filePath = "scores.csv";
 
+int Score::getScore() const
+{
+	return this->_score;
+}
+
 void Score::increment()
 {
 	this->_score++;
@@ -51,6 +56,8 @@ void Score::read()
 
 	while (std::getline(file, line))
 	{
+		if (line == "")
+			continue;
 		std::replace(line.begin(), line.end(), ',', ' ');
 		std::stringstream stream(line);
 		std::string       buffer;
