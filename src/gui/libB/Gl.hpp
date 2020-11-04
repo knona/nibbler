@@ -22,27 +22,31 @@ class Gl: public GUI
 {
 	private:
 	SDL_Window *_window;
-	GLuint      _EBO;
-	GLuint      _VAO;
-	GLuint      _VBO;
+	GLuint      _EBO[3];
+	GLuint      _VAO[3];
+	GLuint      _VBO[3];
 	GLuint      _textures[9];
 	Program     _program;
+	Program     _headerProgram;
 	Size<float> _screen;
 	float       _cellSize;
+	TTF_Font *  _font;
 
 	Gl(const Gl &) = delete;
 	Gl &operator=(const Gl &) = delete;
 
-	void RenderText(const std::string &Text, unsigned char r, unsigned char g, unsigned char b);
-
 	void createWindow(GameData &gData);
-	void createVAO();
+	void createCellVAO();
+	void createTextVAO(float width, float height);
+	void createHeaderVAO();
 
 	void setTexture(GLuint &texture, const char *path, bool flipY, bool rgba);
 	void setTextures();
-	void drawCell(const Position &pos, Texture texture, std::optional<float> rotation = {}) const;
 	void getSnakeTexture(const Snake &snake, std::list<Position>::const_iterator it, Texture &outTexture,
 	                     float &outRotation) const;
+
+	void drawCell(const Position &pos, Texture texture, std::optional<float> rotation = {}) const;
+	void drawText(int score);
 
 	bool isTextureBody(const Position &prevPos, const Position &pos, const Position &nextPos) const;
 	bool isTextureCornerBL(const Position &prevPos, const Position &pos, const Position &nextPos) const;

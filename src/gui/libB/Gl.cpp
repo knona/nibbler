@@ -2,7 +2,7 @@
 
 #include "stb_image.h"
 
-Gl::Gl(): _window(nullptr), _EBO(0), _VAO(0), _VBO(0), _screen(1280, 720)
+Gl::Gl(): _window(nullptr), _screen(1280, 720)
 {}
 
 Gl::~Gl()
@@ -18,7 +18,7 @@ void Gl::createWindow(GameData &gData)
 	if (_cellSize > 40)
 		_cellSize = 40;
 	_screen.width = areaSize.width * _cellSize;
-	_screen.height = areaSize.height * _cellSize;
+	_screen.height = areaSize.height * _cellSize + 40;
 
 	_window = SDL_CreateWindow("NIBBLER", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screen.width, _screen.height,
 	                           SDL_WINDOW_OPENGL);
@@ -30,13 +30,15 @@ void Gl::createWindow(GameData &gData)
 	SDL_GL_CreateContext(_window);
 }
 
-void Gl::createVAO()
+void Gl::createHeaderVAO()
 {
-	float square[] = {
-		00.0f, 01.0f, 00.0f, 01.0f, // top left
-		00.0f, 00.0f, 00.0f, 00.0f, // bottom left
-		01.0f, 01.0f, 01.0f, 01.0f, // top right
-		01.0f, 00.0f, 01.0f, 00.0f, // bottom right
+	float width = _screen.width;
+
+	float cell[] = {
+		0.0f,  40.0f, 0.0f, 1.0f, // top left
+		0.0f,  0.0f,  0.0f, 0.0f, // bottom left
+		width, 40.0f, 1.0f, 1.0f, // top right
+		width, 0.0f,  1.0f, 0.0f, // bottom right
 	};
 
 	uint indices[] = {
@@ -44,16 +46,75 @@ void Gl::createVAO()
 		1, 2, 3  // second triangle
 	};
 
-	glGenVertexArrays(1, &_VAO);
-	glBindVertexArray(_VAO);
+	glBindVertexArray(_VAO[2]);
 
-	glGenBuffers(1, &_EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO[2]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, _VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(square), square, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, _VBO[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cell), cell, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void *>(0));
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void *>(2 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0);
+}
+
+void Gl::createTextVAO(float width, float height)
+{
+	float fontShape[] = {
+		0.0f,  height, 0.0f, 0.0f, // top left
+		0.0f,  0.0f,   0.0f, 1.0f, // bottom left
+		width, height, 1.0f, 0.0f, // top right
+		width, 0.0f,   1.0f, 1.0f, // bottom right
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, _VBO[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(fontShape), fontShape, GL_DYNAMIC_DRAW);
+
+	uint indices[] = {
+		0, 1, 2, // first triangle
+		1, 2, 3  // second triangle
+	};
+
+	glBindVertexArray(_VAO[1]);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO[1]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
+
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void *>(0));
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void *>(2 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0);
+}
+
+void Gl::createCellVAO()
+{
+	float cell[] = {
+		0.0f, 1.0f, 0.0f, 1.0f, // top left
+		0.0f, 0.0f, 0.0f, 0.0f, // bottom left
+		1.0f, 1.0f, 1.0f, 1.0f, // top right
+		1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+	};
+
+	uint indices[] = {
+		0, 1, 2, // first triangle
+		1, 2, 3  // second triangle
+	};
+
+	glBindVertexArray(_VAO[0]);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO[0]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, _VBO[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cell), cell, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void *>(0));
 	glEnableVertexAttribArray(0);
@@ -119,7 +180,7 @@ void Gl::init(GameData &gData)
 		throw std::runtime_error("Failed to initialize GLAD");
 
 	glViewport(0, 0, _screen.width, _screen.height);
-	glClearColor(0.95, 0.91, 0.89f, 1.0f);
+	glClearColor(0.9686f, 0.9765f, 0.9765f, 1.0f);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -129,20 +190,39 @@ void Gl::init(GameData &gData)
 	_program.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/shader.frag" });
 	_program.link();
 
-	this->createVAO();
+	_headerProgram.setId();
+	_headerProgram.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/shader.vert" });
+	_headerProgram.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/grey.frag" });
+	_headerProgram.link();
 
-	this->setTextures();
+	glGenVertexArrays(3, _VAO);
+	glGenBuffers(3, _EBO);
+	glGenBuffers(3, _VBO);
 
 	if (TTF_Init() == -1)
 		throw std::runtime_error("Cannot init ttf");
+	_font = TTF_OpenFont("src/gui/libC/assets/ModernSans-Light.otf", 26);
+	if (!_font)
+		throw std::runtime_error("Cannot open font");
 
-	_program.use();
+	this->createCellVAO();
+	this->createHeaderVAO();
+	this->setTextures();
 
 	glm::mat4 view = glm::mat4(1.0f);
-	_program.uniformSet("view", view);
-
 	glm::mat4 projection = glm::ortho(0.0f, _screen.width, 0.0f, _screen.height);
+
+	_program.use();
+	_program.uniformSet("view", view);
 	_program.uniformSet("projection", projection);
+
+	_headerProgram.use();
+	_headerProgram.uniformSet("view", view);
+	_headerProgram.uniformSet("projection", projection);
+
+	glm::mat4 model(1.0f);
+	model = glm::translate(model, glm::vec3(0, _screen.height - 40.0f, 0.0f));
+	_headerProgram.uniformSet("model", model);
 }
 
 void Gl::close()
@@ -152,10 +232,12 @@ void Gl::close()
 		SDL_DestroyWindow(_window);
 		_window = nullptr;
 	}
-	glDeleteVertexArrays(1, &_VAO);
-	glDeleteBuffers(1, &_VBO);
-	glDeleteBuffers(1, &_EBO);
+	glDeleteVertexArrays(3, _VAO);
+	glDeleteBuffers(3, _VBO);
+	glDeleteBuffers(3, _EBO);
 	glDeleteTextures(9, _textures);
+	if (_font)
+		TTF_CloseFont(_font);
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -190,7 +272,7 @@ Input Gl::getInput()
 void Gl::drawCell(const Position &pos, Texture texture, std::optional<float> rotation) const
 {
 	float xStart = 0;
-	float yStart = _screen.height;
+	float yStart = _screen.height - 40;
 
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(xStart + _cellSize * pos.x, yStart - _cellSize * (pos.y + 1), 0.0f));
@@ -201,6 +283,7 @@ void Gl::drawCell(const Position &pos, Texture texture, std::optional<float> rot
 		model = glm::rotate(model, rotation.value(), glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::translate(model, glm::vec3(-0.5f, -0.5f, 0.0f));
 	}
+	_program.use();
 	_program.uniformSet("model", model);
 
 	glBindTexture(GL_TEXTURE_2D, _textures[texture]);
@@ -282,93 +365,49 @@ void Gl::getSnakeTexture(const Snake &snake, std::list<Position>::const_iterator
 	}
 }
 
-void Gl::RenderText(const std::string &text, unsigned char r, unsigned char g, unsigned char b)
+void Gl::drawText(int score)
 {
-	GLuint VAO, VBO, EBO;
-
-	TTF_Font *font = TTF_OpenFont("src/gui/libC/assets/arial.ttf", 26);
-
-	SDL_Color    color = { r, g, b, 0xFF };
-	SDL_Surface *message = TTF_RenderText_Blended(const_cast<TTF_Font *>(font), text.c_str(), color);
+	std::string  scoreStr = "Score : " + std::to_string(score);
+	SDL_Color    textColor = { 0xFF, 0xFF, 0xFF, 0xFF };
+	SDL_Surface *message = TTF_RenderText_Blended(_font, scoreStr.c_str(), textColor);
 	GLuint       texture = 0;
 
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-	Size<float> size = { static_cast<float>(message->w), static_cast<float>(message->h) };
+	float textW = static_cast<float>(message->w);
+	float textH = static_cast<float>(message->h);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.width, size.height, 0, GL_BGRA, GL_UNSIGNED_BYTE, message->pixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textW, textH, 0, GL_BGRA, GL_UNSIGNED_BYTE, message->pixels);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
-	Program program;
-	program.setId();
-	program.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/text.vert" });
-	program.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/text.frag" });
-	program.link();
-
-	program.use();
-
-	glm::mat4 view = glm::mat4(1.0f);
-	program.uniformSet("view", view);
-
-	glm::mat4 projection = glm::ortho(0.0f, _screen.width, 0.0f, _screen.height);
-	program.uniformSet("projection", projection);
+	_program.use();
 
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(5.0f, _screen.height - 35, 0.0f));
-	program.uniformSet("model", model);
+	model = glm::translate(model, glm::vec3(_screen.width / 2.0f - textW / 2.0f, _screen.height - 35, 0.0f));
+	_program.uniformSet("model", model);
 
-	float fontShape[] = {
-		00.0f,      size.height, 00.0f, 00.0f, // top left
-		00.0f,      00.0f,       00.0f, 01.0f, // bottom left
-		size.width, size.height, 01.0f, 00.0f, // top right
-		size.width, 00.0f,       01.0f, 01.0f, // bottom right
-	};
+	this->createTextVAO(textW, textH);
 
-	uint indices[] = {
-		0, 1, 2, // first triangle
-		1, 2, 3  // second triangle
-	};
-
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	glGenBuffers(1, &EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
-
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(fontShape), fontShape, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void *>(0));
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void *>(2 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
+	glBindVertexArray(_VAO[1]);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
-
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &texture);
 	SDL_FreeSurface(message);
-	TTF_CloseFont(font);
 }
 
 void Gl::render(GameData &gData)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	glBindVertexArray(_VAO);
 	glActiveTexture(GL_TEXTURE0);
+
+	glBindVertexArray(_VAO[0]);
 
 	for (const auto &[key, food]: gData.foods)
 		for (const Position &pos: food.getPositions())
@@ -385,14 +424,17 @@ void Gl::render(GameData &gData)
 		Texture texture = Texture::BODY;
 
 		getSnakeTexture(gData.snake, it, texture, rotation);
-		_program.use();
 		drawCell(*it, texture, rotation);
 	}
 
 	glBindVertexArray(0);
 
-	std::string scoreStr = "Score : " + std::to_string(gData.score.getScore());
-	RenderText(scoreStr, 0, 0, 0);
+	glBindVertexArray(_VAO[2]);
+	_headerProgram.use();
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	this->drawText(gData.score.getScore());
 
 	SDL_GL_SwapWindow(_window);
 }

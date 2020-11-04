@@ -82,7 +82,7 @@ void Score::displayScore()
 	}
 	std::cout << "Score: \033[0;92m" << this->_score << "\033[0m";
 	std::cout << " (" << this->_areaSize.width << "x" << this->_areaSize.height;
-	std::cout << ", " << (this->_noWall ? "no" : "") << " walls)" << std::endl;
+	std::cout << "," << (this->_noWall ? "no" : "") << " walls)" << std::endl;
 }
 
 void Score::displayHighScore() const
@@ -98,7 +98,7 @@ void Score::displayHighScore() const
 	}
 	std::cout << "HIGHSCORE: \033[0;92m" << score << "\033[0m";
 	std::cout << " (" << this->_areaSize.width << "x" << this->_areaSize.height;
-	std::cout << ", " << (this->_noWall ? "no" : "") << " walls)" << std::endl;
+	std::cout << "," << (this->_noWall ? "no" : "") << " walls)" << std::endl;
 }
 
 void Score::store()

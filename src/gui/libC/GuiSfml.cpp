@@ -73,9 +73,9 @@ void GuiSfml::displayScore(GameData &gData)
 	text.setFont(font);
 	text.setCharacterSize(26);
 	text.setFillColor(sf::Color::White);
-	text.setPosition(5, _screen.height + 5);
 	std::string scoreStr = "Score : " + std::to_string(gData.score.getScore());
 	text.setString(scoreStr);
+	text.setPosition(_screen.width / 2.0f - text.getLocalBounds().width / 2.0f, _screen.height + 5);
 	_window.draw(text);
 }
 
