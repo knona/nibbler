@@ -172,7 +172,7 @@ void GuiSdl::createPrograms()
 
 	_headerProgram.setId();
 	_headerProgram.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/shader.vert" });
-	_headerProgram.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/grey.frag" });
+	_headerProgram.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/green.frag" });
 	_headerProgram.link();
 
 	glm::mat4 view = glm::mat4(1.0f);
@@ -196,9 +196,10 @@ void GuiSdl::init(GameData &gData)
 		throw std::runtime_error("Failed to initliaze SDL");
 	if (TTF_Init() == -1)
 		throw std::runtime_error("Cannot init ttf");
-	_font = TTF_OpenFont("src/gui/libC/assets/ModernSans-Light.otf", 26);
+	_font = TTF_OpenFont("src/gui/libC/assets/Gorva.otf", 26);
 	if (!_font)
 		throw std::runtime_error("Cannot open font");
+	TTF_SetFontStyle(_font, TTF_STYLE_BOLD);
 
 	SDL_GL_LoadLibrary(NULL);
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);

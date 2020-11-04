@@ -25,7 +25,7 @@ void GuiAllegro::init(GameData &gData)
 	al_init_primitives_addon();
 	al_init_font_addon();
 	al_init_ttf_addon();
-	_font = al_load_font("src/gui/libC/assets/ModernSans-Light.otf", 26, 0);
+	_font = al_load_font("src/gui/libC/assets/Retro Gaming.ttf", 26, 0);
 
 	_queue = al_create_event_queue();
 	al_register_event_source(_queue, al_get_keyboard_event_source());
@@ -73,7 +73,7 @@ void GuiAllegro::render(GameData &gData)
 	const std::string scoreStr = "Score : " + std::to_string(gData.score.getScore());
 	al_draw_filled_rectangle(0, 0, _screen.width, 40, al_map_rgb(161, 55, 49));
 	int textWidth = al_get_text_width(_font, scoreStr.c_str());
-	al_draw_text(_font, al_map_rgb(255, 255, 255), _screen.width / 2.0f - textWidth / 2.0f, 10, 0, scoreStr.c_str());
+	al_draw_text(_font, al_map_rgb(255, 255, 255), _screen.width / 2.0f - textWidth / 2.0f, 5, 0, scoreStr.c_str());
 
 	for (int y = 0; y < gData.area.height(); y++)
 	{
