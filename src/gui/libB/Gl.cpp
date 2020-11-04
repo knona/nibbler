@@ -2,7 +2,7 @@
 
 #include "stb_image.h"
 
-Gl::Gl(): _window(nullptr), _screen(1280, 720)
+Gl::Gl(): _window(nullptr), _context(nullptr), _VAO {}, _VBO {}, _EBO {}, _textures {}, _screen(1280, 720)
 {}
 
 Gl::~Gl()
@@ -27,7 +27,7 @@ void Gl::createWindow(GameData &gData)
 
 	SDL_SetWindowResizable(_window, SDL_FALSE);
 
-	SDL_GL_CreateContext(_window);
+	_context = SDL_GL_CreateContext(_window);
 }
 
 void Gl::createCellVAO()
@@ -228,6 +228,11 @@ void Gl::init(GameData &gData)
 
 void Gl::close()
 {
+	if (_context)
+	{
+		SDL_GL_DeleteContext(_context);
+		_context = nullptr;
+	}
 	if (_window)
 	{
 		SDL_DestroyWindow(_window);

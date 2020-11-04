@@ -21,16 +21,17 @@
 class Gl: public GUI
 {
 	private:
-	SDL_Window *_window;
-	GLuint      _EBO[3];
-	GLuint      _VAO[3];
-	GLuint      _VBO[3];
-	GLuint      _textures[9];
-	Program     _program;
-	Program     _headerProgram;
-	Size<float> _screen;
-	float       _cellSize;
-	TTF_Font *  _font;
+	SDL_Window *  _window;
+	SDL_GLContext _context;
+	GLuint        _VAO[3];
+	GLuint        _VBO[3];
+	GLuint        _EBO[3];
+	GLuint        _textures[9];
+	Program       _program;
+	Program       _headerProgram;
+	Size<float>   _screen;
+	float         _cellSize;
+	TTF_Font *    _font;
 
 	Gl(const Gl &) = delete;
 	Gl &operator=(const Gl &) = delete;
