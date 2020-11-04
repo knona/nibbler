@@ -1,5 +1,5 @@
-#ifndef GL_HPP
-#define GL_HPP
+#ifndef GUI_SDL_HPP
+#define GUI_SDL_HPP
 
 #include "GUI.hpp"
 #include "GameData.hpp"
@@ -18,7 +18,7 @@
 #include <memory>
 #include <optional>
 
-class Gl: public GUI
+class GuiSdl: public GUI
 {
 	private:
 	SDL_Window *  _window;
@@ -33,8 +33,8 @@ class Gl: public GUI
 	float         _cellSize;
 	TTF_Font *    _font;
 
-	Gl(const Gl &) = delete;
-	Gl &operator=(const Gl &) = delete;
+	GuiSdl(const GuiSdl &) = delete;
+	GuiSdl &operator=(const GuiSdl &) = delete;
 
 	void createWindow(GameData &gData);
 	void createCellVAO();
@@ -57,8 +57,8 @@ class Gl: public GUI
 	bool isTextureCornerTR(const Position &prevPos, const Position &pos, const Position &nextPos) const;
 
 	public:
-	Gl();
-	~Gl();
+	GuiSdl();
+	~GuiSdl();
 
 	void  init(GameData &gData);
 	void  close();
@@ -66,4 +66,4 @@ class Gl: public GUI
 	void  render(GameData &gData);
 };
 
-#endif // !GL_HPP
+#endif // !GUI_SDL_HPP

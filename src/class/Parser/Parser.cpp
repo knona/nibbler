@@ -27,7 +27,7 @@ Size<int> Parser::getAreaSize(const po::variables_map &vm)
 std::string Parser::getGui(const po::variables_map &vm)
 {
 	std::string gui = vm["gui"].as<std::string>();
-	if (gui != "Gl" && gui != "Retro" && gui != "Sfml")
+	if (gui != "Sdl" && gui != "Retro" && gui != "Sfml")
 		throw Exception::ParsingOptions("Invalid gui option", EXIT_FAILURE);
 	return gui;
 }
@@ -45,13 +45,13 @@ int Parser::getSpeed(const po::variables_map &vm)
 Options Parser::parseCommandLine(int argc, const char **argv)
 {
 	po::options_description desc("Allowed options");
-	desc.add_options()                                                                                       //
-		("help,h", "produce help message")                                                                   //
-		("width,W", po::value<int>()->required(), "set the area's width (required)")                         //
-		("height,H", po::value<int>()->required(), "set the area's height (required)")                       //
-		("gui", po::value<std::string>()->default_value("Gl"), "use the gui \"Retro\", \"Gl\" or \"third\"") //
-		("no-wall", "do not set wall")                                                                       //
-		("high-score", "check highscore for a specific area size")                                           //
+	desc.add_options()                                                                                        //
+		("help,h", "produce help message")                                                                    //
+		("width,W", po::value<int>()->required(), "set the area's width (required)")                          //
+		("height,H", po::value<int>()->required(), "set the area's height (required)")                        //
+		("gui", po::value<std::string>()->default_value("Sdl"), "use the gui \"Sdl\", \"Sfml\" or \"Retro\"") //
+		("no-wall", "do not set wall")                                                                        //
+		("high-score", "check highscore for a specific area size")                                            //
 		("speed", po::value<std::string>()->default_value("normal"),
 	     "set snake's speed: \"slow\", \"normal\" or \"fast\"");
 

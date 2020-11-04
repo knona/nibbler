@@ -1,16 +1,16 @@
-#include "Gl.hpp"
+#include "GuiSdl.hpp"
 
 #include "stb_image.h"
 
-Gl::Gl(): _window(nullptr), _context(nullptr), _VAO {}, _VBO {}, _EBO {}, _textures {}, _screen(1280, 720)
+GuiSdl::GuiSdl(): _window(nullptr), _context(nullptr), _VAO {}, _VBO {}, _EBO {}, _textures {}, _screen(1280, 720)
 {}
 
-Gl::~Gl()
+GuiSdl::~GuiSdl()
 {
 	this->close();
 }
 
-void Gl::createWindow(GameData &gData)
+void GuiSdl::createWindow(GameData &gData)
 {
 	Size<int> areaSize = gData.area.getSize();
 
@@ -30,7 +30,7 @@ void Gl::createWindow(GameData &gData)
 	_context = SDL_GL_CreateContext(_window);
 }
 
-void Gl::createCellVAO()
+void GuiSdl::createCellVAO()
 {
 	float cell[] = {
 		0.0f, 1.0f, 0.0f, 1.0f, // top left
@@ -61,7 +61,7 @@ void Gl::createCellVAO()
 	glBindVertexArray(0);
 }
 
-void Gl::createTextVAO(float width, float height)
+void GuiSdl::createTextVAO(float width, float height)
 {
 	float fontShape[] = {
 		0.0f,  height, 0.0f, 0.0f, // top left
@@ -92,7 +92,7 @@ void Gl::createTextVAO(float width, float height)
 	glBindVertexArray(0);
 }
 
-void Gl::createHeaderVAO()
+void GuiSdl::createHeaderVAO()
 {
 	float width = _screen.width;
 
@@ -125,7 +125,7 @@ void Gl::createHeaderVAO()
 	glBindVertexArray(0);
 }
 
-void Gl::setTexture(GLuint &texture, const char *path, bool flipY, bool rgba)
+void GuiSdl::setTexture(GLuint &texture, const char *path, bool flipY, bool rgba)
 {
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -150,7 +150,7 @@ void Gl::setTexture(GLuint &texture, const char *path, bool flipY, bool rgba)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Gl::setTextures()
+void GuiSdl::setTextures()
 {
 	this->setTexture(_textures[Texture::HEAD], "src/gui/libB/assets/snake/head.png", true, true);
 	this->setTexture(_textures[Texture::BODY], "src/gui/libB/assets/snake/body.png", true, true);
@@ -163,7 +163,7 @@ void Gl::setTextures()
 	this->setTexture(_textures[Texture::WALL], "src/gui/libB/assets/wall.png", false, false);
 }
 
-void Gl::createPrograms()
+void GuiSdl::createPrograms()
 {
 	_program.setId();
 	_program.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/shader.vert" });
@@ -190,7 +190,7 @@ void Gl::createPrograms()
 	_headerProgram.uniformSet("model", model);
 }
 
-void Gl::init(GameData &gData)
+void GuiSdl::init(GameData &gData)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		throw std::runtime_error("Failed to initliaze SDL");
@@ -226,7 +226,7 @@ void Gl::init(GameData &gData)
 	this->createPrograms();
 }
 
-void Gl::close()
+void GuiSdl::close()
 {
 	if (_context)
 	{
@@ -248,7 +248,7 @@ void Gl::close()
 	SDL_Quit();
 }
 
-Input Gl::getInput()
+Input GuiSdl::getInput()
 {
 	SDL_Event event;
 
@@ -275,7 +275,7 @@ Input Gl::getInput()
 	return Input::NONE;
 }
 
-void Gl::drawCell(const Position &pos, Texture texture, std::optional<float> rotation) const
+void GuiSdl::drawCell(const Position &pos, Texture texture, std::optional<float> rotation) const
 {
 	float xStart = 0;
 	float yStart = _screen.height - 40;
@@ -296,34 +296,34 @@ void Gl::drawCell(const Position &pos, Texture texture, std::optional<float> rot
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
-bool Gl::isTextureBody(const Position &prevPos, const Position &pos, const Position &nextPos) const
+bool GuiSdl::isTextureBody(const Position &prevPos, const Position &pos, const Position &nextPos) const
 {
 	return (prevPos.x + 1 == pos.x && pos.x + 1 == nextPos.x) || (prevPos.x - 1 == pos.x && pos.x - 1 == nextPos.x) ||
 	       (prevPos.y + 1 == pos.y && pos.y + 1 == nextPos.y) || (prevPos.y - 1 == pos.y && pos.y - 1 == nextPos.y);
 }
 
-bool Gl::isTextureCornerBL(const Position &prevPos, const Position &pos, const Position &nextPos) const
+bool GuiSdl::isTextureCornerBL(const Position &prevPos, const Position &pos, const Position &nextPos) const
 {
 	return (prevPos.x + 1 == pos.x && pos.y + 1 == nextPos.y) || (prevPos.y - 1 == pos.y && pos.x - 1 == nextPos.x);
 }
 
-bool Gl::isTextureCornerBR(const Position &prevPos, const Position &pos, const Position &nextPos) const
+bool GuiSdl::isTextureCornerBR(const Position &prevPos, const Position &pos, const Position &nextPos) const
 {
 	return (prevPos.x - 1 == pos.x && pos.y + 1 == nextPos.y) || (prevPos.y - 1 == pos.y && pos.x + 1 == nextPos.x);
 }
 
-bool Gl::isTextureCornerTL(const Position &prevPos, const Position &pos, const Position &nextPos) const
+bool GuiSdl::isTextureCornerTL(const Position &prevPos, const Position &pos, const Position &nextPos) const
 {
 	return (prevPos.x + 1 == pos.x && pos.y - 1 == nextPos.y) || (prevPos.y + 1 == pos.y && pos.x - 1 == nextPos.x);
 }
 
-bool Gl::isTextureCornerTR(const Position &prevPos, const Position &pos, const Position &nextPos) const
+bool GuiSdl::isTextureCornerTR(const Position &prevPos, const Position &pos, const Position &nextPos) const
 {
 	return (prevPos.x - 1 == pos.x && pos.y - 1 == nextPos.y) || (prevPos.y + 1 == pos.y && pos.x + 1 == nextPos.x);
 }
 
-void Gl::getSnakeTexture(const Snake &snake, std::list<Position>::const_iterator it, Texture &outTexture,
-                         float &outRotation) const
+void GuiSdl::getSnakeTexture(const Snake &snake, std::list<Position>::const_iterator it, Texture &outTexture,
+                             float &outRotation) const
 {
 	Position pos = *it;
 
@@ -371,7 +371,7 @@ void Gl::getSnakeTexture(const Snake &snake, std::list<Position>::const_iterator
 	}
 }
 
-void Gl::drawText(int score)
+void GuiSdl::drawText(int score)
 {
 	std::string  scoreStr = "Score : " + std::to_string(score);
 	SDL_Color    textColor = { 0xFF, 0xFF, 0xFF, 0xFF };
@@ -408,7 +408,7 @@ void Gl::drawText(int score)
 	SDL_FreeSurface(message);
 }
 
-void Gl::render(GameData &gData)
+void GuiSdl::render(GameData &gData)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glActiveTexture(GL_TEXTURE0);

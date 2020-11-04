@@ -3,7 +3,7 @@
 
 #include "GUI.hpp"
 #include "GameData.hpp"
-#include "Gl.hpp"
+#include "GuiSdl.hpp"
 #include "GuiSfml.hpp"
 #include "Input.hpp"
 #include "Options.hpp"
