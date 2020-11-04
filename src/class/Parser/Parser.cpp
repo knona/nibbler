@@ -32,14 +32,14 @@ std::string Parser::getGui(const po::variables_map &vm)
 	return gui;
 }
 
-std::chrono::milliseconds Parser::getSpeed(const po::variables_map &vm)
+int Parser::getSpeed(const po::variables_map &vm)
 {
-	std::unordered_map<std::string, int> map = { { "slow", 300 }, { "normal", 200 }, { "fast", 100 } };
+	std::unordered_map<std::string, int> map = { { "slow", 2 }, { "normal", 1 }, { "fast", 0 } };
 
 	std::string speed = vm["speed"].as<std::string>();
 	if (speed != "slow" && speed != "normal" && speed != "fast")
 		throw Exception::ParsingOptions("Invalid speed option", EXIT_FAILURE);
-	return std::chrono::milliseconds(map[speed]);
+	return map[speed];
 }
 
 Options Parser::parseCommandLine(int argc, const char **argv)

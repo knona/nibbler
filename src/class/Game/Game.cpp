@@ -27,12 +27,14 @@ InputMap Game::_inputMap = //
 
 void Game::loop(GUI &gui)
 {
-	Input       input;
-	std::string pause;
+	Input                     input;
+	std::string               pause;
+	int                       time[3] = { 100, 200, 300 };
+	std::chrono::milliseconds cycleTime = std::chrono::milliseconds(time[this->_options.speed]);
 
 	gui.init(this->_gData);
 	gui.render(this->_gData);
-	std::this_thread::sleep_for(this->_options.cycleTime * 3);
+	std::this_thread::sleep_for(cycleTime * 4);
 	while ((input = gui.getInput()) != Input::EXIT)
 	{
 		auto time1 = std::chrono::high_resolution_clock::now();
@@ -45,7 +47,7 @@ void Game::loop(GUI &gui)
 		auto time2 = std::chrono::high_resolution_clock::now();
 
 		std::chrono::microseconds timeElapsed = std::chrono::duration_cast<std::chrono::microseconds>(time2 - time1);
-		std::chrono::microseconds timeToSleep = std::chrono::microseconds(this->_options.cycleTime) - timeElapsed;
+		std::chrono::microseconds timeToSleep = std::chrono::microseconds(cycleTime) - timeElapsed;
 		if (timeToSleep.count() < 0)
 			timeToSleep = std::chrono::microseconds(0);
 		std::this_thread::sleep_for(timeToSleep);

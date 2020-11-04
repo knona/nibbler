@@ -18,6 +18,7 @@ class Score
 {
 	private:
 	int       _score;
+	int       _speed;
 	bool      _noWall;
 	Size<int> _areaSize;
 	ScoreData _data;

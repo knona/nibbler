@@ -15,9 +15,9 @@ namespace po = boost::program_options;
 class Parser
 {
 	private:
-	static Size<int>                 getAreaSize(const po::variables_map &vm);
-	static std::string               getGui(const po::variables_map &vm);
-	static std::chrono::milliseconds getSpeed(const po::variables_map &vm);
+	static Size<int>   getAreaSize(const po::variables_map &vm);
+	static std::string getGui(const po::variables_map &vm);
+	static int         getSpeed(const po::variables_map &vm);
 
 	public:
 	static Options parseCommandLine(int argc, const char **argv);

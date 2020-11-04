@@ -7,11 +7,11 @@
 
 struct Options
 {
-	Size<int>                 areaSize;
-	std::string               gui;
-	bool                      noWall;
-	bool                      highScore;
-	std::chrono::milliseconds cycleTime;
+	Size<int>   areaSize;
+	std::string gui;
+	bool        noWall;
+	bool        highScore;
+	int         speed;
 };
 
 #endif // !OPTIONS_HPP

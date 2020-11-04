@@ -2,18 +2,19 @@
 
 std::size_t key_hash::operator()(const ScoreDataKey &k) const
 {
-	const auto &[size, score] = k;
+	const auto &[size, noWall, speed] = k;
 
 	size_t code = 0;
-	code |= static_cast<size_t>(size.width);
-	code |= static_cast<size_t>(size.height) << 16;
-	code |= static_cast<size_t>(score) << 32;
+	code |= static_cast<size_t>(speed) << 0;
+	code |= static_cast<size_t>(noWall) << 1;
+	code |= static_cast<size_t>(size.width) << 3;
+	code |= static_cast<size_t>(size.height) << 19;
 	return code;
 }
 
 bool key_equal::operator()(const ScoreDataKey &v1, const ScoreDataKey &v2) const
 {
-	const auto &[size1, score1] = v1;
-	const auto &[size2, score2] = v2;
-	return size1.width == size2.width && size1.height == size2.height && score1 == score2;
+	const auto &[size1, noWall1, speed1] = v1;
+	const auto &[size2, noWall2, speed2] = v2;
+	return size1.width == size2.width && size1.height == size2.height && noWall1 == noWall2 && speed1 == speed2;
 }
