@@ -91,7 +91,7 @@ void GuiSfml::render(GameData &gData)
 		{
 			Position pos(x, y);
 
-			square.setPosition(_cellSize * pos.x, _cellSize * pos.y);
+			square.setPosition(_cellSize * x, _cellSize * y);
 
 			sf::Color color;
 			if (gData.area.isWall(pos))
