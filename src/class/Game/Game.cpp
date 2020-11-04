@@ -55,10 +55,7 @@ void Game::loop(GUI &gui)
 void Game::start()
 {
 	std::unordered_map<std::string, std::unique_ptr<GUI> (*)()> fMap = //
-		{ { "Gl", GUI::createGui<Gl> },
-		  { "Retro", GUI::createGui<Retro> },
-		  { "Debug", GUI::createGui<Debug> },
-		  { "Sfml", GUI::createGui<GuiSfml> } };
+		{ { "Gl", GUI::createGui<Gl> }, { "Retro", GUI::createGui<Retro> }, { "Sfml", GUI::createGui<GuiSfml> } };
 
 	this->_gData.score = { this->_options };
 	this->_gData.area = { this->_options.areaSize };

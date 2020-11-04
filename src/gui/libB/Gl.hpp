@@ -39,6 +39,7 @@ class Gl: public GUI
 	void createCellVAO();
 	void createTextVAO(float width, float height);
 	void createHeaderVAO();
+	void createPrograms();
 
 	void setTexture(GLuint &texture, const char *path, bool flipY, bool rgba);
 	void setTextures();

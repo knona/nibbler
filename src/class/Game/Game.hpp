@@ -1,7 +1,6 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "Debug.hpp"
 #include "GUI.hpp"
 #include "GameData.hpp"
 #include "Gl.hpp"

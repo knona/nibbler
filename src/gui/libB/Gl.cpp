@@ -30,15 +30,13 @@ void Gl::createWindow(GameData &gData)
 	SDL_GL_CreateContext(_window);
 }
 
-void Gl::createHeaderVAO()
+void Gl::createCellVAO()
 {
-	float width = _screen.width;
-
 	float cell[] = {
-		0.0f,  40.0f, 0.0f, 1.0f, // top left
-		0.0f,  0.0f,  0.0f, 0.0f, // bottom left
-		width, 40.0f, 1.0f, 1.0f, // top right
-		width, 0.0f,  1.0f, 0.0f, // bottom right
+		0.0f, 1.0f, 0.0f, 1.0f, // top left
+		0.0f, 0.0f, 0.0f, 0.0f, // bottom left
+		1.0f, 1.0f, 1.0f, 1.0f, // top right
+		1.0f, 0.0f, 1.0f, 0.0f, // bottom right
 	};
 
 	uint indices[] = {
@@ -46,12 +44,12 @@ void Gl::createHeaderVAO()
 		1, 2, 3  // second triangle
 	};
 
-	glBindVertexArray(_VAO[2]);
+	glBindVertexArray(_VAO[0]);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO[2]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO[0]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, _VBO[2]);
+	glBindBuffer(GL_ARRAY_BUFFER, _VBO[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cell), cell, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void *>(0));
@@ -94,13 +92,15 @@ void Gl::createTextVAO(float width, float height)
 	glBindVertexArray(0);
 }
 
-void Gl::createCellVAO()
+void Gl::createHeaderVAO()
 {
+	float width = _screen.width;
+
 	float cell[] = {
-		0.0f, 1.0f, 0.0f, 1.0f, // top left
-		0.0f, 0.0f, 0.0f, 0.0f, // bottom left
-		1.0f, 1.0f, 1.0f, 1.0f, // top right
-		1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+		0.0f,  40.0f, 0.0f, 1.0f, // top left
+		0.0f,  0.0f,  0.0f, 0.0f, // bottom left
+		width, 40.0f, 1.0f, 1.0f, // top right
+		width, 0.0f,  1.0f, 0.0f, // bottom right
 	};
 
 	uint indices[] = {
@@ -108,12 +108,12 @@ void Gl::createCellVAO()
 		1, 2, 3  // second triangle
 	};
 
-	glBindVertexArray(_VAO[0]);
+	glBindVertexArray(_VAO[2]);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO[0]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO[2]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, _VBO[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, _VBO[2]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cell), cell, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void *>(0));
@@ -163,10 +163,42 @@ void Gl::setTextures()
 	this->setTexture(_textures[Texture::WALL], "src/gui/libB/assets/wall.png", false, false);
 }
 
+void Gl::createPrograms()
+{
+	_program.setId();
+	_program.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/shader.vert" });
+	_program.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/shader.frag" });
+	_program.link();
+
+	_headerProgram.setId();
+	_headerProgram.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/shader.vert" });
+	_headerProgram.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/grey.frag" });
+	_headerProgram.link();
+
+	glm::mat4 view = glm::mat4(1.0f);
+	glm::mat4 projection = glm::ortho(0.0f, _screen.width, 0.0f, _screen.height);
+
+	_program.use();
+	_program.uniformSet("view", view);
+	_program.uniformSet("projection", projection);
+
+	_headerProgram.use();
+	_headerProgram.uniformSet("view", view);
+	_headerProgram.uniformSet("projection", projection);
+	glm::mat4 model(1.0f);
+	model = glm::translate(model, glm::vec3(0, _screen.height - 40.0f, 0.0f));
+	_headerProgram.uniformSet("model", model);
+}
+
 void Gl::init(GameData &gData)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		throw std::runtime_error("Failed to initliaze SDL");
+	if (TTF_Init() == -1)
+		throw std::runtime_error("Cannot init ttf");
+	_font = TTF_OpenFont("src/gui/libC/assets/ModernSans-Light.otf", 26);
+	if (!_font)
+		throw std::runtime_error("Cannot open font");
 
 	SDL_GL_LoadLibrary(NULL);
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
@@ -185,44 +217,13 @@ void Gl::init(GameData &gData)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	_program.setId();
-	_program.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/shader.vert" });
-	_program.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/shader.frag" });
-	_program.link();
-
-	_headerProgram.setId();
-	_headerProgram.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/shader.vert" });
-	_headerProgram.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/grey.frag" });
-	_headerProgram.link();
-
 	glGenVertexArrays(3, _VAO);
 	glGenBuffers(3, _EBO);
 	glGenBuffers(3, _VBO);
-
-	if (TTF_Init() == -1)
-		throw std::runtime_error("Cannot init ttf");
-	_font = TTF_OpenFont("src/gui/libC/assets/ModernSans-Light.otf", 26);
-	if (!_font)
-		throw std::runtime_error("Cannot open font");
-
 	this->createCellVAO();
 	this->createHeaderVAO();
 	this->setTextures();
-
-	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::ortho(0.0f, _screen.width, 0.0f, _screen.height);
-
-	_program.use();
-	_program.uniformSet("view", view);
-	_program.uniformSet("projection", projection);
-
-	_headerProgram.use();
-	_headerProgram.uniformSet("view", view);
-	_headerProgram.uniformSet("projection", projection);
-
-	glm::mat4 model(1.0f);
-	model = glm::translate(model, glm::vec3(0, _screen.height - 40.0f, 0.0f));
-	_headerProgram.uniformSet("model", model);
+	this->createPrograms();
 }
 
 void Gl::close()
