@@ -103,12 +103,12 @@ void GuiAllegro::render(GameData &gData)
 	al_flip_display();
 }
 
-GUI *createGuiAllegro()
+GUI *createGui()
 {
 	return new GuiAllegro;
 }
 
-void deleteGuiAllegro(GuiAllegro *gui)
+void deleteGui(GUI *gui)
 {
 	delete gui;
 }

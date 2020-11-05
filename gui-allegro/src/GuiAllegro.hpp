@@ -34,8 +34,8 @@ class GuiAllegro: public GUI
 
 extern "C"
 {
-	GUI *createGuiAllegro();
-	void deleteGuiAllegro(GuiAllegro *gui);
+	GUI *createGui();
+	void deleteGui(GUI *gui);
 }
 
 #endif // !GUI_ALLEGRO_HPP

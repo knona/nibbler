@@ -445,3 +445,13 @@ void GuiSdl::render(GameData &gData)
 
 	SDL_GL_SwapWindow(_window);
 }
+
+GUI *createGui()
+{
+	return new GuiSdl;
+}
+
+void deleteGui(GUI *gui)
+{
+	delete gui;
+}

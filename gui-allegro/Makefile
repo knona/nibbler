@@ -6,14 +6,18 @@ define uniq =
 endef
 
 # SOURCES
-SRCS	= GuiAllegro.cpp
+SRCS_FILES		= GuiAllegro.cpp
+SRCS_MAIN_DIR	= src/
+SRCS			= $(addprefix $(SRCS_MAIN_DIR), $(SRCS_FILES))
 
 # OBJETS
-OBJS	= $(SRCS:.cpp=.o)
+OBJS_FILES		= $(SRCS_FILES:.cpp=.o)
+OBJS_MAIN_DIR 	= objs/
+OBJS 			= $(addprefix $(OBJS_MAIN_DIR), $(OBJS_FILES))
 
 # HEADERS
-HEADERS			=  ../src/exceptions/Exceptions.hpp ../src/class/Score/Score.hpp ../src/class/Score/ScoreDataKey.hpp ../src/class/Elements/Walls.hpp ../src/class/Elements/Snake.hpp ../src/class/Elements/Food.hpp ../src/class/Elements/Foods.hpp ../src/class/Elements/Element.hpp ../src/class/Elements/Wall.hpp ../src/class/Gui/GUI.hpp ../src/class/Area/Area.hpp ../src/class/Cron/Cron.hpp ../src/class/Game/Game.hpp ../src/enum/Input.hpp ../src/enum/Direction.hpp ../src/enum/ElementType.hpp ../src/struct/Position.hpp ../src/struct/GameData.hpp ../src/struct/Cell.hpp
-HEADERS_DIRS	= $(call uniq, $(dir $(HEADERS)))
+HEADERS			=  src/GuiAllegro.hpp ../src/exceptions/Exceptions.hpp ../src/class/Score/Score.hpp ../src/class/Score/ScoreDataKey.hpp ../src/class/Elements/Walls.hpp ../src/class/Elements/Snake.hpp ../src/class/Elements/Food.hpp ../src/class/Elements/Foods.hpp ../src/class/Elements/Element.hpp ../src/class/Elements/Wall.hpp ../src/class/Gui/GUI.hpp ../src/class/Area/Area.hpp ../src/class/Cron/Cron.hpp ../src/class/Game/Game.hpp ../src/enum/Input.hpp ../src/enum/Direction.hpp ../src/enum/ElementType.hpp ../src/struct/Position.hpp ../src/struct/GameData.hpp ../src/struct/Cell.hpp
+HEADERS_DIRS	= $(call uniq, src/ $(dir $(HEADERS)))
 
 # INCLUDES FOLDER
 INCLUDES = $(addprefix -I, $(HEADERS_DIRS))
@@ -35,12 +39,15 @@ BLUE = \033[36m
 # REGLES
 all: $(NAME)
 
-$(NAME): $(OBJS)
+$(OBJS_MAIN_DIR):
+	@mkdir -p $@
+
+$(NAME): $(OBJS_MAIN_DIR) $(OBJS)
 	@$(CC) -shared -o $(NAME) $(OBJS)
 	@printf "\n$(NAME) has been created"
 	@printf " $(GREEN)[OK]$(WHITE)\n"
 
-%.o: %.cpp $(HEADERS)
+$(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
 	@printf "\033[2K\r$(BLUE)>>Compiling \033[37m$<$(BLUE)\033[0m"
 	@$(CC) $(CFLAGS) $(INCLUDES) -fPIC -o $@ -c $<
 
@@ -48,7 +55,7 @@ $(NAME): $(OBJS)
 
 clean:
 	@echo "\033[31mCleaning .o\033[0m"
-	@rm -f $(OBJS)
+	@rm -rf $(OBJS_MAIN_DIR)
 
 fclean:	clean
 	@echo "\033[31mCleaning $(NAME)\033[0m"

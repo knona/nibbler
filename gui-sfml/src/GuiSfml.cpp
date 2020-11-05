@@ -112,3 +112,13 @@ void GuiSfml::render(GameData &gData)
 
 	_window.display();
 }
+
+GUI *createGui()
+{
+	return new GuiSfml;
+}
+
+void deleteGui(GUI *gui)
+{
+	delete gui;
+}

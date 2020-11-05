@@ -3,14 +3,12 @@
 
 #include "GUI.hpp"
 #include "GameData.hpp"
-#include "GuiAllegro.hpp"
-#include "GuiSdl.hpp"
-#include "GuiSfml.hpp"
 #include "Input.hpp"
 #include "Options.hpp"
 #include "Parser.hpp"
 #include "Size.tpp"
 
+#include <dlfcn.h>
 #include <iostream>
 #include <string>
 #include <thread>

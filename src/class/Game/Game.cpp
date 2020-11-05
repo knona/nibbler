@@ -56,10 +56,10 @@ void Game::loop(GUI &gui)
 
 void Game::start()
 {
-	std::unordered_map<std::string, std::unique_ptr<GUI> (*)()> fMap = //
-		{ { "Sdl", GUI::createGui<GuiSdl> },
-		  { "Allegro", GUI::createGui<GuiAllegro> },
-		  { "Sfml", GUI::createGui<GuiSfml> } };
+	std::unordered_map<std::string, const char *> libMap = //
+		{ { "Sdl", "./gui-sdl/libgui-sdl.so" },
+		  { "Allegro", "./gui-allegro/libgui-allegro.so" },
+		  { "Sfml", "./gui-sfml/libgui-sfml.so" } };
 
 	this->_gData.score = { this->_options };
 	this->_gData.area = { this->_options.areaSize };
@@ -75,21 +75,34 @@ void Game::start()
 	if (!this->_options.noWall)
 		addWalls(this->_gData);
 
-	std::unique_ptr<GUI> gui = fMap[this->_options.gui]();
+	void *handle = dlopen(libMap[_options.gui], RTLD_LAZY | RTLD_GLOBAL);
+	if (!handle)
+		throw std::runtime_error(dlerror());
+
+	GUI *(*createGui)() = (GUI * (*)())(dlsym(handle, "createGui"));
+	if (!createGui)
+		throw std::runtime_error("Cannot get createGui function");
+	void (*deleteGui)(GUI *) = (void (*)(GUI *))(dlsym(handle, "deleteGui"));
+	if (!deleteGui)
+		throw std::runtime_error("Cannot get deleteGui function");
+
+	GUI *gui = createGui();
+
 	try
 	{
 		this->loop(*gui);
+		deleteGui(gui);
 	}
 	catch (const Exception::GameOver &e)
 	{
 		std::cout << e.what() << std::endl;
-		gui.release();
+		deleteGui(gui);
 		this->_gData.score.displayScore();
 	}
 	catch (const Exception::Win &e)
 	{
 		std::cout << e.what() << std::endl;
-		gui.release();
+		deleteGui(gui);
 		this->_gData.score.displayScore();
 	}
 }
