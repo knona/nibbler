@@ -23,8 +23,8 @@ void GuiSfml::init(GameData &gData)
 
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	sf::Vector2i  windowPos;
-	windowPos.x = static_cast<int>(desktop.width / 2 - _window.getSize().x / 2);
-	windowPos.y = static_cast<int>(desktop.height / 2 - _window.getSize().y / 2);
+	windowPos.x = static_cast<int>(desktop.width / 2.0 - _window.getSize().x / 2.0);
+	windowPos.y = static_cast<int>(desktop.height / 2.0 - _window.getSize().y / 2.0);
 	_window.setPosition(windowPos);
 
 	_window.setKeyRepeatEnabled(false);
@@ -62,7 +62,7 @@ void GuiSfml::displayScore(GameData &gData)
 {
 	sf::RectangleShape rectangle(sf::Vector2f(_screen.width, 40));
 	rectangle.setFillColor(sf::Color(86, 101, 115));
-	rectangle.setPosition(0, _screen.height);
+	rectangle.setPosition(0, 0);
 	_window.draw(rectangle);
 
 	sf::Font font;
@@ -75,7 +75,7 @@ void GuiSfml::displayScore(GameData &gData)
 	text.setFillColor(sf::Color::White);
 	std::string scoreStr = "Score : " + std::to_string(gData.score.getScore());
 	text.setString(scoreStr);
-	text.setPosition(_screen.width / 2.0f - text.getLocalBounds().width / 2.0f, _screen.height + 5);
+	text.setPosition(_screen.width / 2.0f - text.getLocalBounds().width / 2.0f, 5);
 	_window.draw(text);
 }
 
@@ -91,7 +91,7 @@ void GuiSfml::render(GameData &gData)
 		{
 			Position pos(x, y);
 
-			square.setPosition(_cellSize * x, _cellSize * y);
+			square.setPosition(_cellSize * x, _cellSize * y + 40);
 
 			sf::Color color;
 			if (gData.area.isWall(pos))

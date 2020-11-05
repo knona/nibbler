@@ -22,6 +22,12 @@ void GuiAllegro::init(GameData &gData)
 	_screen.height = areaSize.height * _cellSize;
 	_disp = al_create_display(_screen.width, _screen.height + 40);
 
+	ALLEGRO_MONITOR_INFO info;
+	al_get_monitor_info(0, &info);
+	int winX = static_cast<int>(info.x2 / 2.0 - _screen.width / 2.0);
+	int winY = static_cast<int>(info.y2 / 2.0 - (_screen.height + 40) / 2.0);
+	al_set_window_position(_disp, winX, winY);
+
 	al_init_primitives_addon();
 	al_init_font_addon();
 	al_init_ttf_addon();
