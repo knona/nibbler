@@ -152,15 +152,15 @@ void GuiSdl::setTexture(GLuint &texture, const char *path, bool flipY, bool rgba
 
 void GuiSdl::setTextures()
 {
-	this->setTexture(_textures[Texture::HEAD], "src/gui/libB/assets/snake/head.png", true, true);
-	this->setTexture(_textures[Texture::BODY], "src/gui/libB/assets/snake/body.png", true, true);
-	this->setTexture(_textures[Texture::TAIL], "src/gui/libB/assets/snake/tail.png", true, true);
-	this->setTexture(_textures[Texture::CORNER_BL], "src/gui/libB/assets/snake/corner-bl.png", true, true);
-	this->setTexture(_textures[Texture::CORNER_BR], "src/gui/libB/assets/snake/corner-br.png", true, true);
-	this->setTexture(_textures[Texture::CORNER_TL], "src/gui/libB/assets/snake/corner-tl.png", true, true);
-	this->setTexture(_textures[Texture::CORNER_TR], "src/gui/libB/assets/snake/corner-tr.png", true, true);
-	this->setTexture(_textures[Texture::FOOD], "src/gui/libB/assets/food.png", true, true);
-	this->setTexture(_textures[Texture::WALL], "src/gui/libB/assets/wall.png", false, false);
+	this->setTexture(_textures[Texture::HEAD], "assets/snake/head.png", true, true);
+	this->setTexture(_textures[Texture::BODY], "assets/snake/body.png", true, true);
+	this->setTexture(_textures[Texture::TAIL], "assets/snake/tail.png", true, true);
+	this->setTexture(_textures[Texture::CORNER_BL], "assets/snake/corner-bl.png", true, true);
+	this->setTexture(_textures[Texture::CORNER_BR], "assets/snake/corner-br.png", true, true);
+	this->setTexture(_textures[Texture::CORNER_TL], "assets/snake/corner-tl.png", true, true);
+	this->setTexture(_textures[Texture::CORNER_TR], "assets/snake/corner-tr.png", true, true);
+	this->setTexture(_textures[Texture::FOOD], "assets/food.png", true, true);
+	this->setTexture(_textures[Texture::WALL], "assets/wall.png", false, false);
 }
 
 void GuiSdl::createPrograms()
@@ -196,7 +196,7 @@ void GuiSdl::init(GameData &gData)
 		throw std::runtime_error("Failed to initliaze SDL");
 	if (TTF_Init() == -1)
 		throw std::runtime_error("Cannot init ttf");
-	_font = TTF_OpenFont("src/gui/libC/assets/Gorva.otf", 26);
+	_font = TTF_OpenFont("assets/font/Gorva.otf", 26);
 	if (!_font)
 		throw std::runtime_error("Cannot open font");
 	TTF_SetFontStyle(_font, TTF_STYLE_BOLD);

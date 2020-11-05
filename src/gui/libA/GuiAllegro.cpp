@@ -31,7 +31,7 @@ void GuiAllegro::init(GameData &gData)
 	al_init_primitives_addon();
 	al_init_font_addon();
 	al_init_ttf_addon();
-	_font = al_load_font("src/gui/libC/assets/Retro Gaming.ttf", 26, 0);
+	_font = al_load_font("assets/font/Retro Gaming.ttf", 26, 0);
 
 	_queue = al_create_event_queue();
 	al_register_event_source(_queue, al_get_keyboard_event_source());

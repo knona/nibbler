@@ -66,7 +66,7 @@ void GuiSfml::displayScore(GameData &gData)
 	_window.draw(rectangle);
 
 	sf::Font font;
-	if (!font.loadFromFile("src/gui/libC/assets/ModernSans-Light.otf"))
+	if (!font.loadFromFile("assets/font/ModernSans-Light.otf"))
 		throw std::runtime_error("Cannot open the font");
 
 	sf::Text text;
