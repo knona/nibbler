@@ -32,4 +32,10 @@ class GuiAllegro: public GUI
 	void  render(GameData &gData);
 };
 
+extern "C"
+{
+	GUI *createGuiAllegro();
+	void deleteGuiAllegro(GuiAllegro *gui);
+}
+
 #endif // !GUI_ALLEGRO_HPP

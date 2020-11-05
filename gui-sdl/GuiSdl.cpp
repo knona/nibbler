@@ -166,13 +166,13 @@ void GuiSdl::setTextures()
 void GuiSdl::createPrograms()
 {
 	_program.setId();
-	_program.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/shader.vert" });
-	_program.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/shader.frag" });
+	_program.addShader({ GL_VERTEX_SHADER, "gui-sdl/shaders/shader.vert" });
+	_program.addShader({ GL_FRAGMENT_SHADER, "gui-sdl/shaders/shader.frag" });
 	_program.link();
 
 	_headerProgram.setId();
-	_headerProgram.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/shader.vert" });
-	_headerProgram.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/green.frag" });
+	_headerProgram.addShader({ GL_VERTEX_SHADER, "gui-sdl/shaders/shader.vert" });
+	_headerProgram.addShader({ GL_FRAGMENT_SHADER, "gui-sdl/shaders/green.frag" });
 	_headerProgram.link();
 
 	glm::mat4 view = glm::mat4(1.0f);
