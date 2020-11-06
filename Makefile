@@ -38,7 +38,7 @@ GUI_SDL = gui-sdl/libgui-sdl.so
 
 # COMPILATEUR
 CC		= clang++
-CFLAGS	= -Wall -Wextra -g3 --std=c++17
+CFLAGS	= -Wall -Wextra -Werror -g3 --std=c++17
 
 # TEXT
 RED = \033[31m
