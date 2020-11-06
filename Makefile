@@ -43,7 +43,7 @@ CFLAGS	= -Wall -Wextra -g3 --std=c++17
 # REGLES
 all: $(NAME)
 
-.PHONY: clean fclean re clean-boost clean-glad clean-stb_image clean-libs ffclean libraries guis
+.PHONY: clean fclean re clean-boost clean-glad clean-stb_image clean-libs ffclean libraries guis $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL)
 
 $(OBJS_DIRS):
 	@mkdir -p $@

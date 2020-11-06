@@ -38,6 +38,9 @@ Input GuiSfml::getInput()
 {
 	const std::unordered_map<sf::Keyboard::Key, Input> map = {
 		{ sf::Keyboard::Escape, Input::EXIT },                                    // EXIT
+		{ sf::Keyboard::Num1, Input::LIB1 },                                      // LIB1
+		{ sf::Keyboard::Num2, Input::LIB2 },                                      // LIB2
+		{ sf::Keyboard::Num3, Input::LIB3 },                                      // LIB3
 		{ sf::Keyboard::Up, Input::UP },       { sf::Keyboard::W, Input::UP },    // UP
 		{ sf::Keyboard::Right, Input::RIGHT }, { sf::Keyboard::D, Input::RIGHT }, // RIGHT
 		{ sf::Keyboard::Down, Input::DOWN },   { sf::Keyboard::S, Input::DOWN },  // DOWN
