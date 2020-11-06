@@ -255,6 +255,7 @@ Input GuiSdl::getInput()
 
 	const std::unordered_map<int, Input> map = {
 		{ SDL_SCANCODE_ESCAPE, Input::EXIT },                                   // EXIT
+		{ SDL_SCANCODE_P, Input::PAUSE },                                       // PAUSE
 		{ SDL_SCANCODE_1, Input::LIB1 },                                        // LIB1
 		{ SDL_SCANCODE_2, Input::LIB2 },                                        // LIB2
 		{ SDL_SCANCODE_3, Input::LIB3 },                                        // LIB3

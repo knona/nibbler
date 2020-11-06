@@ -74,16 +74,21 @@ void Game::loop()
 	while ((input = gui->getInput()) != Input::EXIT)
 	{
 		auto time1 = std::chrono::high_resolution_clock::now();
+		if (input == Input::PAUSE)
+			this->_gData.pause = !this->_gData.pause;
 		if (this->isLibInput(input) && guiManager.openLib(this->getLibPath(input)))
 		{
 			gui->init(this->_gData);
 			gui->render(this->_gData);
 		}
-		else if (Game::_inputMap.count(input))
-			Game::_inputMap[input](this->_gData);
-		else
-			this->_gData.snake.moveForward(this->_gData);
-		this->_gData.cron.checkEvents();
+		else if (!this->_gData.pause)
+		{
+			if (Game::_inputMap.count(input))
+				Game::_inputMap[input](this->_gData);
+			else
+				this->_gData.snake.moveForward(this->_gData);
+			this->_gData.cron.checkEvents();
+		}
 		gui->render(this->_gData);
 		auto time2 = std::chrono::high_resolution_clock::now();
 		this->sleep(time1, time2);
@@ -94,6 +99,7 @@ void Game::start()
 {
 	this->_gData.score = { this->_options };
 	this->_gData.area = { this->_options.areaSize };
+	this->_gData.pause = false;
 	if (this->_options.highScore)
 	{
 		this->_gData.score.displayHighScore();

@@ -31,7 +31,7 @@ void GuiAllegro::init(GameData &gData)
 	al_init_primitives_addon();
 	al_init_font_addon();
 	al_init_ttf_addon();
-	_font = al_load_font("assets/font/Retro Gaming.ttf", 26, 0);
+	_font = al_load_font("assets/font/Retro Gaming.ttf", 24, 0);
 
 	_queue = al_create_event_queue();
 	al_register_event_source(_queue, al_get_keyboard_event_source());
@@ -52,6 +52,7 @@ Input GuiAllegro::getInput()
 {
 	const std::unordered_map<int, Input> map = {
 		{ ALLEGRO_KEY_ESCAPE, Input::EXIT },                                  // EXIT
+		{ ALLEGRO_KEY_P, Input::PAUSE },                                      // PAUSE
 		{ ALLEGRO_KEY_1, Input::LIB1 },                                       // LIB1
 		{ ALLEGRO_KEY_2, Input::LIB2 },                                       // LIB2
 		{ ALLEGRO_KEY_3, Input::LIB3 },                                       // LIB3
@@ -86,6 +87,8 @@ void GuiAllegro::render(GameData &gData)
 	al_draw_filled_rectangle(0, 0, _screen.width, 40, al_map_rgb(161, 55, 49));
 	int textWidth = al_get_text_width(_font, scoreStr.c_str());
 	al_draw_text(_font, al_map_rgb(255, 255, 255), _screen.width / 2.0f - textWidth / 2.0f, 5, 0, scoreStr.c_str());
+	if (gData.pause)
+		al_draw_text(_font, al_map_rgb(255, 255, 255), 15, 5, 0, "||");
 
 	for (int y = 0; y < gData.area.height(); y++)
 	{

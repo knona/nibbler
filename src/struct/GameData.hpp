@@ -16,6 +16,7 @@ struct GameData
 	Walls walls;
 	Snake snake;
 	Cron  cron;
+	bool  pause;
 };
 
 #endif // !GAME_DATA_HPP

@@ -38,6 +38,7 @@ Input GuiSfml::getInput()
 {
 	const std::unordered_map<sf::Keyboard::Key, Input> map = {
 		{ sf::Keyboard::Escape, Input::EXIT },                                    // EXIT
+		{ sf::Keyboard::P, Input::PAUSE },                                        // PAUSE
 		{ sf::Keyboard::Num1, Input::LIB1 },                                      // LIB1
 		{ sf::Keyboard::Num2, Input::LIB2 },                                      // LIB2
 		{ sf::Keyboard::Num3, Input::LIB3 },                                      // LIB3
@@ -72,14 +73,26 @@ void GuiSfml::displayScore(GameData &gData)
 	if (!font.loadFromFile("assets/font/ModernSans-Light.otf"))
 		throw std::runtime_error("Cannot open the font");
 
-	sf::Text text;
-	text.setFont(font);
-	text.setCharacterSize(26);
-	text.setFillColor(sf::Color::White);
+	sf::Text scoreText;
+	scoreText.setFont(font);
+	scoreText.setCharacterSize(26);
+	scoreText.setFillColor(sf::Color::White);
 	std::string scoreStr = "Score : " + std::to_string(gData.score.getScore());
-	text.setString(scoreStr);
-	text.setPosition(_screen.width / 2.0f - text.getLocalBounds().width / 2.0f, 5);
-	_window.draw(text);
+	scoreText.setString(scoreStr);
+	scoreText.setPosition(_screen.width / 2.0f - scoreText.getLocalBounds().width / 2.0f, 5);
+	_window.draw(scoreText);
+
+	if (gData.pause)
+	{
+		sf::Text pauseText;
+		pauseText.setFont(font);
+		pauseText.setCharacterSize(29);
+		pauseText.setFillColor(sf::Color::White);
+		pauseText.setString("||");
+		pauseText.setStyle(sf::Text::Bold);
+		pauseText.setPosition(10, 0);
+		_window.draw(pauseText);
+	}
 }
 
 void GuiSfml::render(GameData &gData)
