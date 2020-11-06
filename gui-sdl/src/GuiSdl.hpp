@@ -66,4 +66,10 @@ class GuiSdl: public GUI
 	void  render(GameData &gData);
 };
 
+extern "C"
+{
+	GUI *createGui();
+	void deleteGui(GUI *gui);
+}
+
 #endif // !GUI_SDL_HPP

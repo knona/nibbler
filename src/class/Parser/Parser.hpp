@@ -18,6 +18,7 @@ class Parser
 	static Size<int>   getAreaSize(const po::variables_map &vm);
 	static std::string getGui(const po::variables_map &vm);
 	static int         getSpeed(const po::variables_map &vm);
+	static void        checkHelp(const po::variables_map &vm, const po::options_description &desc);
 
 	public:
 	static Options parseCommandLine(int argc, const char **argv);

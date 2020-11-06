@@ -166,13 +166,13 @@ void GuiSdl::setTextures()
 void GuiSdl::createPrograms()
 {
 	_program.setId();
-	_program.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/shader.vert" });
-	_program.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/shader.frag" });
+	_program.addShader({ GL_VERTEX_SHADER, "gui-sdl/shaders/shader.vert" });
+	_program.addShader({ GL_FRAGMENT_SHADER, "gui-sdl/shaders/shader.frag" });
 	_program.link();
 
 	_headerProgram.setId();
-	_headerProgram.addShader({ GL_VERTEX_SHADER, "src/gui/libB/shaders/shader.vert" });
-	_headerProgram.addShader({ GL_FRAGMENT_SHADER, "src/gui/libB/shaders/green.frag" });
+	_headerProgram.addShader({ GL_VERTEX_SHADER, "gui-sdl/shaders/shader.vert" });
+	_headerProgram.addShader({ GL_FRAGMENT_SHADER, "gui-sdl/shaders/green.frag" });
 	_headerProgram.link();
 
 	glm::mat4 view = glm::mat4(1.0f);
@@ -255,6 +255,9 @@ Input GuiSdl::getInput()
 
 	const std::unordered_map<int, Input> map = {
 		{ SDL_SCANCODE_ESCAPE, Input::EXIT },                                   // EXIT
+		{ SDL_SCANCODE_1, Input::LIB1 },                                        // LIB1
+		{ SDL_SCANCODE_2, Input::LIB2 },                                        // LIB2
+		{ SDL_SCANCODE_3, Input::LIB3 },                                        // LIB3
 		{ SDL_SCANCODE_UP, Input::UP },       { SDL_SCANCODE_W, Input::UP },    // UP
 		{ SDL_SCANCODE_RIGHT, Input::RIGHT }, { SDL_SCANCODE_D, Input::RIGHT }, // RIGHT
 		{ SDL_SCANCODE_DOWN, Input::DOWN },   { SDL_SCANCODE_S, Input::DOWN },  // DOWN
@@ -444,4 +447,14 @@ void GuiSdl::render(GameData &gData)
 	this->drawText(gData.score.getScore());
 
 	SDL_GL_SwapWindow(_window);
+}
+
+GUI *createGui()
+{
+	return new GuiSdl;
+}
+
+void deleteGui(GUI *gui)
+{
+	delete gui;
 }

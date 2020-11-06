@@ -43,6 +43,7 @@ void GuiAllegro::close()
 	al_destroy_font(_font);
 	al_destroy_display(_disp);
 	al_destroy_event_queue(_queue);
+	al_shutdown_ttf_addon();
 	al_shutdown_font_addon();
 	al_shutdown_primitives_addon();
 }
@@ -50,6 +51,11 @@ void GuiAllegro::close()
 Input GuiAllegro::getInput()
 {
 	const std::unordered_map<int, Input> map = {
+		{ ALLEGRO_KEY_ESCAPE, Input::EXIT },                                  // EXIT
+		{ ALLEGRO_KEY_1, Input::LIB1 },                                       // LIB1
+		{ ALLEGRO_KEY_2, Input::LIB2 },                                       // LIB2
+		{ ALLEGRO_KEY_3, Input::LIB3 },                                       // LIB3
+		{ ALLEGRO_KEY_ESCAPE, Input::EXIT },                                  // EXIT
 		{ ALLEGRO_KEY_ESCAPE, Input::EXIT },                                  // EXIT
 		{ ALLEGRO_KEY_UP, Input::UP },       { ALLEGRO_KEY_W, Input::UP },    // UP
 		{ ALLEGRO_KEY_RIGHT, Input::RIGHT }, { ALLEGRO_KEY_D, Input::RIGHT }, // RIGHT
@@ -101,4 +107,14 @@ void GuiAllegro::render(GameData &gData)
 		}
 	}
 	al_flip_display();
+}
+
+GUI *createGui()
+{
+	return new GuiAllegro;
+}
+
+void deleteGui(GUI *gui)
+{
+	delete gui;
 }

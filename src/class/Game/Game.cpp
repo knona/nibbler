@@ -6,6 +6,31 @@ Game::Game(const Options &options): _options(std::move(options))
 Game::~Game()
 {}
 
+std::string Game::getLibPath(const Input &input) const
+{
+	std::unordered_map<Input, std::string> map = //
+		{ { Input::LIB1, "./gui-sdl/libgui-sdl.so" },
+		  { Input::LIB2, "./gui-allegro/libgui-allegro.so" },
+		  { Input::LIB3, "./gui-sfml/libgui-sfml.so" } };
+
+	return map[input];
+}
+
+std::string Game::getLibPath(const std::string &libName) const
+{
+	std::unordered_map<std::string, std::string> map = //
+		{ { "Sdl", "./gui-sdl/libgui-sdl.so" },
+		  { "Allegro", "./gui-allegro/libgui-allegro.so" },
+		  { "Sfml", "./gui-sfml/libgui-sfml.so" } };
+
+	return map[libName];
+}
+
+bool Game::isLibInput(const Input &input) const
+{
+	return input == Input::LIB1 || input == Input::LIB2 || input == Input::LIB3;
+}
+
 void Game::addWalls(GameData &gData)
 {
 	int surfaceArea = gData.area.width() * gData.area.height();
@@ -19,48 +44,54 @@ void Game::addWalls(GameData &gData)
 	}
 }
 
+void Game::sleep(timePoint time1, timePoint time2) const
+{
+	int      time[3] = { 100, 200, 300 };
+	millisec cycleTime = millisec(time[this->_options.speed]);
+
+	microsec timeElapsed = std::chrono::duration_cast<microsec>(time2 - time1);
+	microsec timeToSleep = microsec(cycleTime) - timeElapsed;
+	if (timeToSleep.count() < 0)
+		timeToSleep = microsec(0);
+	std::this_thread::sleep_for(timeToSleep);
+}
+
 InputMap Game::_inputMap = //
 	{ { Input::UP, [](GameData &gData) { gData.snake.moveTop(gData); } },
 	  { Input::RIGHT, [](GameData &gData) { gData.snake.moveRight(gData); } },
 	  { Input::DOWN, [](GameData &gData) { gData.snake.moveBottom(gData); } },
 	  { Input::LEFT, [](GameData &gData) { gData.snake.moveLeft(gData); } } };
 
-void Game::loop(GUI &gui)
+void Game::loop()
 {
-	Input                     input;
-	std::string               pause;
-	int                       time[3] = { 100, 200, 300 };
-	std::chrono::milliseconds cycleTime = std::chrono::milliseconds(time[this->_options.speed]);
+	Input      input;
+	GuiManager guiManager(this->getLibPath(this->_options.gui));
+	GUI *&     gui = guiManager.getGui();
 
-	gui.init(this->_gData);
-	gui.render(this->_gData);
-	std::this_thread::sleep_for(cycleTime * 4);
-	while ((input = gui.getInput()) != Input::EXIT)
+	gui->init(this->_gData);
+	gui->render(this->_gData);
+	std::this_thread::sleep_for(millisec(1000));
+	while ((input = gui->getInput()) != Input::EXIT)
 	{
 		auto time1 = std::chrono::high_resolution_clock::now();
-		if (Game::_inputMap.count(input))
+		if (this->isLibInput(input) && guiManager.openLib(this->getLibPath(input)))
+		{
+			gui->init(this->_gData);
+			gui->render(this->_gData);
+		}
+		else if (Game::_inputMap.count(input))
 			Game::_inputMap[input](this->_gData);
 		else
 			this->_gData.snake.moveForward(this->_gData);
 		this->_gData.cron.checkEvents();
-		gui.render(this->_gData);
+		gui->render(this->_gData);
 		auto time2 = std::chrono::high_resolution_clock::now();
-
-		std::chrono::microseconds timeElapsed = std::chrono::duration_cast<std::chrono::microseconds>(time2 - time1);
-		std::chrono::microseconds timeToSleep = std::chrono::microseconds(cycleTime) - timeElapsed;
-		if (timeToSleep.count() < 0)
-			timeToSleep = std::chrono::microseconds(0);
-		std::this_thread::sleep_for(timeToSleep);
+		this->sleep(time1, time2);
 	}
 }
 
 void Game::start()
 {
-	std::unordered_map<std::string, std::unique_ptr<GUI> (*)()> fMap = //
-		{ { "Sdl", GUI::createGui<GuiSdl> },
-		  { "Allegro", GUI::createGui<GuiAllegro> },
-		  { "Sfml", GUI::createGui<GuiSfml> } };
-
 	this->_gData.score = { this->_options };
 	this->_gData.area = { this->_options.areaSize };
 	if (this->_options.highScore)
@@ -75,21 +106,18 @@ void Game::start()
 	if (!this->_options.noWall)
 		addWalls(this->_gData);
 
-	std::unique_ptr<GUI> gui = fMap[this->_options.gui]();
 	try
 	{
-		this->loop(*gui);
+		this->loop();
 	}
 	catch (const Exception::GameOver &e)
 	{
 		std::cout << e.what() << std::endl;
-		gui.release();
 		this->_gData.score.displayScore();
 	}
 	catch (const Exception::Win &e)
 	{
 		std::cout << e.what() << std::endl;
-		gui.release();
 		this->_gData.score.displayScore();
 	}
 }
