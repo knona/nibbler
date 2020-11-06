@@ -12,6 +12,9 @@ int Parser::parsingErrorHandler(const Exception::ParsingOptions &e)
 
 Size<int> Parser::getAreaSize(const po::variables_map &vm)
 {
+	if (vm.count("height") == 0 || vm.count("width") == 0)
+		throw Exception::ParsingOptions("Area's witdh and height must be set", EXIT_FAILURE);
+
 	int width = vm["width"].as<int>();
 	int height = vm["height"].as<int>();
 
@@ -42,16 +45,26 @@ int Parser::getSpeed(const po::variables_map &vm)
 	return map[speed];
 }
 
+void Parser::checkHelp(const po::variables_map &vm, const po::options_description &desc)
+{
+	if (vm.count("help"))
+	{
+		std::stringstream buffer;
+		buffer << desc;
+		throw Exception::ParsingOptions(buffer.str(), EXIT_SUCCESS);
+	}
+}
+
 Options Parser::parseCommandLine(int argc, const char **argv)
 {
 	po::options_description desc("Allowed options");
 	desc.add_options()                                                                                          //
 		("help,h", "produce help message")                                                                      //
-		("width,W", po::value<int>()->required(), "set the area's width (required)")                            //
-		("height,H", po::value<int>()->required(), "set the area's height (required)")                          //
+		("width,W", po::value<int>(), "set the area's width (required)")                                        //
+		("height,H", po::value<int>(), "set the area's height (required)")                                      //
 		("gui", po::value<std::string>()->default_value("Sdl"), "use the gui \"Sdl\", \"Sfml\" or \"Allegro\"") //
 		("no-wall", "do not set wall")                                                                          //
-		("high-score", "check highscore for a specific area size")                                              //
+		("high-score", "check highscore for a specific area size, a speed and a no-wall option")                //
 		("speed", po::value<std::string>()->default_value("normal"),
 	     "set snake's speed: \"slow\", \"normal\" or \"fast\"");
 
@@ -68,12 +81,7 @@ Options Parser::parseCommandLine(int argc, const char **argv)
 
 	po::notify(vm);
 
-	if (vm.count("help"))
-	{
-		std::stringstream buffer;
-		buffer << desc;
-		throw Exception::ParsingOptions(buffer.str(), EXIT_SUCCESS);
-	}
+	Parser::checkHelp(vm, desc);
 
 	return { Parser::getAreaSize(vm), Parser::getGui(vm), static_cast<bool>(vm.count("no-wall")),
 		     static_cast<bool>(vm.count("high-score")), Parser::getSpeed(vm) };

@@ -46,8 +46,7 @@ $(OBJS_MAIN_DIR):
 
 $(NAME): $(OBJS_MAIN_DIR) $(OBJS)
 	@$(CC) -shared -fPIC -o $(NAME) $(OBJS)
-	@printf "\n$(NAME) has been created"
-	@printf " $(GREEN)[OK]$(WHITE)\n"
+	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(WHITE)\n"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
 	@printf "\033[2K\r$(BLUE)>>Compiling \033[37m$<$(BLUE)\033[0m"
