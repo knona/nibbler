@@ -86,11 +86,11 @@ void GuiSfml::displayScore(GameData &gData)
 	{
 		sf::Text pauseText;
 		pauseText.setFont(font);
-		pauseText.setCharacterSize(29);
+		pauseText.setCharacterSize(28);
 		pauseText.setFillColor(sf::Color::White);
 		pauseText.setString("||");
 		pauseText.setStyle(sf::Text::Bold);
-		pauseText.setPosition(10, 0);
+		pauseText.setPosition(15, 0);
 		_window.draw(pauseText);
 	}
 }
