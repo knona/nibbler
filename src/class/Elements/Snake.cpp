@@ -19,6 +19,7 @@ Snake &Snake::operator=(const Snake &snake)
 	this->_grow = snake._grow;
 	this->_direction = snake._direction;
 	this->_grow = snake._grow;
+	this->_positions = snake._positions;
 	return *this;
 }
 
