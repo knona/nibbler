@@ -23,6 +23,7 @@ HEADERS_DIRS	= $(call uniq, src/ $(dir $(HEADERS)))
 INCLUDES = $(addprefix -I, $(HEADERS_DIRS))
 
 # LIBRARIES
+SFML_DIR=libs/sfml
 
 # COMPILATEUR
 CC		= clang++
@@ -36,21 +37,25 @@ PINK = \033[35m
 GREEN = \033[32m
 BLUE = \033[36m
 
+.PHONY: clean clean-sfml clean-libs fclean re ffclean
+
 # REGLES
 all: $(NAME)
 
 $(OBJS_MAIN_DIR):
 	@mkdir -p $@
 
-$(NAME): $(OBJS_MAIN_DIR) $(OBJS)
-	@$(CC) -shared -o $(NAME) $(OBJS)
+$(NAME): $(SFML_DIR) $(OBJS_MAIN_DIR) $(OBJS)
+	@$(CC) -shared -o $(NAME) $(OBJS) -L$(SFML_DIR)/lib -lsfml-graphics-s -L$(SFML_DIR)/lib -lsfml-system-s -L$(SFML_DIR)/lib -lsfml-window-s
 	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(WHITE)\n"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
 	@printf "\033[2K\r$(BLUE)>>Compiling \033[37m$<$(BLUE)\033[0m"
-	@$(CC) $(CFLAGS) $(INCLUDES) -fPIC -o $@ -c $<
+	@$(CC) $(CFLAGS) $(INCLUDES) -I$(SFML_DIR)/include -fPIC -o $@ -c $<
 
-.PHONY: clean fclean re ffclean
+$(SFML_DIR):
+	@echo "$(BLUE)Installing sfml...$(DEFAULT)"
+	@./scripts/install-sfml.bash
 
 clean:
 	@echo "\033[31mCleaning .o\033[0m"
@@ -60,4 +65,14 @@ fclean:	clean
 	@echo "\033[31mCleaning $(NAME)\033[0m"
 	@rm -f $(NAME)
 
+clean-sfml:
+	@echo "$(RED)Removing sfml...$(DEFAULT)"
+	@rm -rf $(SFML_DIR)
+
+clean-libs:
+	@echo "$(RED)Removing all libs...$(DEFAULT)"
+	@rm -rf libs
+
 re: fclean all
+
+ffclean: clean-libs fclean
