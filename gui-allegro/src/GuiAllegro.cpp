@@ -1,6 +1,6 @@
 #include "GuiAllegro.hpp"
 
-GuiAllegro::GuiAllegro(): _screen(1280, 720)
+GuiAllegro::GuiAllegro(): _disp(nullptr), _font(nullptr), _queue(nullptr), _screen(1280, 720)
 {}
 
 GuiAllegro::~GuiAllegro()
@@ -21,6 +21,7 @@ void GuiAllegro::init(GameData &gData)
 	_screen.width = areaSize.width * _cellSize;
 	_screen.height = areaSize.height * _cellSize;
 	_disp = al_create_display(_screen.width, _screen.height + 40);
+	al_set_window_title(_disp, "NIBBLER");
 
 	ALLEGRO_MONITOR_INFO info;
 	al_get_monitor_info(0, &info);
@@ -40,12 +41,27 @@ void GuiAllegro::init(GameData &gData)
 
 void GuiAllegro::close()
 {
-	al_destroy_font(_font);
-	al_destroy_display(_disp);
-	al_destroy_event_queue(_queue);
-	al_shutdown_ttf_addon();
-	al_shutdown_font_addon();
-	al_shutdown_primitives_addon();
+	if (_font)
+	{
+		al_destroy_font(_font);
+		_font = nullptr;
+	}
+	if (_disp)
+	{
+		al_destroy_display(_disp);
+		_disp = nullptr;
+	}
+	if (_queue)
+	{
+		al_destroy_event_queue(_queue);
+		_queue = nullptr;
+	}
+	if (al_is_ttf_addon_initialized())
+		al_shutdown_ttf_addon();
+	if (al_is_font_addon_initialized())
+		al_shutdown_font_addon();
+	if (al_is_primitives_addon_initialized())
+		al_shutdown_primitives_addon();
 }
 
 Input GuiAllegro::getInput()

@@ -28,6 +28,7 @@ void GuiManager::closeLib()
 	}
 	this->_createGui = nullptr;
 	this->_deleteGui = nullptr;
+	this->_currentLib = "";
 }
 
 bool GuiManager::openLib(const std::string &lib)

@@ -17,14 +17,13 @@ class GuiManager
 	GuiManager(const GuiManager &) = delete;
 	GuiManager &operator=(const GuiManager &) = delete;
 
-	void closeLib();
-
 	public:
 	GuiManager();
 	GuiManager(const std::string &lib);
 	~GuiManager();
 
 	bool  openLib(const std::string &lib);
+	void  closeLib();
 	GUI *&getGui();
 };
 

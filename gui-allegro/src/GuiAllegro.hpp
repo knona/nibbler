@@ -14,10 +14,10 @@ class GuiAllegro: public GUI
 {
 	private:
 	ALLEGRO_DISPLAY *    _disp;
-	Size<float>          _screen;
-	float                _cellSize;
 	ALLEGRO_FONT *       _font;
 	ALLEGRO_EVENT_QUEUE *_queue;
+	Size<float>          _screen;
+	float                _cellSize;
 
 	GuiAllegro(const GuiAllegro &) = delete;
 	GuiAllegro &operator=(const GuiAllegro &) = delete;

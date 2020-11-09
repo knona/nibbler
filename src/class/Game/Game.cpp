@@ -76,7 +76,7 @@ void Game::loop()
 		auto time1 = std::chrono::high_resolution_clock::now();
 		if (input == Input::PAUSE)
 			this->_gData.pause = !this->_gData.pause;
-		if (this->isLibInput(input) && guiManager.openLib(this->getLibPath(input)))
+		else if (this->isLibInput(input) && guiManager.openLib(this->getLibPath(input)))
 		{
 			gui->init(this->_gData);
 			gui->render(this->_gData);
