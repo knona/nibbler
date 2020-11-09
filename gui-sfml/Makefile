@@ -49,9 +49,9 @@ $(NAME): $(SFML_DIR) $(OBJS_MAIN_DIR) $(OBJS)
 	@$(CC) -shared \
 		-o $(NAME) $(OBJS) \
 		-Wl,--whole-archive -shared	\
-			$(SFML_DIR)/lib/libsfml-graphics-s.a \
-			$(SFML_DIR)/lib/libsfml-system-s.a \
-			$(SFML_DIR)/lib/libsfml-window-s.a \
+			-L$(SFML_DIR)/lib/ -lsfml-graphics-s \
+			-L$(SFML_DIR)/lib/ -lsfml-system-s \
+			-L$(SFML_DIR)/lib/ -lsfml-window-s \
 		-Wl,--no-whole-archive \
 		-ludev
 	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(WHITE)\n"
