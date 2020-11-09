@@ -62,7 +62,7 @@ Input GuiSfml::getInput()
 	return Input::NONE;
 }
 
-void GuiSfml::displayScore(GameData &gData)
+void GuiSfml::renderText(GameData &gData)
 {
 	sf::RectangleShape rectangle(sf::Vector2f(_screen.width, 40));
 	rectangle.setFillColor(sf::Color(86, 101, 115));
@@ -90,7 +90,7 @@ void GuiSfml::displayScore(GameData &gData)
 		pauseText.setFillColor(sf::Color::White);
 		pauseText.setString("||");
 		pauseText.setStyle(sf::Text::Bold);
-		pauseText.setPosition(15, 0);
+		pauseText.setPosition(_screen.width - pauseText.getLocalBounds().width - 15, 0);
 		_window.draw(pauseText);
 	}
 }
@@ -124,7 +124,7 @@ void GuiSfml::render(GameData &gData)
 		}
 	}
 
-	this->displayScore(gData);
+	this->renderText(gData);
 
 	_window.display();
 }

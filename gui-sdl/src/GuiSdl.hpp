@@ -12,11 +12,12 @@
 #include <SDL2/SDL_ttf.h>
 #include <clocale>
 #include <exception>
+#include <functional>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <memory>
-#include <optional>
+
+namespace ph = std::placeholders;
 
 class GuiSdl: public GUI
 {
@@ -48,7 +49,9 @@ class GuiSdl: public GUI
 	                     float &outRotation) const;
 
 	void drawCell(const Position &pos, Texture texture, std::optional<float> rotation = {}) const;
-	void drawText(int score);
+	void drawText(const std::string &text, SDL_Color textColor, std::function<void(float, float)> setPosition);
+	void setPositionScore(float textW, float);
+	void setPositionPause(float textW, float textH);
 
 	bool isTextureBody(const Position &prevPos, const Position &pos, const Position &nextPos) const;
 	bool isTextureCornerBL(const Position &prevPos, const Position &pos, const Position &nextPos) const;

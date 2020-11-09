@@ -95,16 +95,27 @@ Input GuiAllegro::getInput()
 	return Input::NONE;
 }
 
+void GuiAllegro::renderText(int score, bool pause)
+{
+	al_draw_filled_rectangle(0, 0, _screen.width, 40, al_map_rgb(161, 55, 49));
+	{
+		const std::string text = "Score : " + std::to_string(score);
+		int               textWidth = al_get_text_width(_font, text.c_str());
+		al_draw_text(_font, al_map_rgb(255, 255, 255), _screen.width / 2.0f - textWidth / 2.0f, 5, 0, text.c_str());
+	}
+	if (pause)
+	{
+		const char *text = "||";
+		int         textWidth = al_get_text_width(_font, text);
+		al_draw_text(_font, al_map_rgb(255, 255, 255), _screen.width - textWidth - 15, 5, 0, text);
+	}
+}
+
 void GuiAllegro::render(GameData &gData)
 {
 	al_clear_to_color(al_map_rgb(241, 240, 238));
 
-	const std::string scoreStr = "Score : " + std::to_string(gData.score.getScore());
-	al_draw_filled_rectangle(0, 0, _screen.width, 40, al_map_rgb(161, 55, 49));
-	int textWidth = al_get_text_width(_font, scoreStr.c_str());
-	al_draw_text(_font, al_map_rgb(255, 255, 255), _screen.width / 2.0f - textWidth / 2.0f, 5, 0, scoreStr.c_str());
-	if (gData.pause)
-		al_draw_text(_font, al_map_rgb(255, 255, 255), 15, 5, 0, "||");
+	renderText(gData.score.getScore(), gData.pause);
 
 	for (int y = 0; y < gData.area.height(); y++)
 	{

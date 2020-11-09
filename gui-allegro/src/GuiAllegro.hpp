@@ -22,6 +22,8 @@ class GuiAllegro: public GUI
 	GuiAllegro(const GuiAllegro &) = delete;
 	GuiAllegro &operator=(const GuiAllegro &) = delete;
 
+	void renderText(int score, bool pause);
+
 	public:
 	GuiAllegro();
 	~GuiAllegro();

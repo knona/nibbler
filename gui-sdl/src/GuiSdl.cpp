@@ -376,11 +376,23 @@ void GuiSdl::getSnakeTexture(const Snake &snake, std::list<Position>::const_iter
 	}
 }
 
-void GuiSdl::drawText(int score)
+void GuiSdl::setPositionScore(float textW, float)
 {
-	std::string  scoreStr = "Score : " + std::to_string(score);
-	SDL_Color    textColor = { 0xFF, 0xFF, 0xFF, 0xFF };
-	SDL_Surface *message = TTF_RenderText_Blended(_font, scoreStr.c_str(), textColor);
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(_screen.width / 2.0f - textW / 2.0f, _screen.height - 35, 0.0f));
+	_program.uniformSet("model", model);
+}
+
+void GuiSdl::setPositionPause(float textW, float textH)
+{
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(_screen.width - textW - 15, _screen.height - textH, 0));
+	_program.uniformSet("model", model);
+}
+
+void GuiSdl::drawText(const std::string &text, SDL_Color textColor, std::function<void(float, float)> setPosition)
+{
+	SDL_Surface *message = TTF_RenderText_Blended(_font, text.c_str(), textColor);
 	GLuint       texture = 0;
 
 	glGenTextures(1, &texture);
@@ -398,10 +410,7 @@ void GuiSdl::drawText(int score)
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	_program.use();
-
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(_screen.width / 2.0f - textW / 2.0f, _screen.height - 35, 0.0f));
-	_program.uniformSet("model", model);
+	setPosition(textW, textH);
 
 	this->createTextVAO(textW, textH);
 
@@ -445,7 +454,14 @@ void GuiSdl::render(GameData &gData)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
-	this->drawText(gData.score.getScore());
+	SDL_Color   white = { 0xFF, 0xFF, 0xFF, 0xFF };
+	std::string scoreText = "Score : " + std::to_string(gData.score.getScore());
+	this->drawText(scoreText, white, std::bind(&GuiSdl::setPositionScore, this, ph::_1, ph::_2));
+	if (gData.pause)
+	{
+		std::string pauseText = "||";
+		this->drawText(pauseText, white, std::bind(&GuiSdl::setPositionPause, this, ph::_1, ph::_2));
+	}
 
 	SDL_GL_SwapWindow(_window);
 }

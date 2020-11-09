@@ -20,7 +20,7 @@ class GuiSfml: public GUI
 	GuiSfml(const GuiSfml &) = delete;
 	GuiSfml &operator=(const GuiSfml &) = delete;
 
-	void displayScore(GameData &gData);
+	void renderText(GameData &gData);
 
 	public:
 	GuiSfml();
