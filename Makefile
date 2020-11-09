@@ -59,7 +59,7 @@ $(OBJS_DIRS):
 
 $(NAME): $(BOOST_DIR) $(GLAD_DIR) $(STB_IMAGE_DIR) $(GLAD_DIR)/src/glad.o $(STB_IMAGE_DIR)/src/stb_image.o $(OBJS_DIRS) $(OBJS)
 	@printf "\033[2K\r$(BLUE)>>Linking...$(DEFAULT)"
-	@$(CC) -o $@ $(OBJS) $(GLAD_DIR)/src/glad.o $(STB_IMAGE_DIR)/src/stb_image.o -L$(BOOST_DIR)/bin -lboost_program_options -lallegro_font -lallegro_ttf -lallegro_primitives -lallegro -lSDL2 -lSDL2_ttf -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lsfml-graphics -lsfml-window -lsfml-system -rdynamic
+	@$(CC) -o $@ $(OBJS) $(GLAD_DIR)/src/glad.o $(STB_IMAGE_DIR)/src/stb_image.o -L$(BOOST_DIR)/bin -lboost_program_options -lallegro_font -lallegro_ttf -lallegro_primitives -lallegro gui-sfml/libgui-sfml.so -lSDL2 -lSDL2_ttf -lGL -lX11 -lpthread -lXrandr -lXi -ldl
 	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(DEFAULT)\n"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)

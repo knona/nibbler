@@ -46,7 +46,14 @@ $(OBJS_MAIN_DIR):
 	@mkdir -p $@
 
 $(NAME): $(SFML_DIR) $(OBJS_MAIN_DIR) $(OBJS)
-	@$(CC) -shared -o $(NAME) $(OBJS) -L$(SFML_DIR)/lib -lsfml-graphics-s -L$(SFML_DIR)/lib -lsfml-system-s -L$(SFML_DIR)/lib -lsfml-window-s
+	@$(CC) -shared \
+		-o $(NAME) $(OBJS) \
+		-Wl,--whole-archive -shared	\
+			$(SFML_DIR)/lib/libsfml-graphics-s.a \
+			$(SFML_DIR)/lib/libsfml-system-s.a \
+			$(SFML_DIR)/lib/libsfml-window-s.a \
+		-Wl,--no-whole-archive \
+		-ludev
 	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(WHITE)\n"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
