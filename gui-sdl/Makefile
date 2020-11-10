@@ -57,11 +57,12 @@ $(NAME): $(SDL_DIR) $(GLAD_DIR) $(GLAD_DIR)/src/glad.o $(STB_IMAGE_DIR) $(STB_IM
 	-L$(SDL_DIR)/lib -lSDL2 \
 	-L$(SDL_DIR)/lib -lSDL2_ttf \
 	-Wl,--no-whole-archive \
+	-lfreetype
 
 	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(WHITE)\n"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
-	@printf "\033[2K\r$(BLUE)>>Compiling \033[37m$<$(BLUE)\033[0m"
+	@printf "\033[2K\r$(BLUE)>>Compiling \033[37m$<$(BLUE)$(DEFAULT)"
 	@$(CC) $(CFLAGS) -fPIC -I $(SDL_DIR)/include -I $(STB_IMAGE_DIR)/include -I $(GLAD_DIR)/include -I $(GLM_DIR)/include $(INCLUDES) -o $@ -c $<
 
 $(SDL_DIR):
@@ -91,11 +92,11 @@ $(GLM_DIR):
 	@./scripts/install-glm.bash
 
 clean:
-	@echo "\033[31mCleaning .o\033[0m"
+	@echo "\033[31mCleaning .o$(DEFAULT)"
 	@rm -rf $(OBJS_MAIN_DIR)
 
 fclean:	clean
-	@echo "\033[31mCleaning $(NAME)\033[0m"
+	@echo "\033[31mCleaning $(NAME)$(DEFAULT)"
 	@rm -f $(NAME)
 
 clean-sdl:

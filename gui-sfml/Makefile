@@ -54,11 +54,12 @@ $(NAME): $(SFML_DIR) $(OBJS_MAIN_DIR) $(OBJS)
 			-L$(SFML_DIR)/lib/ -lsfml-system-s \
 			-L$(SFML_DIR)/lib/ -lsfml-window-s \
 		-Wl,--no-whole-archive \
-		-ludev
+		-ludev \
+		-lfreetype
 	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(WHITE)\n"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
-	@printf "\033[2K\r$(BLUE)>>Compiling \033[37m$<$(BLUE)\033[0m"
+	@printf "\033[2K\r$(BLUE)>>Compiling \033[37m$<$(BLUE)$(DEFAULT)"
 	@$(CC) $(CFLAGS) $(INCLUDES) -I$(SFML_DIR)/include -fPIC -o $@ -c $<
 
 $(SFML_DIR):
@@ -66,11 +67,11 @@ $(SFML_DIR):
 	@./scripts/install-sfml.bash
 
 clean:
-	@echo "\033[31mCleaning .o\033[0m"
+	@echo "\033[31mCleaning .o$(DEFAULT)"
 	@rm -rf $(OBJS_MAIN_DIR)
 
 fclean:	clean
-	@echo "\033[31mCleaning $(NAME)\033[0m"
+	@echo "\033[31mCleaning $(NAME)$(DEFAULT)"
 	@rm -f $(NAME)
 
 clean-sfml:

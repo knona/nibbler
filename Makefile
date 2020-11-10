@@ -57,7 +57,7 @@ $(OBJS_DIRS):
 
 $(NAME): $(BOOST_DIR) $(OBJS_DIRS) $(OBJS) reload
 	@printf "\033[2K\r$(BLUE)>>Linking...$(DEFAULT)"
-	@$(CC) -o $@ $(OBJS) -L$(BOOST_DIR)/bin -lboost_program_options -lallegro_font -lallegro_ttf -lallegro_primitives -lallegro gui-sfml/libgui-sfml.so -lGL -lX11 -lpthread -lXrandr -lXi -ldl -rdynamic
+	@$(CC) -o $@ $(OBJS) -L$(BOOST_DIR)/bin -lboost_program_options gui-allegro/libgui-allegro.so -lXpm -lXss -lGL -lX11 -lpthread -lXrandr -lXi -ldl -rdynamic
 	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(DEFAULT)\n"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
