@@ -5,17 +5,17 @@
 #include "GameData.hpp"
 #include "Input.hpp"
 #include "Program.hpp"
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_ttf.h"
 #include "Texture.hpp"
 #include "glad/glad.h"
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <clocale>
 #include <exception>
 #include <functional>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace ph = std::placeholders;
 

@@ -26,9 +26,6 @@ HEADERS_DIRS			= $(call uniq, $(dir $(HEADERS)))
 # INCLUDES FOLDER
 INCLUDES = $(addprefix -I, $(call uniq,$(SRCS_MAIN_DIR) $(HEADERS_DIRS)))
 
-# LIBRARIES
-BOOST_DIR = libs/boost
-
 # GUIS
 GUI_ALLEGRO = gui-allegro/libgui-allegro.so
 GUI_SFML = gui-sfml/libgui-sfml.so
@@ -47,26 +44,22 @@ GREEN = \033[32m
 BLUE = \033[36m
 DEFAULT = \033[0m
 
-.PHONY: clean fclean re clean-boost clean-libs clean-guis ffclean libraries $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL) reload
+.PHONY: clean fclean ffclean re clean-guis $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL)
 
 # REGLES
-all: $(NAME) $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL)
+all: $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL) $(NAME)
 
 $(OBJS_DIRS):
 	@mkdir -p $@
 
-$(NAME): $(BOOST_DIR) $(OBJS_DIRS) $(OBJS) reload
+$(NAME): $(OBJS_DIRS) $(OBJS)
 	@printf "\033[2K\r$(BLUE)>>Linking...$(DEFAULT)"
-	@$(CC) -o $@ $(OBJS) -L$(BOOST_DIR)/bin -lboost_program_options -ldl -rdynamic
+	@$(CC) -o $@ $(OBJS) -lboost_program_options -ldl -rdynamic
 	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(DEFAULT)\n"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
 	@printf "\033[2K\r$(BLUE)>>Compiling \033[37m$<$(BLUE) $(DEFAULT)"
-	@$(CC) $(CFLAGS) -I $(BOOST_DIR)/include $(INCLUDES) -o $@ -c $<
-
-$(BOOST_DIR):
-	@echo "$(BLUE)Installing boost...$(DEFAULT)"
-	@./scripts/install-boost.bash
+	@$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<
 
 $(GUI_ALLEGRO):
 	@make -sC gui-allegro
@@ -85,19 +78,11 @@ fclean:	clean
 	@echo "$(RED)Cleaning $(NAME)$(DEFAULT)"
 	@rm -f $(NAME)
 
-clean-boost:
-	@echo "$(RED)Removing boost...$(DEFAULT)"
-	@rm -rf $(BOOST_DIR)
-
-clean-libs:
-	@echo "$(RED)Removing all libs...$(DEFAULT)"
-	@rm -rf libs
-
 clean-guis:
 	@make -sC gui-allegro fclean
 	@make -sC gui-sfml fclean
 	@make -sC gui-sdl fclean
 
-ffclean: clean-libs clean-guis fclean
+ffclean: clean-guis fclean
 
 re: fclean all

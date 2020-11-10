@@ -22,9 +22,6 @@ HEADERS_DIRS	= $(call uniq, src/ $(dir $(HEADERS)))
 # INCLUDES FOLDER
 INCLUDES = $(addprefix -I, $(HEADERS_DIRS))
 
-# LIBRARIES
-ALLEGRO_DIR=libs/allegro
-
 # COMPILATEUR
 CC		= clang++
 CFLAGS	= -Wall -Wextra -Werror -g3 --std=c++17
@@ -38,7 +35,7 @@ GREEN = \033[32m
 BLUE = \033[36m
 DEFAULT = \033[0m
 
-.PHONY: clean clean-allegro clean-libs fclean re ffclean
+.PHONY: clean fclean re
 
 # REGLES
 all: $(NAME)
@@ -46,29 +43,13 @@ all: $(NAME)
 $(OBJS_MAIN_DIR):
 	@mkdir -p $@
 
-$(NAME): $(ALLEGRO_DIR) $(OBJS_MAIN_DIR) $(OBJS)
-	@$(CC) -shared -o $(NAME) $(OBJS) \
-	-Wl,--whole-archive -shared	\
-	-L$(ALLEGRO_DIR)/lib/ -lallegro-static \
-	-L$(ALLEGRO_DIR)/lib/ -lallegro_color-static \
-	-L$(ALLEGRO_DIR)/lib/ -lallegro_font-static \
-	-L$(ALLEGRO_DIR)/lib/ -lallegro_image-static \
-	-L$(ALLEGRO_DIR)/lib/ -lallegro_main-static \
-	-L$(ALLEGRO_DIR)/lib/ -lallegro_primitives-static \
-	-L$(ALLEGRO_DIR)/lib/ -lallegro_ttf-static \
-	-Wl,--no-whole-archive \
-	-lfreetype -lgtk-3 -lXpm -lXss -lGL
-
-
+$(NAME): $(OBJS_MAIN_DIR) $(OBJS)
+	@$(CC) -shared -o $(NAME) $(OBJS) -lallegro_font -lallegro_ttf -lallegro_primitives -lallegro
 	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(WHITE)\n"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
 	@printf "\033[2K\r$(BLUE)>>Compiling \033[37m$<$(BLUE)$(DEFAULT)"
-	@$(CC) $(CFLAGS) -I $(ALLEGRO_DIR)/include $(INCLUDES) -fPIC -o $@ -c $<
-
-$(ALLEGRO_DIR):
-	@echo "$(BLUE)Installing allegro...$(DEFAULT)"
-	@./scripts/install-allegro.bash
+	@$(CC) $(CFLAGS) $(INCLUDES) -fPIC -o $@ -c $<
 
 clean:
 	@echo "\033[31mCleaning .o$(DEFAULT)"
@@ -77,15 +58,5 @@ clean:
 fclean:	clean
 	@echo "\033[31mCleaning $(NAME)$(DEFAULT)"
 	@rm -f $(NAME)
-
-clean-allegro:
-	@echo "$(RED)Removing allegro...$(DEFAULT)"
-	@rm -rf $(ALLEGRO_DIR)
-
-clean-libs:
-	@echo "$(RED)Removing all libs...$(DEFAULT)"
-	@rm -rf libs
-
-ffclean: clean-libs fclean
 
 re: fclean all

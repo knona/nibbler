@@ -22,9 +22,6 @@ HEADERS_DIRS	= $(call uniq, src/ $(dir $(HEADERS)))
 # INCLUDES FOLDER
 INCLUDES = $(addprefix -I, $(HEADERS_DIRS))
 
-# LIBRARIES
-SFML_DIR=libs/sfml
-
 # COMPILATEUR
 CC		= clang++
 CFLAGS	= -Wall -Wextra -Werror -g3 --std=c++17
@@ -38,7 +35,7 @@ GREEN = \033[32m
 BLUE = \033[36m
 DEFAULT = \033[0m
 
-.PHONY: clean clean-sfml clean-libs fclean re ffclean
+.PHONY: clean fclean re
 
 # REGLES
 all: $(NAME)
@@ -46,24 +43,13 @@ all: $(NAME)
 $(OBJS_MAIN_DIR):
 	@mkdir -p $@
 
-$(NAME): $(SFML_DIR) $(OBJS_MAIN_DIR) $(OBJS)
-	@$(CC) -shared \
-		-o $(NAME) $(OBJS) \
-		-Wl,--whole-archive -shared	\
-			-L$(SFML_DIR)/lib/ -lsfml-graphics-s \
-			-L$(SFML_DIR)/lib/ -lsfml-system-s \
-			-L$(SFML_DIR)/lib/ -lsfml-window-s \
-		-Wl,--no-whole-archive \
-		-ludev -lfreetype -lGL
+$(NAME): $(OBJS_MAIN_DIR) $(OBJS)
+	@$(CC) -shared -o $(NAME) $(OBJS) -lsfml-graphics -lsfml-window -lsfml-system
 	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(WHITE)\n"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
 	@printf "\033[2K\r$(BLUE)>>Compiling \033[37m$<$(BLUE)$(DEFAULT)"
-	@$(CC) $(CFLAGS) $(INCLUDES) -I$(SFML_DIR)/include -fPIC -o $@ -c $<
-
-$(SFML_DIR):
-	@echo "$(BLUE)Installing sfml...$(DEFAULT)"
-	@./scripts/install-sfml.bash
+	@$(CC) $(CFLAGS) $(INCLUDES) -fPIC -o $@ -c $<
 
 clean:
 	@echo "\033[31mCleaning .o$(DEFAULT)"
@@ -73,14 +59,4 @@ fclean:	clean
 	@echo "\033[31mCleaning $(NAME)$(DEFAULT)"
 	@rm -f $(NAME)
 
-clean-sfml:
-	@echo "$(RED)Removing sfml...$(DEFAULT)"
-	@rm -rf $(SFML_DIR)
-
-clean-libs:
-	@echo "$(RED)Removing all libs...$(DEFAULT)"
-	@rm -rf libs
-
 re: fclean all
-
-ffclean: clean-libs fclean
