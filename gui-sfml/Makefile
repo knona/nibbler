@@ -36,6 +36,7 @@ YELLOW = \033[33m
 PINK = \033[35m
 GREEN = \033[32m
 BLUE = \033[36m
+DEFAULT = \033[0m
 
 .PHONY: clean clean-sfml clean-libs fclean re ffclean
 

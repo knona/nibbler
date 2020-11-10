@@ -28,8 +28,6 @@ INCLUDES = $(addprefix -I, $(call uniq,$(SRCS_MAIN_DIR) $(HEADERS_DIRS)))
 
 # LIBRARIES
 BOOST_DIR = libs/boost
-GLAD_DIR = libs/glad
-STB_IMAGE_DIR = libs/stb_image
 
 # GUIS
 GUI_ALLEGRO = gui-allegro/libgui-allegro.so
@@ -49,7 +47,7 @@ GREEN = \033[32m
 BLUE = \033[36m
 DEFAULT = \033[0m
 
-.PHONY: clean fclean re clean-boost clean-glad clean-stb_image clean-libs clean-guis ffclean libraries $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL)
+.PHONY: clean fclean re clean-boost clean-libs clean-guis ffclean libraries $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL) reload
 
 # REGLES
 all: $(NAME) $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL)
@@ -57,9 +55,9 @@ all: $(NAME) $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL)
 $(OBJS_DIRS):
 	@mkdir -p $@
 
-$(NAME): $(BOOST_DIR) $(GLAD_DIR) $(STB_IMAGE_DIR) $(GLAD_DIR)/src/glad.o $(STB_IMAGE_DIR)/src/stb_image.o $(OBJS_DIRS) $(OBJS)
+$(NAME): $(BOOST_DIR) $(OBJS_DIRS) $(OBJS) reload
 	@printf "\033[2K\r$(BLUE)>>Linking...$(DEFAULT)"
-	@$(CC) -o $@ $(OBJS) $(GLAD_DIR)/src/glad.o $(STB_IMAGE_DIR)/src/stb_image.o -L$(BOOST_DIR)/bin -lboost_program_options -lallegro_font -lallegro_ttf -lallegro_primitives -lallegro gui-sfml/libgui-sfml.so -lSDL2 -lSDL2_ttf -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+	@$(CC) -o $@ $(OBJS) -L$(BOOST_DIR)/bin -lboost_program_options -lallegro_font -lallegro_ttf -lallegro_primitives -lallegro gui-sfml/libgui-sfml.so -lGL -lX11 -lpthread -lXrandr -lXi -ldl -rdynamic
 	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(DEFAULT)\n"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
@@ -69,22 +67,6 @@ $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
 $(BOOST_DIR):
 	@echo "$(BLUE)Installing boost...$(DEFAULT)"
 	@./scripts/install-boost.bash
-
-$(GLAD_DIR):
-	@echo "$(BLUE)Installing glad...$(DEFAULT)"
-	@./scripts/install-glad.bash
-
-$(STB_IMAGE_DIR):
-	@echo "$(BLUE)Installing stb_image...$(DEFAULT)"
-	@./scripts/install-stb_image.bash
-
-$(GLAD_DIR)/src/glad.o: $(GLAD_DIR)/src/glad.c
-	@printf "\033[2K\r$(BLUE)>>Compiling \033[37m$<$(BLUE) $(DEFAULT)"
-	@clang -I $(GLAD_DIR)/include -o $@ -c $<
-
-$(STB_IMAGE_DIR)/src/stb_image.o: $(STB_IMAGE_DIR)/src/stb_image.c
-	@printf "\033[2K\r$(BLUE)>>Compiling \033[37m$<$(BLUE) $(DEFAULT)"
-	@clang -I $(STB_IMAGE_DIR)/include -o $@ -c $<
 
 $(GUI_ALLEGRO):
 	@make -sC gui-allegro
@@ -106,14 +88,6 @@ fclean:	clean
 clean-boost:
 	@echo "$(RED)Removing boost...$(DEFAULT)"
 	@rm -rf $(BOOST_DIR)
-
-clean-glad:
-	@echo "$(RED)Removing glad...$(DEFAULT)"
-	@rm -rf $(GLAD_DIR)
-
-clean-stb_image:
-	@echo "$(RED)Removing stb_image...$(DEFAULT)"
-	@rm -rf $(STB_IMAGE_DIR)
 
 clean-libs:
 	@echo "$(RED)Removing all libs...$(DEFAULT)"

@@ -1,7 +1,5 @@
 #include "Shader.hpp"
 
-// Shader::Shader() {}
-
 Shader::Shader(const GLenum shaderType, const char *shaderPath)
 {
 	std::unordered_map<GLenum, const char *> map = { { GL_VERTEX_SHADER, "Vertex" },

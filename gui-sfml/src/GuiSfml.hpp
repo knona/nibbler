@@ -5,7 +5,6 @@
 #include "GameData.hpp"
 #include "Input.hpp"
 #include "Position.hpp"
-
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
 
