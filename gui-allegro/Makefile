@@ -57,8 +57,7 @@ $(NAME): $(ALLEGRO_DIR) $(OBJS_MAIN_DIR) $(OBJS)
 	-L$(ALLEGRO_DIR)/lib/ -lallegro_primitives-static \
 	-L$(ALLEGRO_DIR)/lib/ -lallegro_ttf-static \
 	-Wl,--no-whole-archive \
-	-lfreetype \
-	-lgtk-3 \
+	-lfreetype -lgtk-3 -lXpm -lXss -lGL
 
 
 	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(WHITE)\n"

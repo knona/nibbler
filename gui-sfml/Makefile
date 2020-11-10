@@ -54,8 +54,7 @@ $(NAME): $(SFML_DIR) $(OBJS_MAIN_DIR) $(OBJS)
 			-L$(SFML_DIR)/lib/ -lsfml-system-s \
 			-L$(SFML_DIR)/lib/ -lsfml-window-s \
 		-Wl,--no-whole-archive \
-		-ludev \
-		-lfreetype
+		-ludev -lfreetype -lGL
 	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(WHITE)\n"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)
