@@ -56,11 +56,11 @@ void GuiAllegro::close()
 		al_destroy_event_queue(_queue);
 		_queue = nullptr;
 	}
-	if (al_is_ttf_addon_initialized())
+	// if (al_is_ttf_addon_initialized())
 		al_shutdown_ttf_addon();
-	if (al_is_font_addon_initialized())
+	// if (al_is_font_addon_initialized())
 		al_shutdown_font_addon();
-	if (al_is_primitives_addon_initialized())
+	// if (al_is_primitives_addon_initialized())
 		al_shutdown_primitives_addon();
 }
 

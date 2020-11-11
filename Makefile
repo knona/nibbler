@@ -47,14 +47,14 @@ DEFAULT = \033[0m
 .PHONY: clean fclean ffclean re clean-guis $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL)
 
 # REGLES
-all: $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL) $(NAME)
+all:  $(NAME) $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL)
 
 $(OBJS_DIRS):
 	@mkdir -p $@
 
 $(NAME): $(OBJS_DIRS) $(OBJS)
 	@printf "\033[2K\r$(BLUE)>>Linking...$(DEFAULT)"
-	@$(CC) -o $@ $(OBJS) -lboost_program_options -ldl -rdynamic
+	@$(CC) -o $@ $(OBJS) -lboost_program_options -lstdc++fs -ldl -rdynamic
 	@printf "\033[2K\r$(NAME) has been created $(GREEN)[OK]$(DEFAULT)\n"
 
 $(OBJS_MAIN_DIR)%.o: $(SRCS_MAIN_DIR)%.cpp $(HEADERS)

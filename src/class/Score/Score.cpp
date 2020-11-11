@@ -47,7 +47,7 @@ void Score::increment()
 
 void Score::read()
 {
-	if (!std::filesystem::exists(Score::filePath))
+	if (!std::experimental::filesystem::exists(Score::filePath))
 		return;
 
 	std::ifstream file(Score::filePath);
