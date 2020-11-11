@@ -64,14 +64,15 @@ InputMap Game::_inputMap = //
 
 void Game::loop()
 {
-	Input      input;
+	Input      input = Input::NONE;
 	GuiManager guiManager(this->getLibPath(this->_options.gui));
 	GUI *&     gui = guiManager.getGui();
 
 	gui->init(this->_gData);
 	gui->render(this->_gData);
-	std::this_thread::sleep_for(millisec(1000));
-	while ((input = gui->getInput()) != Input::EXIT)
+	while ((input = gui->getInput()) == Input::NONE)
+		std::this_thread::sleep_for(millisec(100));
+	while (input != Input::EXIT)
 	{
 		auto time1 = std::chrono::high_resolution_clock::now();
 		if (input == Input::PAUSE)
@@ -92,6 +93,7 @@ void Game::loop()
 		gui->render(this->_gData);
 		auto time2 = std::chrono::high_resolution_clock::now();
 		this->sleep(time1, time2);
+		input = gui->getInput();
 	}
 }
 
