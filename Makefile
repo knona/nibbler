@@ -6,8 +6,7 @@ define uniq =
 endef
 
 # SOURCES
-SRCS_FILES_WILDCARD	= $(wildcard src/*.cpp) $(wildcard src/*/*.cpp) $(wildcard src/*/*/*.cpp)
-SRCS_FILES			= $(SRCS_FILES_WILDCARD:src/%=%)
+SRCS_FILES			= exceptions/Exceptions.cpp nibbler.cpp class/Score/ScoreDataKey.cpp class/Score/Score.cpp class/GuiManager/GuiManager.cpp class/Parser/Parser.cpp class/Elements/Food.cpp class/Elements/Element.cpp class/Elements/Walls.cpp class/Elements/Wall.cpp class/Elements/Snake.cpp class/Elements/Foods.cpp class/Area/Area.cpp class/Cron/Cron.cpp class/Game/Game.cpp struct/Cell.cpp struct/Position.cpp
 SRCS_MAIN_DIR		= src/
 SRCS				= $(addprefix $(SRCS_MAIN_DIR), $(SRCS_FILES))
 
@@ -18,7 +17,7 @@ OBJS 			= $(addprefix $(OBJS_MAIN_DIR), $(OBJS_FILES))
 OBJS_DIRS 		= $(call uniq, $(dir $(OBJS)))
 
 # HEADERS
-HEADERS_FILES_WILDCARD	= $(wildcard src/*.hpp) $(wildcard src/*/*.hpp) $(wildcard src/*/*/*.hpp)
+HEADERS_FILES_WILDCARD	= exceptions/Exceptions.hpp class/Score/Score.hpp class/Score/ScoreDataKey.hpp class/GuiManager/GuiManager.hpp class/Parser/Parser.hpp class/Elements/Walls.hpp class/Elements/Snake.hpp class/Elements/Food.hpp class/Elements/Foods.hpp class/Elements/Element.hpp class/Elements/Wall.hpp class/Gui/GUI.hpp class/Area/Area.hpp class/Cron/Cron.hpp class/Game/Game.hpp enum/Input.hpp enum/Direction.hpp enum/ElementType.hpp struct/Position.hpp struct/GameData.hpp struct/Options.hpp struct/Cell.hpp
 HEADERS_FILES 			= $(HEADERS_FILES_WILDCARD:src/%=%)
 HEADERS					= $(addprefix $(SRCS_MAIN_DIR), $(HEADERS_FILES))
 HEADERS_DIRS			= $(call uniq, $(dir $(HEADERS)))
@@ -47,7 +46,7 @@ DEFAULT = \033[0m
 .PHONY: clean fclean ffclean re clean-guis $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL)
 
 # REGLES
-all:  $(NAME) $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL)
+all: $(NAME) $(GUI_ALLEGRO) $(GUI_SFML) $(GUI_SDL)
 
 $(OBJS_DIRS):
 	@mkdir -p $@

@@ -18,10 +18,14 @@ class GuiAllegro: public GUI
 	ALLEGRO_EVENT_QUEUE *_queue;
 	Size<float>          _screen;
 	float                _cellSize;
+	bool                 _primitivesAddonInitialized;
+	bool                 _fontAddonInitialized;
+	bool                 _ttfAddonInitialized;
 
 	GuiAllegro(const GuiAllegro &) = delete;
 	GuiAllegro &operator=(const GuiAllegro &) = delete;
 
+	void createWindow(const Size<int> &areaSize);
 	void renderText(int score, bool pause);
 
 	public:

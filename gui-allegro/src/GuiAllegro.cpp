@@ -1,6 +1,8 @@
 #include "GuiAllegro.hpp"
 
-GuiAllegro::GuiAllegro(): _disp(nullptr), _font(nullptr), _queue(nullptr), _screen(1280, 720)
+GuiAllegro::GuiAllegro():
+	_disp(nullptr), _font(nullptr), _queue(nullptr), _screen(1280, 720), _primitivesAddonInitialized(false),
+	_fontAddonInitialized(false), _ttfAddonInitialized(false)
 {}
 
 GuiAllegro::~GuiAllegro()
@@ -8,19 +10,16 @@ GuiAllegro::~GuiAllegro()
 	this->close();
 }
 
-void GuiAllegro::init(GameData &gData)
+void GuiAllegro::createWindow(const Size<int> &areaSize)
 {
-	al_init();
-	al_install_keyboard();
-
-	Size<int> areaSize = gData.area.getSize();
-
 	_cellSize = std::min(_screen.width / areaSize.width, _screen.height / areaSize.height);
 	if (_cellSize > 40)
 		_cellSize = 40;
 	_screen.width = areaSize.width * _cellSize;
 	_screen.height = areaSize.height * _cellSize;
 	_disp = al_create_display(_screen.width, _screen.height + 40);
+	if (!_disp)
+		throw std::runtime_error("Cannot create allegro display");
 	al_set_window_title(_disp, "NIBBLER");
 
 	ALLEGRO_MONITOR_INFO info;
@@ -28,11 +27,27 @@ void GuiAllegro::init(GameData &gData)
 	int winX = static_cast<int>(info.x2 / 2.0 - _screen.width / 2.0);
 	int winY = static_cast<int>(info.y2 / 2.0 - (_screen.height + 40) / 2.0);
 	al_set_window_position(_disp, winX, winY);
+}
 
-	al_init_primitives_addon();
-	al_init_font_addon();
-	al_init_ttf_addon();
-	_font = al_load_font("assets/font/Retro Gaming.ttf", 24, 0);
+void GuiAllegro::init(GameData &gData)
+{
+	if (!al_init())
+		throw std::runtime_error("Cannot initialize allegro");
+
+	if (!al_install_keyboard())
+		throw std::runtime_error("Cannot install keyboard allegro");
+
+	this->createWindow(gData.area.getSize());
+
+	if (!(_primitivesAddonInitialized = al_init_primitives_addon()))
+		throw std::runtime_error("Cannot initialize primitives allegro addon");
+	if (!(_fontAddonInitialized = al_init_font_addon()))
+		throw std::runtime_error("Cannot initialize font allegro addon");
+	if (!(_ttfAddonInitialized = al_init_ttf_addon()))
+		throw std::runtime_error("Cannot initialize ttf allegro addon");
+
+	if (!(_font = al_load_font("assets/font/Retro Gaming.ttf", 24, 0)))
+		throw std::runtime_error("Cannot load assets/font/Retro Gaming.ttf font allegro");
 
 	_queue = al_create_event_queue();
 	al_register_event_source(_queue, al_get_keyboard_event_source());
@@ -56,11 +71,11 @@ void GuiAllegro::close()
 		al_destroy_event_queue(_queue);
 		_queue = nullptr;
 	}
-	// if (al_is_ttf_addon_initialized())
+	if (_ttfAddonInitialized)
 		al_shutdown_ttf_addon();
-	// if (al_is_font_addon_initialized())
+	if (_fontAddonInitialized)
 		al_shutdown_font_addon();
-	// if (al_is_primitives_addon_initialized())
+	if (_primitivesAddonInitialized)
 		al_shutdown_primitives_addon();
 }
 
