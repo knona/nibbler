@@ -10,6 +10,8 @@ GuiSfml::~GuiSfml()
 
 void GuiSfml::init(GameData &gData)
 {
+	sf::err().rdbuf(nullptr);
+
 	Size<int> areaSize = gData.area.getSize();
 
 	_cellSize = std::min(_screen.width / areaSize.width, _screen.height / areaSize.height);
