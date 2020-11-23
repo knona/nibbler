@@ -1,0 +1,6 @@
+#ifndef TEXTURE_HPP
+#define TEXTURE_HPP
+
+enum Texture { HEAD, BODY, TAIL, CORNER_BL, CORNER_BR, CORNER_TL, CORNER_TR, FOOD, WALL };
+
+#endif // !TEXTURE_HPP
